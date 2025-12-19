@@ -1,2 +1,5 @@
 #Mevzuatlar Dosyası
 DOCX
+.env
+__pycache__/
+*.pyc

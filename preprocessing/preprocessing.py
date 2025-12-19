@@ -1,9 +1,22 @@
 import json
+from pathlib import Path
 from typing import Dict, Any
-
+from qdrant_client import QdrantClient
+import os
+from dotenv import load_dotenv
+from config.configuration import settings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-file_path = r"C:\Users\hilal\MevzuSaglik\Data\Json\mevzuat_verileri.json"
+
+
+if not settings.DOCUMENT_PATH:
+    raise ValueError("DOCUMENT_PATH .env dosyasında tanımlı değil")
+
+
+file_path = Path(settings.DOCUMENT_PATH)
+
+if not file_path.exists():
+    raise FileNotFoundError(f"Dosya bulunamadı: {file_path}")
 
 
 def format_table_as_text(table_data: list) -> str:
@@ -74,32 +87,3 @@ def flatten_mevzuat_object(mevzuat_object: Dict[str, Any]) -> str:
 
     return "\n\n".join(flat_parts)
 
-
-# Ana çalışma bloğu (try-except)
-try:
-    with open(file_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    if not isinstance(data, list):
-        raise ValueError("JSON içeriği liste değil")
-
-    duz_metin = []
-
-    for d in data:
-        duzlesmis_metin = flatten_mevzuat_object(d)
-        duz_metin.append(duzlesmis_metin)
-        print("\n" + "=" * 80)
-        print(duzlesmis_metin)
-
-    #Chunking İşlemi RecursiveCharacterSplit
-    text_splitter =RecursiveCharacterTextSplitter(
-        chunk_size=512,
-        chunk_overlap=100,
-        length_function=True,
-        eparators=["\n\n", "\n", ". ", " ", ""]
-    )
-
-
-
-except Exception as e:
-    print("HATA:", e)
