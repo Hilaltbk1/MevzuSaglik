@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c986381f-b199-491f-9e43-4dea3e56d67e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/prompt/My_Prompt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompt/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/Retrievers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MevzuSaglik.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MevzuSaglik.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/configuration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocessing/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/Vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Vector_store.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,31 +34,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.DOC_DOCX.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Documan_Doc (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.Dokuman.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Dokuman_Docx (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.Dokumanlarim (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.Dokumanlarim.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Retrievers.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Vector_store.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chat_models.executor&quot;: &quot;Run&quot;,
-    &quot;Python.configuration.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dd.executor&quot;: &quot;Run&quot;,
-    &quot;Python.kk.executor&quot;: &quot;Run&quot;,
-    &quot;Python.metaVeri.executor&quot;: &quot;Run&quot;,
-    &quot;Python.preprocessing.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/retrievals&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/hilal/MevzuSaglik&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.DOC_DOCX.executor": "Run",
+    "Python.Documan_Doc (1).executor": "Run",
+    "Python.Dokuman.executor": "Run",
+    "Python.Dokuman_Docx (1).executor": "Run",
+    "Python.Dokumanlarim (1).executor": "Run",
+    "Python.Dokumanlarim.executor": "Run",
+    "Python.Retrievers.executor": "Run",
+    "Python.Vector_store.executor": "Run",
+    "Python.chat_models.executor": "Run",
+    "Python.configuration.executor": "Run",
+    "Python.dd.executor": "Run",
+    "Python.kk.executor": "Run",
+    "Python.metaVeri.executor": "Run",
+    "Python.preprocessing.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feat/sqlalchemy-mysql-integration",
+    "last_opened_file_path": "C:/Users/hilal/MevzuSaglik",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Yonetmelikler" />
