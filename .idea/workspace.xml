@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c986381f-b199-491f-9e43-4dea3e56d67e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/prompt/My_Prompt.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/prompt/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/Retrievers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MevzuSaglik.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MevzuSaglik.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/configuration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Vector_store.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +30,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -31,27 +41,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.DOC_DOCX.executor": "Run",
-    "Python.Documan_Doc (1).executor": "Run",
-    "Python.Dokuman.executor": "Run",
-    "Python.Dokuman_Docx (1).executor": "Run",
-    "Python.Dokumanlarim (1).executor": "Run",
-    "Python.Dokumanlarim.executor": "Run",
-    "Python.Vector_store.executor": "Run",
-    "Python.kk.executor": "Run",
-    "Python.metaVeri.executor": "Run",
-    "Python.preprocessing (1).executor": "Run",
-    "Python.preprocessing.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feat/storage-logic",
-    "last_opened_file_path": "C:/Users/hilal/MevzuSaglik"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.DOC_DOCX.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Documan_Doc (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokuman.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokuman_Docx (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokumanlarim (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokumanlarim.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Retrievers.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Vector_store.executor&quot;: &quot;Run&quot;,
+    &quot;Python.chat_models.executor&quot;: &quot;Run&quot;,
+    &quot;Python.configuration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dd.executor&quot;: &quot;Run&quot;,
+    &quot;Python.kk.executor&quot;: &quot;Run&quot;,
+    &quot;Python.metaVeri.executor&quot;: &quot;Run&quot;,
+    &quot;Python.preprocessing.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/retrievals&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hilal/MevzuSaglik&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Yonetmelikler" />
@@ -61,15 +75,15 @@
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Yonergeler" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\hilal\MevzuSaglik\Preprocessing" />
-      <recent name="C:\Users\hilal\MevzuSaglik" />
       <recent name="C:\Users\hilal\MevzuSaglik\Data\Json" />
       <recent name="C:\Users\hilal\MevzuSaglik\Data" />
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Tuzukler" />
+      <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Rehber" />
+      <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Diger" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Vector_store">
-    <configuration name="Dokumanlarim (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.Retrievers">
+    <configuration name="Retrievers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MevzuSaglik" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -78,11 +92,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/services" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Dokumanlarim.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/services/Retrievers.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -113,7 +127,51 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="kk" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="chat_models" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MevzuSaglik" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.venv/Lib/site-packages/langchain_google_genai" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/.venv/Lib/site-packages/langchain_google_genai/chat_models.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="configuration" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MevzuSaglik" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/config" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config/configuration.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MevzuSaglik" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -126,51 +184,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kk.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="preprocessing (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MevzuSaglik" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Preprocessing" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Preprocessing/preprocessing.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="preprocessing" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MevzuSaglik" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\hilal\MevzuSaglik\Preprocessing\preprocessing.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dd.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -180,19 +194,19 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.chat_models" />
+      <item itemvalue="Python.Retrievers" />
       <item itemvalue="Python.Vector_store" />
-      <item itemvalue="Python.preprocessing (1)" />
-      <item itemvalue="Python.preprocessing" />
-      <item itemvalue="Python.kk" />
-      <item itemvalue="Python.Dokumanlarim (1)" />
+      <item itemvalue="Python.configuration" />
+      <item itemvalue="Python.dd" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Retrievers" />
+        <item itemvalue="Python.chat_models" />
+        <item itemvalue="Python.dd" />
         <item itemvalue="Python.Vector_store" />
-        <item itemvalue="Python.preprocessing (1)" />
-        <item itemvalue="Python.preprocessing" />
-        <item itemvalue="Python.kk" />
-        <item itemvalue="Python.Dokumanlarim (1)" />
+        <item itemvalue="Python.configuration" />
       </list>
     </recent_temporary>
   </component>

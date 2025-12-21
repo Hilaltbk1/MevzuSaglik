@@ -8,16 +8,16 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 env_path = BASE_DIR / ".env"
 
 if not env_path.exists():
-    raise FileNotFoundError(f".env bulunamadı: {env_path}")
-#env dosyasını oku her seyı os.environ içine koy  DOCUMENT_PATH=abc   os.envıron["DOCUMENT_PATH"] == "abc"
-
-load_dotenv(env_path)
-
+    # Burada uyarı vermek yerine varsayılan bir yol denenebilir veya hata fırlatılır
+    load_dotenv()
+else:
+    load_dotenv(env_path)
 
 class Settings:
-    DOCUMENT_PATH = os.getenv("DOCUMENT_PATH")
-    API_KEY = os.getenv("API_KEY")
 
+        # self kullanarak tanımlamak "sarı çizgileri" (static member uyarısını) siler
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+    DOCUMENT_PATH = os.getenv("DOCUMENT_PATH", "")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
-settings = Settings()
-#nesne olusturma settings.DOCUMENT_PATH

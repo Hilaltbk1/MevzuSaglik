@@ -1,19 +1,12 @@
-import json
 from pathlib import Path
 from typing import Dict, Any
-from qdrant_client import QdrantClient
-import os
-from dotenv import load_dotenv
-from config.configuration import settings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from config.configuration import Settings
 
-
-
-if not settings.DOCUMENT_PATH:
+if not Settings.DOCUMENT_PATH:
     raise ValueError("DOCUMENT_PATH .env dosyasında tanımlı değil")
 
 
-file_path = Path(settings.DOCUMENT_PATH)
+file_path = Path(Settings.DOCUMENT_PATH)
 
 if not file_path.exists():
     raise FileNotFoundError(f"Dosya bulunamadı: {file_path}")
