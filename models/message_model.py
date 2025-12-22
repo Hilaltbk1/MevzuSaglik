@@ -1,9 +1,6 @@
 import datetime
-
-from pypika import Column
-from sqlalchemy import Integer, ForeignKey, String, Text, DateTime
 from sqlalchemy.orm import relationship
-
+from sqlalchemy import Column, Integer, ForeignKey, String, Text, DateTime
 from database.base import Base
 
 

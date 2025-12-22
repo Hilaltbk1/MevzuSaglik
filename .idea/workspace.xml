@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c986381f-b199-491f-9e43-4dea3e56d67e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/configuration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/message_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/message_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/session_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/session_model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +25,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Hilaltbk1"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Hilaltbk1/MevzuSaglik.git",
+    "accountId": "eda37fe3-9efe-4895-a88f-2de1d734417d"
+  }
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -34,31 +48,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.DOC_DOCX.executor": "Run",
-    "Python.Documan_Doc (1).executor": "Run",
-    "Python.Dokuman.executor": "Run",
-    "Python.Dokuman_Docx (1).executor": "Run",
-    "Python.Dokumanlarim (1).executor": "Run",
-    "Python.Dokumanlarim.executor": "Run",
-    "Python.Retrievers.executor": "Run",
-    "Python.Vector_store.executor": "Run",
-    "Python.chat_models.executor": "Run",
-    "Python.configuration.executor": "Run",
-    "Python.dd.executor": "Run",
-    "Python.kk.executor": "Run",
-    "Python.metaVeri.executor": "Run",
-    "Python.preprocessing.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feat/sqlalchemy-mysql-integration",
-    "last_opened_file_path": "C:/Users/hilal/MevzuSaglik",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.DOC_DOCX.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Documan_Doc (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokuman.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokuman_Docx (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokumanlarim (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dokumanlarim.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Retrievers.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Vector_store.executor&quot;: &quot;Run&quot;,
+    &quot;Python.chat_models.executor&quot;: &quot;Run&quot;,
+    &quot;Python.configuration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dd.executor&quot;: &quot;Run&quot;,
+    &quot;Python.kk.executor&quot;: &quot;Run&quot;,
+    &quot;Python.metaVeri.executor&quot;: &quot;Run&quot;,
+    &quot;Python.preprocessing.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/sqlalchemy-mysql-integration&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hilal/MevzuSaglik&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Yonetmelikler" />
@@ -219,5 +233,28 @@
       <updated>1764854970825</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feat/sqlalchemy-mysql-integration" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
