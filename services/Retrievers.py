@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
+from langchain_classic.chains.history_aware_retriever import create_history_aware_retriever
 from langchain_community.retrievers import BM25Retriever
 from config.configuration import Settings
 from prompt.My_Prompt import create_prompt
@@ -34,14 +35,22 @@ def retrieval_chain():
         llm=llm  # Yukarıda tanımladığın ve çalışan LLM
     )
 
-    pr = create_prompt()
+
+    qa_pr,c_pr = create_prompt()
+
+    history_aware_retriever=create_history_aware_retriever(
+        llm,
+        multi_retriever,
+        c_pr
+    )
+
 
     #okuma ve cevaplama -llm ı beslemek
-    question_answer_chain = create_stuff_documents_chain(llm,pr,document_variable_name="context")
+    question_answer_chain = create_stuff_documents_chain(llm,qa_pr,document_variable_name="context")
 
 
     # 3. Final Zinciri multi_retriever ile güncelliyoruz
-    full_chain = create_retrieval_chain(multi_retriever, question_answer_chain)
+    full_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
     response=full_chain.invoke({"input":"Ambulans ve acil bakım teknikerleri hangi görevlere sahiptir?"})
     print("Bulunan belgeler:")
     for doc in response["context"]:

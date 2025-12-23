@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c986381f-b199-491f-9e43-4dea3e56d67e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/message_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/message_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/session_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/session_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prompt/My_Prompt.py" beforeDir="false" afterPath="$PROJECT_DIR$/prompt/My_Prompt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Retrievers.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Retrievers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,18 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Hilaltbk1"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Hilaltbk1&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Hilaltbk1/MevzuSaglik.git",
-    "accountId": "eda37fe3-9efe-4895-a88f-2de1d734417d"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Hilaltbk1/MevzuSaglik.git&quot;,
+    &quot;accountId&quot;: &quot;eda37fe3-9efe-4895-a88f-2de1d734417d&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
