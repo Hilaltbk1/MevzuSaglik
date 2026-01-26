@@ -47,11 +47,11 @@ def initialize_vector_store():
         chunks=text_splitter.split_documents(doc_list)
 
          #embedding model
-        embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2",model_kwargs={'device': 'cuda'},encode_kwargs={"batch_size": 32})
+        embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2",model_kwargs={'device': 'cpu'},encode_kwargs={"batch_size": 64})
         vector_size = len(embedding.embed_query("test"))
 
 
-        client=QdrantClient(host="localhost",port=6333,timeout=60)
+        client=QdrantClient(host="qdrant",port=6333,timeout=60)
         COLLECTION_NAME = "mevzuat"
         if client.collection_exists(COLLECTION_NAME):
             client.delete_collection(COLLECTION_NAME)

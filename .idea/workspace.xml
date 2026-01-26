@@ -5,9 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c986381f-b199-491f-9e43-4dea3e56d67e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routers/history.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routers/search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/db_setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/db_setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dd.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/log_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/log_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/message_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/message_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prompt/My_Prompt.py" beforeDir="false" afterPath="$PROJECT_DIR$/prompt/My_Prompt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/Retrievers.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Retrievers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Vector_store.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/session.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,9 +51,6 @@
     &quot;accountId&quot;: &quot;eda37fe3-9efe-4895-a88f-2de1d734417d&quot;
   }
 }</component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -56,20 +68,24 @@
     &quot;Python.Dokuman_Docx (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.Dokumanlarim (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.Dokumanlarim.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Retrievers.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Vector_store.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chat_models.executor&quot;: &quot;Run&quot;,
-    &quot;Python.configuration.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dd.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Vector_store.executor&quot;: &quot;Debug&quot;,
     &quot;Python.kk.executor&quot;: &quot;Run&quot;,
     &quot;Python.metaVeri.executor&quot;: &quot;Run&quot;,
+    &quot;Python.preprocessing (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.preprocessing.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/sqlalchemy-mysql-integration&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/fastapi&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/hilal/MevzuSaglik&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -81,15 +97,15 @@
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Yonergeler" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hilal\MevzuSaglik\Preprocessing" />
+      <recent name="C:\Users\hilal\MevzuSaglik" />
       <recent name="C:\Users\hilal\MevzuSaglik\Data\Json" />
       <recent name="C:\Users\hilal\MevzuSaglik\Data" />
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Tuzukler" />
-      <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Rehber" />
-      <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Diger" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Retrievers">
-    <configuration name="Retrievers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.Vector_store">
+    <configuration name="Dokumanlarim (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MevzuSaglik" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -98,11 +114,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/services" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/services/Retrievers.py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Dokumanlarim.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -124,6 +141,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/services/Vector_store.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -133,51 +151,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="chat_models" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MevzuSaglik" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.venv/Lib/site-packages/langchain_google_genai" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/.venv/Lib/site-packages/langchain_google_genai/chat_models.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="configuration" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MevzuSaglik" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/config" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config/configuration.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="dd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="kk" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MevzuSaglik" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -190,7 +164,54 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dd.py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kk.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="preprocessing (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MevzuSaglik" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Preprocessing" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Preprocessing/preprocessing.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="preprocessing" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MevzuSaglik" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\hilal\MevzuSaglik\Preprocessing\preprocessing.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -200,25 +221,26 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.chat_models" />
-      <item itemvalue="Python.Retrievers" />
+      <item itemvalue="Python.Dokumanlarim (1)" />
       <item itemvalue="Python.Vector_store" />
-      <item itemvalue="Python.configuration" />
-      <item itemvalue="Python.dd" />
+      <item itemvalue="Python.kk" />
+      <item itemvalue="Python.preprocessing (1)" />
+      <item itemvalue="Python.preprocessing" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Retrievers" />
-        <item itemvalue="Python.chat_models" />
-        <item itemvalue="Python.dd" />
         <item itemvalue="Python.Vector_store" />
-        <item itemvalue="Python.configuration" />
+        <item itemvalue="Python.preprocessing (1)" />
+        <item itemvalue="Python.preprocessing" />
+        <item itemvalue="Python.kk" />
+        <item itemvalue="Python.Dokumanlarim (1)" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-PY-251.26927.90" />
         <option value="bundled-python-sdk-41e8cd69c857-64d779b69b7a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.26927.90" />
       </set>
     </attachedChunks>
@@ -230,30 +252,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1764854970825</updated>
+      <workItem from="1769360473647" duration="2791000" />
+      <workItem from="1769367806279" duration="3038000" />
+      <workItem from="1769425100609" duration="6683000" />
     </task>
     <servers />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="feat/sqlalchemy-mysql-integration" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

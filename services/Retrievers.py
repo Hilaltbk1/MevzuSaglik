@@ -1,14 +1,18 @@
 from dotenv import load_dotenv
+
+# Bu üçü LangChain ana paketinden gelmeli
+from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains.retrieval import create_retrieval_chain
+from langchain.chains.history_aware_retriever import create_history_aware_retriever
+
+# Bunlar genellikle core veya community paketindedir, LangChain üzerinden de erişilebilir
 from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
-from langchain_classic.chains.history_aware_retriever import create_history_aware_retriever
 from langchain_community.retrievers import BM25Retriever
+from langchain_ollama import ChatOllama
+
 from config.configuration import Settings
 from prompt.My_Prompt import create_prompt
 from services.Vector_store import initialize_vector_store
-from langchain_ollama import ChatOllama #
-
 
 settings=Settings()
 # Satır 2 civarındaki hata için:
@@ -17,9 +21,10 @@ def retrieval_chain():
 
     llm = ChatOllama(
         model="llama3.1:8b",
-        temperature=0
+        temperature=0,
+        base_url="http://host.docker.internal:11434"
     )
-
+    #vector_store,chunks
     v_db,split_text=initialize_vector_store()
 
     #vector search
@@ -30,17 +35,12 @@ def retrieval_chain():
     mix_retrievers=EnsembleRetriever(retrievers=[vector_retrievers,bm25_retrievers],weights=[0.5,0.5])
 
     # 5. Final Retrieval Chain
-    multi_retriever = MultiQueryRetriever.from_llm(
-        retriever=mix_retrievers,
-        llm=llm  # Yukarıda tanımladığın ve çalışan LLM
-    )
-
 
     qa_pr,c_pr = create_prompt()
 
     history_aware_retriever=create_history_aware_retriever(
         llm,
-        multi_retriever,
+        mix_retrievers,
         c_pr
     )
 
@@ -51,10 +51,12 @@ def retrieval_chain():
 
     # 3. Final Zinciri multi_retriever ile güncelliyoruz
     full_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
-    response=full_chain.invoke({"input":"Ambulans ve acil bakım teknikerleri hangi görevlere sahiptir?"})
-    print("Bulunan belgeler:")
-    for doc in response["context"]:
-        print(f"Kaynak :{doc.metadata.get('source')} | İçerik özeti : {doc.page_content[:100]}...")
-    print("\n LLM cevabı:" ,response["answer"])
 
-retrieval_chain()
+    # BU KISIM ÖNEMLİ: session.py'nin 'chain.full_chain' olarak erişebilmesi için
+    # fonksiyonun bu nesneyi döndürmesi gerekir.
+    class ChainContainer:
+        def __init__(self, fc):
+            self.full_chain = fc
+
+    return ChainContainer(full_chain)
+

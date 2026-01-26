@@ -6,6 +6,3 @@ __pycache__
 db_data/
 qdrant_storage/
 chroma_data/
-
-.idea/
-.venv/

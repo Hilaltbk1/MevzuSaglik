@@ -11,7 +11,7 @@ class LogModel(Base):
     status_code=Column(Integer,nullable=False)
     request=Column(Text, nullable=False)
     response=Column(Text, nullable=False)
-    error_message=Column(Text, nullable=False)
+    error_message=Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.now)
 
     message_id=Column(Integer, ForeignKey('message.id'), nullable=False)

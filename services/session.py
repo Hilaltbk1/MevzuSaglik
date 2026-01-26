@@ -7,7 +7,7 @@ from services.Retrievers import retrieval_chain
 #
 
 chain=retrieval_chain() #fonk chaın degıskenıne atadık
-
+#sorgu yapacağız
 def ask_question(db:Session, request:QueryRequest) ->QueryResponse:
     #bana bu ısımdekı kullanıcının tum bılgılerını getır
     user_session_satiri=crud.read_session(db, session_name=request.user_name)
