@@ -42,7 +42,7 @@ def create_log(db:Session,status_code:int,request_data:str,response_data:str,err
     db.commit()
     db.refresh(new_log)
     return new_log
-#----------------------READ İŞLEMLERİ---------------------------
+#----------------------İSTENENİLEN KULLANICIYA GÖRE READ İŞLEMLERİ---------------------------
 #READ MESSAGE
 def read_message(db: Session, current_session_id: int):
     return db.query(MessageModel).filter_by(session_id=current_session_id).order_by(MessageModel.created_at.asc()).all()
@@ -54,6 +54,35 @@ def read_session(db: Session, session_name: str):
 #READ-LOG
 def read_log(db: Session, message_id: int):
     return db.query(LogModel).filter_by(message_id=message_id).all()
+
+
+#---------------------TÜM READ İŞLEMLERİ--------------------
+def read_all_messages(db:Session):
+    return db.query(MessageModel).all()
+
+def read_all_sessions(db:Session):
+    return db.query(SessionModel).all()
+
+def read_all_logs(db:Session):
+    return db.query(LogModel).all()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,23 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c986381f-b199-491f-9e43-4dea3e56d67e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/routers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/routers/history.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/routers/search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/db_setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/db_setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dd.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/log_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/log_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/message_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/message_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prompt/My_Prompt.py" beforeDir="false" afterPath="$PROJECT_DIR$/prompt/My_Prompt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/Retrievers.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Retrievers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/Vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Vector_store.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/history.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/history.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/session.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,6 +57,7 @@
     &quot;Python.Dokumanlarim (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.Dokumanlarim.executor&quot;: &quot;Run&quot;,
     &quot;Python.Vector_store.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.history.executor&quot;: &quot;Run&quot;,
     &quot;Python.kk.executor&quot;: &quot;Run&quot;,
     &quot;Python.metaVeri.executor&quot;: &quot;Run&quot;,
     &quot;Python.preprocessing (1).executor&quot;: &quot;Run&quot;,
@@ -76,7 +65,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/fastapi&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/hilal/MevzuSaglik&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -104,30 +93,7 @@
       <recent name="C:\Users\hilal\MevzuSaglik\DOCX\Tuzukler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Vector_store">
-    <configuration name="Dokumanlarim (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MevzuSaglik" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Dokumanlarim.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.history">
     <configuration name="Vector_store" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MevzuSaglik" />
       <option name="ENV_FILES" value="" />
@@ -143,6 +109,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/services/Vector_store.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="history" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MevzuSaglik" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/routers" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/routers/history.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -221,7 +210,7 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.Dokumanlarim (1)" />
+      <item itemvalue="Python.history" />
       <item itemvalue="Python.Vector_store" />
       <item itemvalue="Python.kk" />
       <item itemvalue="Python.preprocessing (1)" />
@@ -229,11 +218,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.history" />
         <item itemvalue="Python.Vector_store" />
         <item itemvalue="Python.preprocessing (1)" />
         <item itemvalue="Python.preprocessing" />
         <item itemvalue="Python.kk" />
-        <item itemvalue="Python.Dokumanlarim (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -255,10 +244,14 @@
       <workItem from="1769360473647" duration="2791000" />
       <workItem from="1769367806279" duration="3038000" />
       <workItem from="1769425100609" duration="6683000" />
+      <workItem from="1769513048176" duration="6692000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/MevzuSaglik$history.coverage" NAME="history Coverage Results" MODIFIED="1769446640303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/routers" />
   </component>
 </project>

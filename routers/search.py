@@ -12,6 +12,7 @@ router = APIRouter(
 )
 
 #endpointleri tanımlama
+#soru sor yanıt uret
 @router.post("/ask",response_model=QueryResponse)
 async def create_query(request: QueryRequest, db:Session=Depends(get_db)):
     try:
@@ -21,3 +22,4 @@ async def create_query(request: QueryRequest, db:Session=Depends(get_db)):
         return result
     except Exception as e:
         raise HTTPException(status_code=500,detail=f"AI HATASI : {str(e)}")
+

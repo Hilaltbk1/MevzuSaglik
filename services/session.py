@@ -1,10 +1,12 @@
+from fastapi import Depends
 from langchain_core.messages import HumanMessage,AIMessage
-from database import crud
+from database.db_setup import get_db
 from models.query_model import QueryRequest, QueryResponse
-from sqlalchemy.orm import Session
-import datetime
 from services.Retrievers import retrieval_chain
-#
+from typing import List
+from fastapi import HTTPException
+from sqlalchemy.orm import Session
+from database import crud
 
 chain=retrieval_chain() #fonk chaın degıskenıne atadık
 #sorgu yapacağız
@@ -47,12 +49,44 @@ def ask_question(db:Session, request:QueryRequest) ->QueryResponse:
         status="success"
     )
 
+#sadece istenilen kullanıcının mesajları
+def get_user_history(session_name:str,db:Session):
+    try:
+        session_obj = crud.read_session(db,session_name)
+        if not session_obj:
+            raise HTTPException(status_code=404, detail="Kullanıcı oturumu bulunamadı.")
+        list_of_messages : List = crud.read_message(db,session_obj.id)
+        temp = []
+        for msj in list_of_messages:
+            temp.append({
+                "id":msj.id,
+                "sender":msj.sender_type,
+                "content":msj.content,
+                "created_at":msj.created_at,
+                "is_user": True if msj.sender_type == "human" else False
+            })
+        return temp
+    except HTTPException as e:
+        raise e
 
-def get_history(db,user_name:str):
-    user_session_satiri=crud.read_session(db, session_name=user_name)
-    if not user_session_satiri:
-        return []
-    else:
-        #filtreleme
-        db_messages=crud.read_message(db, user_session_satiri.id)
-        return db_messages
+#tüm sohbet geçmisi kullanıcıların altında tum mesajlar olacak
+def get_all_history(db: Session = Depends(get_db)):
+    try:
+        sesion_obj_list=crud.read_all_sessions(db)
+        temp_history=[]
+
+        for session_obj in sesion_obj_list:
+            session_id=session_obj.id
+            messages=crud.read_message(db,session_id)
+            user_package = {
+                "user_name":session_obj.user_name,
+                "messages": [{
+                    "content":m.content,
+                    "role":m.sender_type,
+                    "date":m.created_at,
+                } for m in messages]
+            }
+            temp_history.append(user_package)
+        return temp_history
+    except Exception as e:
+        raise HTTPException(status_code=400,detail=f"Herhangi bir sohbet geçmişi bulunmamaktadır.{str(e)}")
