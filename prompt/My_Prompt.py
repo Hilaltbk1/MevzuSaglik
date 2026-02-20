@@ -3,17 +3,18 @@ from langchain_core.prompts import ChatPromptTemplate
 def create_prompt():
     # 1. Soru Cevap Promptu (QA)
     qa_ninja = """
+        Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
         Görevin kullanıcı sorusunu sana "BULUNAN BİLGİLER" başlığı altında verilen metin parçalarına dayanarak yanıtlamaktır.
 
         KULLANICI SORUSU: {{ input }}
 
-        BULUNAN BİLGİLER:
-        {{ context }}
+        BULUNAN BİLGİLER:{{ context }}
 
         TALİMATLAR:
         1. Eğer cevap bu belgelerde yoksa, "Üzgünüm, soruyu yanıtlayamıyorum" cevabını ver.
         2. Asla tahmin yürütme.
         3. Yanıtları net, profesyonel ve doğrudan ver.
+        4. Kullanıcıya hangi maddeye dayanarak cevap verdiğini söyle.Örneğin Kullanıcıya 'X yönetmeliğinin Y maddesine göre...' şeklinde güven verici bir şekilde belirt.
         4. Yanıtı maddeler halinde alt alta yaz. 20 cümleyi geçmesin.
         """
 
@@ -27,6 +28,7 @@ def create_prompt():
     Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
     Görevin sadece verilen sohbet geçmişini ve son kullanıcı sorusunu analiz ederek, veritabanında arama yapmak ve 
     anlamlı tek bir adet soru oluşturmaktır. Soruyu asla cevaplama sadece yeniden ifade ederek yaz.
+    KRİTİK KURAL: Asla açıklamaya yapma. Sadece ve sadece arama sorgusunu yaz.
 
     {% if chat_history %}
         Sohbet Geçmişi:

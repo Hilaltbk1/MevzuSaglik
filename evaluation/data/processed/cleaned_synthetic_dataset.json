@@ -1,0 +1,192 @@
+[
+    {
+        "chunk_id": 0,
+        "question": "Bir sağlık çalışanı, serbest dolaşımda bulunmayan koruma ürünlerini nasıl taşıyabilir?",
+        "ground_truth": "Bu tür ürünlerin kara, demir, deniz veya hava yoluyla taşınması, gümrük gözetimi ve denetimi altında yapılmalıdır. Yani, bu ürünler için transit rejimi hükümlerine uygun hareket edilmesi gerekmektedir. (Gümrük Kanunu, Madde 84 uyarınca)"
+    },
+    {
+        "chunk_id": 0,
+        "question": "Biyosidal ürünlerin gümrükten geçişinde dikkat edilmesi gereken hususlar nelerdir?",
+        "ground_truth": "Bu ürünlerin geçişi sırasında gümrük denetimi yapılması zorunludur ve bu süreçte mevzuatın belirlediği şartlara uygun olarak hareket edilmelidir. Aksi takdirde, ürünlerin geçişinde sorunlar yaşanabilir. (Gümrük Kanunu, Madde 84 uyarınca)"
+    },
+    {
+        "chunk_id": 4,
+        "question": "Salgın incelemesi yapılması gerektiğini hangi durumlarda anlayabiliriz?",
+        "ground_truth": "Vaka artışlarının gözlemlenmesi veya belirli bir bölgede hastalık kümelenmelerinin tespit edilmesi durumunda salgın incelemesi gereklidir. Bu tür durumlar, sağlık otoriteleri tarafından ciddiye alınmalı ve gerekli adımlar atılmalıdır."
+    },
+    {
+        "chunk_id": 4,
+        "question": "Bir hastalıkta artış yaşanması durumunda ne gibi adımlar izlenmelidir?",
+        "ground_truth": "Eğer belirli bir hastalıkta artış yaşanıyorsa, öncelikle bu durumu analiz etmek ve incelemek gerekir. Sağlık çalışanları, artışın nedenlerini araştırmalı ve bu veriler ışığında uygun önlemleri almalıdır. Bu süreç, salgın incelemesi ile desteklenmelidir."
+    },
+    {
+        "chunk_id": 6,
+        "question": "Sağlık göstergeleri belirlenirken dikkate alınması gereken temel unsurlar nelerdir?",
+        "ground_truth": "Sağlık göstergeleri oluşturulurken, öncelikle ölçütlerin doğru tanımlanması, veri toplama yöntemlerinin güvenilir olması ve bu verilerin analizinde uygun istatistiksel yöntemlerin kullanılması önem taşır. Bu süreç, sağlık hizmetlerinin etkinliğini ve kalitesini artırmak için gereklidir. (Sağlık Göstergeleri Yönetmeliği)"
+    },
+    {
+        "chunk_id": 6,
+        "question": "Oran ve orantı kavramları arasındaki farklar nelerdir ve bunlar hangi durumlarda kullanılır?",
+        "ground_truth": "Oran, iki sayının birbirine bölünmesiyle elde edilen değeri ifade ederken, orantı ise iki oranın eşitliğini belirtir. Sağlık ölçütlerinin değerlendirilmesinde oranlar, belirli bir popülasyondaki hastalık yaygınlığını gösterirken, orantılar ise farklı gruplar arasındaki ilişkileri anlamak için kullanılır. (Sağlık Ölçütleri ve Göstergeleri Yönetmeliği)"
+    },
+    {
+        "chunk_id": 12,
+        "question": "Hastaların tedavi süreçlerini izlemek için hangi kayıt sistemine ihtiyaç duyulmaktadır?",
+        "ground_truth": "Hastaların tedavi süreçlerini etkili bir şekilde takip edebilmek için sağlık kuruluşları, elektronik sağlık kayıt sistemine başvurmalıdır. Bu sistem, hastaların sağlık bilgilerini merkezi bir veritabanında toplar ve sağlık profesyonellerinin bu bilgilere kolay erişimini sağlar. Böylece, hastaların geçmiş tedavi süreçleri daha etkin bir şekilde izlenebilir. (Elektronik Sağlık Hizmetleri Yönetmeliği)"
+    },
+    {
+        "chunk_id": 12,
+        "question": "Bir sağlık çalışanı, hasta bilgilerini kaydederken neden gizlilik ilkesine uymalıdır?",
+        "ground_truth": "Hasta bilgileri, kişisel ve özel veriler içermektedir. Bu nedenle, sağlık çalışanlarının bu bilgileri koruması ve gizlilik ilkesine uyması zorunludur. Aksi takdirde, hasta güvenliği tehlikeye girebilir ve kurumun itibarı zarar görebilir. Bu durum, sağlık hizmetlerinin kalitesini de olumsuz etkiler. (Kişisel Verilerin Korunması Kanunu)"
+    },
+    {
+        "chunk_id": 13,
+        "question": "Eğer bir sağlık çalışanı daha önce emekli sandığına tabi bir görevde bulunmuşsa, bu durumun kendisine sağladığı avantajlar neler olabilir?",
+        "ground_truth": "Bu tür bir görevde çalışmış bir kişinin, mevcut intibak işlemlerinde kazanılmış hakları korunur. Yani, önceki görevden elde ettiği haklar, yeni pozisyonda geçerliliğini korur. Bu durum, çalışanın daha yüksek bir dereceye ve dolayısıyla daha iyi bir maaşa erişimini etkileyebilir. Ancak, bu yükseklik öğrenim durumuna göre sınırlı kalır. (Sosyal Sigortalar Kanunu uyarınca)"
+    },
+    {
+        "chunk_id": 13,
+        "question": "Eğer bir sağlık çalışanı intibak sürecinde öğrenim durumu nedeniyle belirli bir dereceden faydalanamıyorsa, bu durumun sonuçları neler olur?",
+        "ground_truth": "Çalışanın intibak sonucunda gireceği derece, sadece öğrenim durumuna bağlı olarak yükselebilir. Ancak, bu yükseklik kişinin mevcut kademe aylığını aşamaz. Böylece, çalışanın maaşı, öğrenim durumuna göre belirlenen son kademe ile sınırlı kalır. Bu durum, çalışanın kariyer ilerlemesine ve maddi kazancına etki eder. (T.C. Emekli Sandığı Yönetmeliği'ne göre)"
+    },
+    {
+        "chunk_id": 14,
+        "question": "Bir sağlık çalışanı, hastaların tıbbi verilerini nasıl koruyabilir?",
+        "ground_truth": "Hastaların tıbbi bilgilerini korumak için sağlık çalışanları, verilerin gizliliğini sağlamak adına gerekli güvenlik önlemlerini almalı, sadece yetkili kişilerin erişimine izin vermeli ve verilerin güvenli bir şekilde saklanmasını temin etmelidir. Ayrıca, hastalara ait verilerin paylaşılmasında yasal düzenlemelere uygun hareket etmek önemlidir. (Kişisel Verilerin Korunması Kanunu uyarınca)."
+    },
+    {
+        "chunk_id": 14,
+        "question": "Bir sağlık personeli, tıbbi malzemelerin kullanımı sırasında hangi sorumlulukları taşır?",
+        "ground_truth": "Tıbbi malzemelerin kullanımı sırasında sağlık personeli, bu malzemelerin doğru bir şekilde kullanılması, hasta güvenliğinin sağlanması ve olası risklerin minimize edilmesi konusunda sorumluluk taşır. Ayrıca, malzemelerin kullanımına dair eğitim almış olması ve gerektiğinde denetim süreçlerine uyum göstermesi gerekmektedir. (Sağlık Uygulamaları Yönetmeliği gereğince)."
+    },
+    {
+        "chunk_id": 17,
+        "question": "Sosyal beceri eğitimi almadığımızda, bir bireyin toplumsal ilişkilerinde karşılaşabileceği zorluklar neler olabilir?",
+        "ground_truth": "Sosyal beceri eğitimi eksikliği, bireyin iletişim kurma yeteneğini olumsuz etkileyebilir. Bu durum, sosyal ortamlarda kaygı, yanlış anlaşılmalar ve yalnızlık hissi gibi sorunlara yol açabilir. Ayrıca, grup içindeki dinamikleri yönetme becerisi gelişmediği için, işbirliği yapma veya çatışmaları çözme konusunda da zorluk yaşayabilir. (Sosyal Beceriler Eğitimi Yönetmeliği)"
+    },
+    {
+        "chunk_id": 17,
+        "question": "Sosyal beceri eğitimi uygulamalarının bireylerin kişisel gelişimlerine sağladığı katkılar nelerdir?",
+        "ground_truth": "Bu eğitimler, bireylerin öz güvenini artırarak sosyal ortamlarda daha rahat davranmalarını sağlar. Ayrıca, empati yeteneğini geliştirdiğinden, başkalarıyla olan ilişkilerinin kalitesini artırır. İletişim becerileri güçlenir ve böylece bireylerin iş yaşamında da daha etkili olmalarına yardımcı olur. (Sosyal Beceriler Eğitimi Yönetmeliği)"
+    },
+    {
+        "chunk_id": 19,
+        "question": "Yeni düzenlemeler yürürlüğe girmeden önce eski kanunların geçerliliği ne olacak?",
+        "ground_truth": "Eski kanunların yürürlükte kalması, yeni düzenlemeler çıkana kadar geçerliliğini sürdürecektir. Ancak yeni mevzuata aykırı olan hükümler geçerliliğini yitirecektir. Bu durum, sağlık çalışanlarının eski düzenlemelere göre hareket etmeye devam etmesini sağlayacaktır. (Kanun Hükmünde Kararnamenin Değiştirilerek Kabulü Hakkındaki Kanun)"
+    },
+    {
+        "chunk_id": 19,
+        "question": "Yeni yönetmelikler çıkarılıncaya kadar eski mevzuatta hangi hükümler geçerli olacak?",
+        "ground_truth": "Yeni yönetmelikler yürürlüğe girene kadar, eski mevzuatta yer alan, yeni düzenlemelere aykırı olmayan hükümler geçerli kalacaktır. Sağlık çalışanları, bu hükümleri göz önünde bulundurarak işlerini sürdürebilirler. (Hayvan Sağlığı ve Zabıtası Kanunu)"
+    },
+    {
+        "chunk_id": 20,
+        "question": "Temel sağlık hizmetleri nasıl daha etkin bir şekilde sunulabilir?",
+        "ground_truth": "Temel sağlık hizmetlerinin etkinliğini artırmak için, hizmetin erişilebilirliğini sağlamak, sağlık çalışanlarının eğitimine önem vermek ve halkın sağlık okuryazarlığını geliştirmek gereklidir. Bu yaklaşımlar, sağlık hizmetlerinin kalitesini artırır ve toplum sağlığını olumlu yönde etkiler. (Temel Sağlık Hizmetleri Yönetmeliği)"
+    },
+    {
+        "chunk_id": 20,
+        "question": "Hizmet sunumunda karşılaşılan aksaklıklar nelere neden olabilir?",
+        "ground_truth": "Hizmet sunumunda yaşanan aksaklıklar, personel yetersizliği, ekipman eksiklikleri veya iletişim kopuklukları gibi durumlardan kaynaklanabilir. Bu sorunlar, sağlık hizmetlerinin kalitesinde düşüşe ve hasta memnuniyetinde azalmaya yol açabilir. (Temel Sağlık Hizmetleri Yönetmeliği)"
+    },
+    {
+        "chunk_id": 21,
+        "question": "Aile hekimliği ile ortak çalışmalar yapılırken hangi tür hizmetler ön planda tutuluyor?",
+        "ground_truth": "Bu tür çalışmalar, koruyucu sağlık hizmetlerini öncelikli hedef olarak belirler. Aile hekimleri, hastalıkların erken tespitine ve yönetimine yardımcı olacak sistemler geliştirmekte ve toplum sağlığını koruma amacı gütmektedir. (Halk Sağlığı Genel Müdürlüğü uygulamaları doğrultusunda)"
+    },
+    {
+        "chunk_id": 21,
+        "question": "Hastalık Yönetim Platformu'nun faydası nedir ve kimler ile iş birliği yapılır?",
+        "ground_truth": "Hastalık Yönetim Platformu, kronik hastalıkların yönetimine yönelik stratejiler geliştirmekte ve bu süreçte aile hekimliği ile iş birliği yaparak daha etkili çözümler sunmayı amaçlamaktadır. Bu iş birliği, hasta takibi ve sağlık hizmetlerinin koordinasyonu açısından büyük önem taşır. (Kronik Hastalıklar ve Yaşlı Sağlığı Dairesi Başkanlığı'nın düzenlemeleri çerçevesinde)"
+    },
+    {
+        "chunk_id": 23,
+        "question": "Prediyabet tanısı olan bir hasta, ne sıklıkla diyabet taramasına girmelidir?",
+        "ground_truth": "Bu tür hastalar yılda bir kez diyabet taramasından geçmelidir. Bu, sağlık durumlarının izlenmesi açısından önemlidir. (Diyabet Tarama Yönetmeliği)"
+    },
+    {
+        "chunk_id": 23,
+        "question": "GDM tanısı almış bir kadın, diyabet taraması için hangi süre zarfında kontrol edilmelidir?",
+        "ground_truth": "GDM tanısı olan kadınlar, üç yılda bir diyabet taramasına tabi tutulmalıdır. Bu, hastalığın ilerlemesini önlemek için gereklidir. (Diyabet Tarama Yönetmeliği)"
+    },
+    {
+        "chunk_id": 32,
+        "question": "Tütün ürünleri kullanımı yasak olan yerlerde çalışan biri ne gibi yaptırımlarla karşılaşabilir?",
+        "ground_truth": "Tütün ürünlerinin kullanılmasına izin verilmeyen alanlarda çalışan bir kişi, bu kurallara uymadığı takdirde iş yeri tarafından disiplin cezası alabilir. Ayrıca, eğer denetim sırasında tütün ürünleri kullanımı tespit edilirse, işletme de idari para cezası gibi yaptırımlarla karşılaşabilir. Bu durum, tütün yasağının ihlali ile ilgili yönetmeliklere dayanır."
+    },
+    {
+        "chunk_id": 32,
+        "question": "Tütün yasağına uymayan bir sağlık kuruluşunun başına neler gelebilir?",
+        "ground_truth": "Tütün yasağına riayet etmeyen bir sağlık kuruluşu, denetim süreçleri sonucunda çeşitli cezalara maruz kalabilir. Bu cezalara idari yaptırımlar, para cezaları ve hatta faaliyet durdurma gibi önlemler dahil olabilir. Böylece, bu tür ihlaller hem sağlık çalışanlarının hem de hastaların sağlığını olumsuz etkileyebilir ve bu durum ilgili mevzuat hükümleri doğrultusunda değerlendirilir."
+    },
+    {
+        "chunk_id": 33,
+        "question": "Hastalarla ilgili geçmiş tarihli verileri nasıl koruyabilirim?",
+        "ground_truth": "Hastalarla ilgili geçmişe yönelik bilgileri gizli tutmak ve sadece yetkili kişilerle paylaşmak önemlidir. Ayrıca, bu verilerin saklanması için güvenli bir sistem kullanılmalı ve verilerin erişimi düzenli olarak denetlenmelidir. Bu uygulamalar, hasta mahremiyetini sağlamak için gereklidir. (Kişisel Verilerin Korunması Kanunu uyarınca)."
+    },
+    {
+        "chunk_id": 33,
+        "question": "Geçmiş tarihlerdeki tedavi süreçlerini nasıl değerlendiririm?",
+        "ground_truth": "Eski tedavi süreçlerini değerlendirirken, hasta dosyalarını düzenli bir şekilde incelemeli ve her bir tedavi aşamasının sonuçlarını analiz etmelisiniz. Bu, gelecekte benzer vakalar için daha iyi kararlar almanıza yardımcı olur ve sürekli gelişim açısından faydalıdır. (Sağlık Bakanlığı'nın hizmet standartları çerçevesinde)."
+    },
+    {
+        "chunk_id": 37,
+        "question": "Bir sağlık çalışanı, tütün yasağı ihlal edildiğinde ne tür yaptırımlarla karşılaşabilir?",
+        "ground_truth": "Tütün yasağına uymayan sağlık çalışanları, çeşitli disiplin cezaları ile karşılaşabilirler. Bu yaptırımlar, uyarıdan başlayarak, görevden men veya para cezası gibi farklı şekillerde uygulanabilir. Bu durum, sağlık hizmetlerinin kalitesini etkileyebileceğinden, dikkatle izlenmesi gereken bir konudur. (201463 sayılı Karar)"
+    },
+    {
+        "chunk_id": 37,
+        "question": "Eğer bir sağlık kurumu, tütün yasağına uymazsa hangi sonuçlarla karşılaşabilir?",
+        "ground_truth": "Tütün yasağına uymayan bir sağlık kurumu, denetim süreci sırasında cezai yaptırımlarla karşılaşabilir. Bu yaptırımlar arasında, hizmet ruhsatının askıya alınması veya belirli bir süreyle kapatılması gibi cezalar yer alabilir. Dolayısıyla, sağlık kurumlarının bu kurala riayet etmesi, hem yasal açıdan hem de kamu sağlığı açısından büyük önem taşır. (201463 sayılı Karar)"
+    },
+    {
+        "chunk_id": 41,
+        "question": "Kan basıncını etkileyen faktörler neler olabilir?",
+        "ground_truth": "Kan basıncının artmasına ya da azalmasına neden olan birçok unsur bulunmaktadır. Bunlar arasında kişinin genel sağlık durumu, yaşam tarzı, beslenme alışkanlıkları, fiziksel aktivite düzeyi ve stres seviyesi sayılabilir. Ayrıca, bazı tıbbi durumlar da kan basıncını etkileyebilir. Bu nedenle sağlık çalışanlarının bu etkenleri göz önünde bulundurarak hastalarını değerlendirmeleri önemlidir."
+    },
+    {
+        "chunk_id": 41,
+        "question": "Yüksek kan basıncının uzun vadede sağlık üzerindeki etkileri neler olabilir?",
+        "ground_truth": "Yüksek kan basıncı, zamanla kalp hastalıkları, felç ve böbrek problemleri gibi ciddi sağlık sorunlarına yol açabilir. Bu durum, damarların zarar görmesine, kalp kasının aşırı çalışmasına ve diğer organların işlevlerinin bozulmasına neden olabilir. Dolayısıyla, bu durumu yönetmek için düzenli kontroller ve uygun tedavi yöntemleri geliştirmek kritik öneme sahiptir."
+    },
+    {
+        "chunk_id": 42,
+        "question": "Yabancı ülkelerle ilgili adalet hizmetlerinde hangi işlemleri yapmamız gerekiyor?",
+        "ground_truth": "Yabancı ülkelerle ilgili adalet hizmetlerinde, öncelikle ilgili mevzuat ve uygulama süreçlerini dikkate alarak gerekli işlemleri gerçekleştirmelisiniz. Bu, belgelerin doğrulanması, uluslararası işbirliklerinin sağlanması ve gerekli araştırmaların yapılmasını içerir. (Adalet Bakanlığı'nın ilgili düzenlemeleri uyarınca)"
+    },
+    {
+        "chunk_id": 42,
+        "question": "Adli sicilin tutulması ile ilgili hizmetlerin eksik olması durumunda ne gibi sonuçlarla karşılaşabiliriz?",
+        "ground_truth": "Adli sicilin tutulmasındaki eksiklikler, adalet sisteminin işleyişini olumsuz etkileyebilir. Bu durum, davaların doğru bir şekilde yürütülmemesi ve infaz süreçlerinin aksamaları gibi sonuçlara yol açar. Bu nedenle, adli sicilin düzenli ve doğru bir şekilde tutulması büyük önem taşır. (Adalet Bakanlığı'nın ilgili yönetmelikleri uyarınca)"
+    },
+    {
+        "chunk_id": 43,
+        "question": "Bir salgın durumunda risk seviyesini nasıl belirleyebilirim?",
+        "ground_truth": "Bir salgın durumunda risk seviyesini belirlemek için, öncelikle hastalığın yayılma hızını, etkilenen bireylerin sayısını ve toplumda oluşturduğu etkiyi değerlendirmek gerekir. Ayrıca, sağlık çalışanlarının maruz kalma olasılıkları ve mevcut sağlık altyapısının durumu da göz önünde bulundurulmalıdır. Bu faktörlerin bir arada değerlendirilmesi, risk seviyesinin belirlenmesinde yardımcı olacaktır. (Sağlık Bakanlığı'nın Salgın Yönetimi Rehberi uyarınca)."
+    },
+    {
+        "chunk_id": 43,
+        "question": "Salgın sırasında olası riskleri azaltmak için hangi önlemleri alabilirim?",
+        "ground_truth": "Salgın sırasında olası riskleri azaltmak için, öncelikle hijyen kurallarına sıkı bir şekilde uymak, kişisel koruyucu ekipmanları etkin bir şekilde kullanmak ve aşılamaları teşvik etmek gereklidir. Ayrıca, sağlık tesislerinde düzenli denetimlerin yapılması ve bilgi akışının sağlanması da önem taşır. Bu önlemler, hem çalışanların hem de hastaların güvenliğini artırmaya yönelik etkili stratejilerdir. (Halk Sağlığı Yönetmeliği'ne dayanmaktadır)."
+    },
+    {
+        "chunk_id": 46,
+        "question": "Bitkisel ürünlerin izlenebilirliğini sağlamak için hangi süreçlerin dikkate alınması gerekiyor?",
+        "ground_truth": "Bitkisel ürünlerin izlenebilirliği, üretimden dağıtıma kadar olan tüm süreçlerin dikkatlice kaydedilmesini gerektirir. Bu, ürünlerin kökeninin belirlenmesi, işleme aşamasının takibi ve dağıtım sürecinin izlenmesi gibi adımları içerir. Tüm bu aşamaların belgelenmesi, olası sorunlarda hızlı müdahale edebilmek için önemlidir. (Gıda İzlenebilirliği Yönetmeliği)"
+    },
+    {
+        "chunk_id": 46,
+        "question": "Üretim sürecinde izlenebilirlik sağlanmazsa ne gibi sonuçlarla karşılaşabiliriz?",
+        "ground_truth": "Eğer üretim sürecinde izlenebilirlik sağlanmazsa, ürün kalitesi ve güvenliği ile ilgili sorunlar ortaya çıkabilir. Bunun yanı sıra tüketici güveni zedelenebilir ve yasal yaptırımlarla karşılaşma riski artar. Bu nedenle, her aşamada izlenebilirliğin sağlanması, hem tüketici sağlığı hem de yasal yükümlülükler açısından kritik öneme sahiptir. (Gıda Güvenliği Yönetmeliği)"
+    },
+    {
+        "chunk_id": 49,
+        "question": "Yaşlı bireylerin sağlık hizmetlerinden yararlanabilmesi için hangi süreçleri takip etmemiz gerekiyor?",
+        "ground_truth": "Yaşlı bireylerin sağlık hizmetlerinden faydalanabilmesi için öncelikle düzenli sağlık taramaları yapılması, ihtiyaç duyduğu tedavilerin zamanında uygulanması ve evde bakım hizmetlerine erişimin sağlanması önemlidir. Bu süreçlerin her biri, yaşlı bireyin genel sağlık durumunu iyileştirmeye yönelik adımları içerir. (Yaşlı Bakım Yönetmeliği)"
+    },
+    {
+        "chunk_id": 49,
+        "question": "Yaşlıların sağlık sorunları için acil durumlarda nasıl bir müdahale planı oluşturmalıyız?",
+        "ground_truth": "Acil durumlarda yaşlı bireyler için hazırlanan müdahale planında, hızlı bir değerlendirme yaparak yaşlı kişinin sağlık geçmişini göz önünde bulundurmak, acil servisle iletişime geçmek ve varsa yanlarında taşıdıkları ilaçların kontrolünü sağlamak gereklidir. Bu plan, yaşlı bireyin acil sağlık ihtiyaçlarına hızlı ve etkili bir şekilde cevap vermek amacı taşır. (Acil Sağlık Hizmetleri Yönetmeliği)"
+    }
+]

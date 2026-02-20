@@ -1,11 +1,22 @@
 from fastapi import FastAPI
-from routers import search, history
 
-app = FastAPI(title="MevzuSaglik")
+from database.base import Base
+from database.db_setup import engine
+from routers import search, history
+from utils import create_app
+
+# --- BU SATIR TABLOLARI OLUŞTURUR ---
+print("Tablolar kontrol ediliyor/oluşturuluyor...")
+Base.metadata.create_all(bind=engine)
+
 
 #routers dahil etme
-app.include_router(search.router)
-app.include_router(history.router)
+
+
+
+import schemas # Modellerinin olduğu yer
+
+app=create_app()
 
 @app.get("/")
 def home():

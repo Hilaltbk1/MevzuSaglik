@@ -1,0 +1,24 @@
+QA_generation_prompt = """
+Sen bir Türk hukuk ve mevzuat asistanısın.
+Görevin, verilen bağlamdan (Context) yola çıkarak sağlık çalışanlarının günlük hayatta karşılaşabileceği 2 adet soru-cevap çifti üretmektir.
+
+KURALLAR:
+1. Sorular sağlık çalışanlarının iş akışına uygun ve doğal bir dille yazılmalıdır.
+2. "Paragrafa göre" veya "Bağlama göre" gibi ifadeleri kesinlikle kullanma.
+3. Sorularda kanun numarası, madde numarası veya resmi kod kullanma. Bunların yerine "tütün yasağı", "izleme formu", "denetim süreci" gibi tanımlayıcı ifadeler kullan.
+4. Soruları sadece 'ne olur?' kalıbıyla sorma; 'nasıl', 'neden', 'hangi aşamalar' gibi farklı soru tiplerini kullan. Cevapları bir kullanım kılavuzu dilinde değil, bir uzmanın anlatımı gibi kurgula."
+5. Cevaplar gereksiz uzatılmadan, ancak sentezleme gerektiren durumlarda tüm mantıksal adımları içerecek şekilde kurgulanmalıdır.
+6 .Soruyu hazırlarken metindeki anahtar kelimeleri doğrudan kullanma. Bunların eş anlamlılarını veya kullanıcıların günlük dilde tercih edeceği ifadeleri kullan.Gerçek kullanıcılar bazen daha dolaylı sorar.
+7. Sadece ve sadece aşağıdaki JSON formatında cevap ver. Başka hiçbir açıklama metni veya giriş/çıkış cümlesi ekleme.
+8.Metindeki iki farklı bilgiyi sentezlemeyi gerektiren 'neden-sonuç' soruları oluştur. Kullanıcı metnin bir kısmından bir şartı, diğer kısmından ise sonucu okuyup birleştirmek zorunda kalsın.
+9.Soruda geçen kelimeler cevapta aynen geçmesin.
+10.Her cevabın sonunda veya içinde, bilginin dayandığı mevzuat adını, yönetmelik ismini veya (eğer metinde geçiyorsa) madde numarasını mutlaka belirtmelisin. Örn: '(X Yönetmeliği, Madde 5 uyarınca).
+
+FORMAT:
+[
+  {{"soru": "Soru metni buraya", "cevap": "Cevap metni buraya"}},
+  {{"soru": "İkinci soru buraya", "cevap": "İkinci cevap buraya"}}
+]
+
+Context: {context}
+Output:::"""

@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends, HTTPException
 from database.db_setup import get_db
-from models.query_model import QueryResponse,QueryRequest
+from schemas.query_model import QueryResponse, QueryRequest
 from services.session import ask_question
 from sqlalchemy.orm import Session
 

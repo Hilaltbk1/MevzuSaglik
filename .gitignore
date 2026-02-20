@@ -9,3 +9,13 @@ chroma_data/
 
 .idea/
 .venv/
+
+# IDE ayarları
+
+.vscode/
+# Büyük Model Dosyaları ve Veriler
+models/
+data/Json/islenmis_mevzuat_verileri.json
+# Çevresel Değişkenler (Gizli anahtarların gitmesin!)
+# Docker logları
+*.log

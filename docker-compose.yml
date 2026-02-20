@@ -15,10 +15,13 @@ services:
       - "8001:8000"
 
   api:
+
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    build: .
+    build:
+      context: .
+      network: host
     ports:
       - "8000:8000"
     depends_on:
@@ -28,9 +31,12 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
+      - LANGCHAIN_TRACING_V2=false  # Buraya ekle
+      - QDRANT_HOST=qdrant
       - DATABASE_URL=mysql+pymysql://root:Hellohilal123.@host.docker.internal:3306/mevzu_saglik_db
     volumes:
       - .:/app
+      - ./schemas:/app/schemas
 
 volumes:
   qdrant_storage:

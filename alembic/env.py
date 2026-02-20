@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 # BURASI ÇOK ÖNEMLİ: Tüm modellerini buraya import etmelisin!
-from models import MessageModel, SessionModel, LogModel
+from schemas import MessageModel, SessionModel, LogModel
 from alembic import context
 
 from config.configuration import Settings

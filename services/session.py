@@ -1,14 +1,23 @@
 from fastapi import Depends
 from langchain_core.messages import HumanMessage,AIMessage
 from database.db_setup import get_db
-from models.query_model import QueryRequest, QueryResponse
+from schemas.query_model import QueryRequest, QueryResponse
 from services.Retrievers import retrieval_chain
 from typing import List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from database import crud
 
-chain=retrieval_chain() #fonk chaın degıskenıne atadık
+_chain = None  # Başta boş bırakıyoruz
+
+def get_chain():
+    """Zinciri sadece ihtiyaç duyulduğunda (ilk soruda) oluşturur."""
+    global _chain
+    if _chain is None:
+        print("⛓️ RAG Zinciri ilk kez oluşturuluyor, bu biraz zaman alabilir...")
+        _chain = retrieval_chain()
+    return _chain
+    #fonk chaın degıskenıne atadık
 #sorgu yapacağız
 def ask_question(db:Session, request:QueryRequest) ->QueryResponse:
     #bana bu ısımdekı kullanıcının tum bılgılerını getır
@@ -33,9 +42,20 @@ def ask_question(db:Session, request:QueryRequest) ->QueryResponse:
     human_message=crud.create_message(db,user_session_satiri.id,request.query,"human")
 
     #ai ya sor
-    response = chain.full_chain.invoke({"input":request.query,"chat_history":chat_history})
+    current_chain = get_chain()
+
+    # 3. response kısmında current_chain kullanıyoruz
+    response = current_chain.full_chain.invoke({"input": request.query, "chat_history": chat_history})
 
     answer=response.get("answer","Üzgünüm cevap oluşturulamadı")
+
+    raw_docs = response.get("context",[])
+
+    sources = [f"{doc.metadata.get('Mevzuat Adı','Bilinmeyen Mevzuat')} - {doc.metadata.get('Mevzuat Türü','Bilinmeyen')}" for doc in raw_docs] if raw_docs else []
+
+    #tekrar olmasın
+    sources=list(set(sources))
+
 
     #ai mesajini kaydet
     crud.create_message(db,user_session_satiri.id,answer,"ai")
@@ -46,6 +66,7 @@ def ask_question(db:Session, request:QueryRequest) ->QueryResponse:
     return QueryResponse(
         query=request.query,
         answer=answer,
+        sources=sources,
         status="success"
     )
 

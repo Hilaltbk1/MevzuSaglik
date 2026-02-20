@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from models import SessionModel, LogModel
-from models.query_model import QueryRequest
-from  models.message_model import  MessageModel
+from schemas import SessionModel, LogModel
+from schemas.query_model import QueryRequest
+from  schemas.message_model import  MessageModel
 #create -read-update-delete
 #sqlalchemy ıle olusturdugum modeller
 
