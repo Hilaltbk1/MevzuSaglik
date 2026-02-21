@@ -11,12 +11,13 @@ def create_prompt():
         BULUNAN BİLGİLER:{{ context }}
 
         TALİMATLAR:
-        1. Eğer cevap bu belgelerde yoksa, "Üzgünüm, soruyu yanıtlayamıyorum" cevabını ver.
-        2. Asla tahmin yürütme.
-        3. Yanıtları net, profesyonel ve doğrudan ver.
-        4. Kullanıcıya hangi maddeye dayanarak cevap verdiğini söyle.Örneğin Kullanıcıya 'X yönetmeliğinin Y maddesine göre...' şeklinde güven verici bir şekilde belirt.
-        4. Yanıtı maddeler halinde alt alta yaz. 20 cümleyi geçmesin.
-        """
+            1. ROL AYRIMI: Metin içinde farklı unvanların görevleri karışık olabilir. SADECE sorulan unvana ait görevleri getir.
+            2. KAYNAK GÖSTERİMİ: Yanıtına "X Yönetmeliği'nin Y Maddesine göre..." diyerek başla.
+            3. FORMAT: Yanıtı Markdown liste (* kullanarak) şeklinde ve her madde yeni satırda olacak şekilde yaz.
+            4. SINIR: Bilgi dökümanlarda yoksa uydurma, "Sistemimde bu konuda kayıtlı mevzuat bulunmamaktadır" de.
+            5. KAYNAKÇA: Yanıtı "Yararlanılan Kaynaklar:" başlığı altında mevzuat adlarını listeleyerek bitir.
+            6. CEVAP BAŞLANGICI: Cevabına asla kullanıcı sorusunu tekrar ederek başlama. Doğrudan kaynak göstererek (Örn: X Yönetmeliği'ne göre...) bilgi vermeye geç.
+            """
 
     qa_prompt = ChatPromptTemplate.from_template(
         template=qa_ninja,

@@ -4,6 +4,7 @@ from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
 from langchain_community.retrievers import BM25Retriever
+from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
 from config.configuration import Settings
@@ -36,6 +37,11 @@ def retrieval_chain():
     # 5. Final Retrieval Chain
     qa_pr,c_pr = create_prompt()
 
+    document_prompt = PromptTemplate(
+        input_variables=["page_content", "Mevzuat_Adi"],
+        template="[KAYNAK: {Mevzuat_Adi}]\nİÇERİK: {page_content}"
+    )
+
     history_aware_retriever=create_history_aware_retriever(
         llm,
         mix_retrievers,
@@ -44,7 +50,7 @@ def retrieval_chain():
 
 
     #okuma ve cevaplama -llm ı beslemek
-    question_answer_chain = create_stuff_documents_chain(llm,qa_pr,document_variable_name="context")
+    question_answer_chain = create_stuff_documents_chain(llm,qa_pr,document_variable_name="context", document_prompt=document_prompt)
 
 
 

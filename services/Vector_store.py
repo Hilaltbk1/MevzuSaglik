@@ -64,7 +64,7 @@ def initialize_vector_store(rebuild_db=False):
                 print(f"💾 İşlenmiş veriler yedeklendi: {PROCESSED_DATA_PATH}")
 
             text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000, chunk_overlap=200, length_function=len,
+                chunk_size=500, chunk_overlap=150, length_function=len,
                 separators=["\n\n", "\n", ". ", " ", ""]
             )
 
