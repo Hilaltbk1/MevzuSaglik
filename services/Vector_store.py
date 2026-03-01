@@ -67,8 +67,14 @@ def initialize_vector_store(rebuild_db=False):
         embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
         # --- 3. Qdrant Bağlantısı ---
-        QDRANT_HOST = os.getenv("QDRANT_HOST", "qdrant")
-        client = QdrantClient(host=QDRANT_HOST, port=6333, timeout=300, prefer_grpc=False)
+        QDRANT_HOST = os.getenv("QDRANT_HOST")  # Örn: https://xxxx.qdrant.io
+        QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+        # Bulut bağlantısı için url ve api_key parametrelerini kullanıyoruz
+        client = QdrantClient(
+            url=QDRANT_HOST,
+            api_key=QDRANT_API_KEY,
+            timeout=300
+        )
         COLLECTION_NAME = "mevzu_saglik_docs"
 
         exists = client.collection_exists(COLLECTION_NAME)

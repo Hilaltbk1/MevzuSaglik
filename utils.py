@@ -1,4 +1,4 @@
-from openai import OpenAI
+from google import genai
 from config.configuration import Settings
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
@@ -7,7 +7,10 @@ from routers import search, history, session_router
 settings = Settings()
 
 # Doğru başlatma:
-llm_client = OpenAI(api_key=settings.OPENAI_API_KEY)
+genai.configure(api_key=settings.GOOGLE_API_KEY)
+
+# llm_client olarak Gemini modelini tanımla
+llm_client = genai.GenerativeModel('gemini-1.5-flash')
 
 def create_app() -> FastAPI:
 
