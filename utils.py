@@ -1,16 +1,28 @@
-from google import genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from langchain_google_genai import ChatGoogleGenerativeAI
+
 from config.configuration import Settings
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from routers import search, history, session_router
-
+import google.generativeai as genai
 settings = Settings()
 
 # Doğru başlatma:
 genai.configure(api_key=settings.GOOGLE_API_KEY)
 
 # llm_client olarak Gemini modelini tanımla
-llm_client = genai.GenerativeModel('gemini-1.5-flash')
+llm_client = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    google_api_key=settings.GOOGLE_API_KEY,
+    safety_settings={
+            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+        }
+
+                                   )
 
 def create_app() -> FastAPI:
 

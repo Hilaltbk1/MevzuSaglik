@@ -38,52 +38,44 @@ def format_table_as_text(table_data: list) -> str:
 
     return "\n\n".join(semantic_rows)
 
-#tabloyu ragın anlayacagı sekle çevirme
-def verbalize_tables_with_llm(formatted_tables_text: str,model_name):
-
-    text_splitter=RecursiveCharacterTextSplitter(
-        chunk_size =3000,
+def verbalize_tables_with_llm(formatted_tables_text: str, model_name):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=3000,
         chunk_overlap=200,
         separators=["\n\n", "\n", ". ", " ", ""]
     )
-    initial_chunks=text_splitter.split_text(formatted_tables_text)
-
+    initial_chunks = text_splitter.split_text(formatted_tables_text)
     final_processed_chunks = []
 
     for chunk in initial_chunks:
+        # Tablo benzeri yapı kontrolü
+        if "SATIR" in chunk or ":" in chunk:
+            print("Tablo tespit edildi")
 
-        if "|" in chunk or  "  " in chunk:
-
-            print("Tablo tespit edildi ")
-            response = model_name.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "Sen profesyonel bir sağlık mevzuatı uzmanısın. Sana verilen metindeki tabloları oku ve bunları doğal dile çevir."
-                    },
-                    {
-                        "role": "user",
-                        "content": f"Aşağıdaki metindeki tabloları akıcı cümlelere dönüştür:\n\n{chunk}"
-                        # KRİTİK: Burada 'prompts' değil 'chunk' (parça) gönderiyoruz!
-                    }
-                ],
-              temperature=0
+            prompt = (
+                "Sen profesyonel bir sağlık mevzuatı uzmanısın. "
+                "Aşağıdaki metindeki tabloları oku ve bunları akıcı, doğal bir dile çevir:\n\n"
+                f"{chunk}"
             )
-            processed_text = response.choices[0].message.content
-            final_processed_chunks.append(processed_text)
+
+            # --- DÜZELTİLEN KISIM: LangChain invoke kullanımı ---
+            try:
+                # model_name burada aslında senin utils'den gelen llm_client'ındır.
+                response = model_name.invoke(prompt)
+                processed_text = response.content # .text yerine .content
+                final_processed_chunks.append(processed_text)
+            except Exception as e:
+                print(f"LLM İşleme Hatası: {e}")
+                final_processed_chunks.append(chunk) # Hata olursa ham hali kalsın
+            # -----------------------------------------------
         else:
-            # Normal metin ise hiç dokunmadan listeye ekle
             final_processed_chunks.append(chunk)
 
     return "\n\n".join(final_processed_chunks)
-
-#tek bir  mevzuatları ragın anlayacagı sekle getir
+    #tek bir  mevzuatları ragın anlayacagı sekle getir
 def flatten_mevzuat_object(mevzuat_object: Dict[str, Any],model_name) -> str:
 
-
     flat_parts = []
-
 
     flat_parts.append(f"MEVZUAT ADI: {mevzuat_object.get('Mevzuat Adı', 'YOK')}")
     flat_parts.append(f"MEVZUAT TÜRÜ: {mevzuat_object.get('Mevzuat Türü', 'YOK')}")

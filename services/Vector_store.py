@@ -8,7 +8,8 @@ from qdrant_client.models import VectorParams, Distance
 from qdrant_client import QdrantClient
 import os
 from dotenv import load_dotenv
-from utils import llm_client
+
+
 
 load_dotenv()
 
@@ -33,7 +34,7 @@ def initialize_vector_store(rebuild_db=False):
 
         # --- DÜZELTİLEN YER: Kesin Dosya Yolu ---
         # Hatalı olanı bununla değiştir:
-        PROCESSED_DATA_PATH = "/app/data/Json/islenmis_mevzuat_verileri.json"
+        PROCESSED_DATA_PATH =r"C:\Users\hilal\MevzuSaglik\data\Json\islenmis_mevzuat_verileri.json"
         # --- DÜZELTİLEN YER: LLM KONTROL MANTIĞI ---
         # Artık rebuild_db=True olsa bile eğer yedek dosya varsa LLM'i çalıştırmaz, dosyadan okur.
         if os.path.exists(PROCESSED_DATA_PATH):
@@ -118,4 +119,12 @@ def initialize_vector_store(rebuild_db=False):
 
 
 
-initialize_vector_store(rebuild_db=False)
+if __name__ == "__main__":
+    # Import'u sadece dosya çalışınca, fonksiyon içinde yapıyoruz (Döngü kırıldı!)
+    try:
+        from utils import llm_client
+
+        print("✅ Bağımlılıklar yüklendi, veritabanı işlemi başlıyor...")
+        initialize_vector_store(rebuild_db=True)
+    except Exception as e:
+        print(f"❌ Çalıştırma hatası: {e}")

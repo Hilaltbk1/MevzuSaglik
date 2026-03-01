@@ -3,7 +3,7 @@ import pickle
 from dotenv import load_dotenv
 
 # Ana LangChain bileşenleri
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, HarmCategory, HarmBlockThreshold
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
 
@@ -26,8 +26,14 @@ def retrieval_chain():
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         # Modern sürümlerde version="v1" yerine doğrudan api_version kullanılır
-        # Eğer kütüphane eskiyse bunu görmezden gelebilir ama biz yine de yazalım
-        version="v1",
+        # Eğer kütüphane eskiyse bunu görmezden gelebilir ama biz yine de yazalım,
+        google_api_key=settings.GOOGLE_API_KEY,
+        safety_settings={
+            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+        },
         temperature=0
     )
 
@@ -85,5 +91,4 @@ def retrieval_chain():
 
 
     return ChainContainer(full_chain)
-
 

@@ -13,4 +13,5 @@ RUN pip install --upgrade pip && \
 # SONRA geri kalan kodları kopyalamalısınız
 COPY . .
 
-CMD ["uvicorn", "main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}
