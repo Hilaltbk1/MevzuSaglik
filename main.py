@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from database.base import Base
 from database.db_setup import engine
-from routers import search, history
+from routers import search, history,session_router
 from utils import create_app
 
 # --- BU SATIR TABLOLARI OLUŞTURUR ---

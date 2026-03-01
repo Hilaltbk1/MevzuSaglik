@@ -1,5 +1,5 @@
 from fastapi import Depends
-from langchain_core.messages import HumanMessage,AIMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from database.db_setup import get_db
 from schemas.query_model import QueryRequest, QueryResponse
 from services.Retrievers import retrieval_chain
@@ -8,106 +8,94 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from database import crud
 
-_chain = None  # Başta boş bırakıyoruz
+_chain = None
+
 
 def get_chain():
-    """Zinciri sadece ihtiyaç duyulduğunda (ilk soruda) oluşturur."""
     global _chain
     if _chain is None:
         print("⛓️ RAG Zinciri ilk kez oluşturuluyor, bu biraz zaman alabilir...")
         _chain = retrieval_chain()
     return _chain
-    #fonk chaın degıskenıne atadık
-#sorgu yapacağız
-def ask_question(db:Session, request:QueryRequest) ->QueryResponse:
-    #bana bu ısımdekı kullanıcının tum bılgılerını getır
-    user_session_satiri=crud.read_session(db, session_name=request.user_name)
 
-    if not user_session_satiri:
-        user_session_satiri=crud.create_session(db,user_name=request.user_name)
-        db_messages=[]
-    else:
-        db_messages = crud.read_message(db, user_session_satiri.id)
-    #geçmişi getir ve AI formatına çevir
-    #session.id gönderiyoruz
 
-    chat_history=[]
+# services/session.py
+def ask_question(db: Session, request: QueryRequest) -> QueryResponse:
+    db_session= crud.get_session_by_uuid(db, request.session_uuid)
+    if not db_session:
+        raise HTTPException(status_code=404, detail="Oturum bulunamadı")
+
+    s_id = db_session.id
+
+    # 2. Geçmişi çekme
+    db_messages = crud.read_messages_by_session(db, s_id)
+
+    chat_history = []
     for msg in db_messages:
         if msg.sender_type == "human":
             chat_history.append(HumanMessage(content=msg.content))
         else:
             chat_history.append(AIMessage(content=msg.content))
 
-    #kullanıcı mesajını kayder
-    human_message=crud.create_message(db,user_session_satiri.id,request.query,"human")
+    # 3. Kullanıcı mesajını kaydet
+    human_message = crud.create_message(db, s_id,request.query, "human")
 
-    #ai ya sor
+    # 2. AI Yanıtı Oluşturma
     current_chain = get_chain()
 
-    # 3. response kısmında current_chain kullanıyoruz
-    response = current_chain.full_chain.invoke({"input": request.query, "chat_history": chat_history})
+    try:
+        response = current_chain.full_chain.invoke({"input": request.query, "chat_history": chat_history})
+    except Exception as e:
+        print(f"--- RAG ZİNCİRİ HATASI: {e} ---")  # Bu satır hatayı terminale basar
+        raise e
+    answer = response.get("answer", "Üzgünüm cevap oluşturulamadı")
 
-    answer=response.get("answer","Üzgünüm cevap oluşturulamadı")
+    # 3. Kaynakları Listeleme
+    raw_docs = response.get("context", [])
+    sources = list(set([f"{doc.metadata.get('Mevzuat_Adi', 'Bilinmeyen')}" for doc in raw_docs]))
 
-    raw_docs = response.get("context",[])
+    # 4. AI Mesajını Kaydet
+    crud.create_message(db, s_id, answer, "ai")
 
-    sources = [f"{doc.metadata.get('Mevzuat Adı','Bilinmeyen Mevzuat')} - {doc.metadata.get('Mevzuat Türü','Bilinmeyen')}" for doc in raw_docs] if raw_docs else []
+    # 5. HATA ÖNLEYİCİ LOGLAMA: Loglamayı try-except içine alalım ki hata verirse mesajlar silinmesin
+    try:
+        crud.create_log(db, 200, request.query, answer, None, human_message.id)
+    except Exception as log_error:
+        print(f"Loglama sırasında hata oluştu: {log_error}")
 
-    #tekrar olmasın
-    sources=list(set(sources))
-
-
-    #ai mesajini kaydet
-    crud.create_message(db,user_session_satiri.id,answer,"ai")
-
-    #logla
-    crud.create_log(db,200,request.query,answer,None,human_message.id)
-
+    # 6. DÖNÜŞ (Şemadaki tüm alanların olduğundan emin ol)
     return QueryResponse(
         query=request.query,
         answer=answer,
         sources=sources,
-        status="success"
+        status="success",
+        session_uuid=request.session_uuid # Şema bunu bekliyor!
     )
 
-#sadece istenilen kullanıcının mesajları
-def get_user_history(session_name:str,db:Session):
+# Oturuma göre mesajları getir
+def get_session_history(db: Session, uuid: str):
     try:
-        session_obj = crud.read_session(db,session_name)
-        if not session_obj:
-            raise HTTPException(status_code=404, detail="Kullanıcı oturumu bulunamadı.")
-        list_of_messages : List = crud.read_message(db,session_obj.id)
-        temp = []
-        for msj in list_of_messages:
-            temp.append({
-                "id":msj.id,
-                "sender":msj.sender_type,
-                "content":msj.content,
-                "created_at":msj.created_at,
+        session = crud.get_session_by_uuid(db, uuid)
+        if not session:
+            return []
+
+        formatted_messages = [
+            {
+                "id": msj.id,
+                "sender": msj.sender_type,
+                "content": msj.content,  # İçeriği eklemeyi unutma
+                "created_at": msj.created_at,
                 "is_user": True if msj.sender_type == "human" else False
-            })
-        return temp
-    except HTTPException as e:
-        raise e
-
-#tüm sohbet geçmisi kullanıcıların altında tum mesajlar olacak
-def get_all_history(db: Session = Depends(get_db)):
-    try:
-        sesion_obj_list=crud.read_all_sessions(db)
-        temp_history=[]
-
-        for session_obj in sesion_obj_list:
-            session_id=session_obj.id
-            messages=crud.read_message(db,session_id)
-            user_package = {
-                "user_name":session_obj.user_name,
-                "messages": [{
-                    "content":m.content,
-                    "role":m.sender_type,
-                    "date":m.created_at,
-                } for m in messages]
             }
-            temp_history.append(user_package)
-        return temp_history
+            for msj in session.messages
+        ]
+
+        return [{
+            "session_id": session.id,
+            "session_uuid": session.session_uuid,
+            "user_name": session.user_name,
+            "created_at": session.created_at,
+            "messages": formatted_messages
+        }]
     except Exception as e:
-        raise HTTPException(status_code=400,detail=f"Herhangi bir sohbet geçmişi bulunmamaktadır.{str(e)}")
+        raise HTTPException(status_code=500, detail=f"Geçmiş çekilirken hata: {str(e)}")

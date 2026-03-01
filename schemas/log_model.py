@@ -15,4 +15,5 @@ class LogModel(Base):
     created_at = Column(DateTime, default=datetime.datetime.now)
 
     message_id=Column(Integer, ForeignKey('message.id'), nullable=False)
-    message=relationship("MessageModel",back_populates="logs")
+    # Doğrusu bu şekilde olmalı:
+    message = relationship("MessageModel", back_populates="logs")

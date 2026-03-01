@@ -13,10 +13,10 @@ class Settings:
     DATABASE_URL = os.getenv("DATABASE_URL", "")
 
     LLM_MODEL_NAME = os.getenv(
-        "LLM_MODEL_NAME", "gpt-4o-mini"
+        "LLM_MODEL_NAME", "gemini-3.1-pro"
     )
     EMBEDDING_MODEL_NAME = os.getenv(
-        "EMBEDDING_MODEL_NAME","all-MiniLM-L6-v2"
+        "EMBEDDING_MODEL_NAME","gemini-embedding-001"
     )
 
     VECTOR_DB_COLLECTION = "mevzu_saglik_docs"

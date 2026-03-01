@@ -1,14 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
+from database import crud
 from database.db_setup import get_db
 from services import session as session_service
+from services.session import get_session_history
+
 router=APIRouter(
     prefix="/history",
     tags=["Sohbet Geçmişi işlemleri"],
 )
 #tüm geçmiş mesaj metnini gösteren endpoınt tanımlanacak
+"""
 
-# Tüm geçmişi getir
 @router.get("/allHistory")
 async def read_history(db: Session = Depends(get_db)):
 #bi fonk olusturduk async bu ıle tum sessıonlardakı mesajlara ulasacagız
@@ -28,8 +32,21 @@ async def read_user_messages(session_name: str,db: Session = Depends(get_db)):
     except Exception as e:
         # Beklenmedik hatalar için
         raise HTTPException(status_code=500, detail=f"Bir hata oluştu: {str(e)}")
+"""
+# Tüm geçmişi getir
 
+@router.get("/{session_uuid}")
+async def get_history(session_uuid: str, db: Session = Depends(get_db)):
 
+    try:
+        all_history=get_session_history(db=db,uuid =session_uuid)
+        if not all_history:
+            return []
+
+        return all_history
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 

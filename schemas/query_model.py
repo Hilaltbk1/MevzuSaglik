@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class QueryRequest(BaseModel):
     query:str
     user_name:str
+    session_uuid: str
 
 #response - çıkış
 class QueryResponse(BaseModel):
@@ -13,4 +14,5 @@ class QueryResponse(BaseModel):
     answer : str
     sources : List[str]
     status:str
+    session_uuid:str
 

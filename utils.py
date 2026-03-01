@@ -1,8 +1,8 @@
-from fastapi import FastAPI
 from openai import OpenAI
-from starlette.middleware.cors import CORSMiddleware
 from config.configuration import Settings
-from routers import search, history
+from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+from routers import search, history, session_router
 
 settings = Settings()
 
@@ -16,6 +16,7 @@ def create_app() -> FastAPI:
     def initrouters(app:FastAPI):
         app.include_router(search.router)
         app.include_router(history.router)
+        app.include_router(session_router.router)
 
     def configure_middleswares(app:FastAPI):
         app.add_middleware(

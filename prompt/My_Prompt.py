@@ -26,27 +26,18 @@ def create_prompt():
 
     # 2. Soruyu Bağlamına Göre Yeniden Düzenleme Promptu (Contextualize)
     c_ninja = """
-    Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
-    Görevin sadece verilen sohbet geçmişini ve son kullanıcı sorusunu analiz ederek, veritabanında arama yapmak ve 
-    anlamlı tek bir adet soru oluşturmaktır. Soruyu asla cevaplama sadece yeniden ifade ederek yaz.
-    KRİTİK KURAL: Asla açıklamaya yapma. Sadece ve sadece arama sorgusunu yaz.
+        Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
+        Görevin sadece verilen sohbet geçmişini ve son kullanıcı sorusunu analiz ederek, veritabanında arama yapmak ve 
+        anlamlı tek bir adet soru oluşturmaktır. Soruyu asla cevaplama sadece yeniden ifade ederek yaz.
+        KRİTİK KURAL: Asla açıklamaya yapma. Sadece ve sadece arama sorgusunu yaz.
 
-    {% if chat_history %}
         Sohbet Geçmişi:
-        {% for message in chat_history %}
-            {# Veritabanı modelindeki kolon adı sender_type olduğu için ona göre güncellendi #}
-            {% if message.sender_type == "human" %}
-                Kullanıcı : {{ message.content }}
-            {% elif message.sender_type == "ai" %}
-                Asistan : {{ message.content }}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+        {{ chat_history }}
 
-    Son kullanıcı sorusu:
-    {{ input }}
-    Yukarıdaki verilenlere dayanarak oluşturulan, kendi başına anlamlı arama sorgusu
-    """
+        Son kullanıcı sorusu:
+        {{ input }}
+        Yukarıdaki verilenlere dayanarak oluşturulan, kendi başına anlamlı arama sorgusu:
+        """
 
     c_prompt = ChatPromptTemplate.from_template(
         template=c_ninja,

@@ -6,6 +6,7 @@ from database.base import Base
 class SessionModel(Base):
     __tablename__ = 'session'
     id = Column(Integer, primary_key=True)
+    session_uuid=Column(String(36), nullable=False)
     user_name = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.now)
 

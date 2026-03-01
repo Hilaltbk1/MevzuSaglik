@@ -3,9 +3,10 @@ version: '3.8'
 services:
   qdrant:
     image: qdrant/qdrant
+    environment:
+      - QDRANT__TELEMETRY_DISABLED=true  # Telemetriyi kapatır
     ports:
       - "6333:6333"
-      - "6334:6334"
     volumes:
       - qdrant_storage:/qdrant/storage
 
@@ -21,11 +22,11 @@ services:
       - 1.1.1.1
     build:
       context: .
-      network: host
     ports:
-      - "8000:8000"
+      - "8080:8000"
     depends_on:
       - qdrant
+      - chroma
     env_file:
       - .env
     extra_hosts:
@@ -33,6 +34,7 @@ services:
     environment:
       - LANGCHAIN_TRACING_V2=false  # Buraya ekle
       - QDRANT_HOST=qdrant
+      - CHROMA_HOST=chroma
       - DATABASE_URL=mysql+pymysql://root:Hellohilal123.@host.docker.internal:3306/mevzu_saglik_db
     volumes:
       - .:/app
