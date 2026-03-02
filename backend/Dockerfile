@@ -6,8 +6,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# TÜM PROJEYİ kopyala (backend klasörüyle birlikte gelsin)
-COPY . .
+# ÖNEMLİ: Tüm dosyaları bir 'backend' klasörü içine kopyalıyoruz
+COPY . ./backend/
 
-# Başlatma komutunu değiştir:
+# Uvicorn'u bu yeni yapıya göre başlatıyoruz
 CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
