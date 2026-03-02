@@ -1,18 +1,18 @@
-# Örnek olması açısından:
 FROM python:3.11-slim
+
+# Sistem bağımlılıkları (Gerekirse)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# ÖNCE requirements dosyasını kopyalayıp yüklemelisiniz
-COPY ../requirements.txt .
-
-# Önce pip'i güncelleyin, sonra paketleri kurun
+# Dosyaları kopyala
+COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# SONRA geri kalan kodları kopyalamalısınız
-COPY .. .
+COPY . .
 
-
-# Değişkenin shell tarafından yorumlanması için bu formatı tercih edebilirsin
+# Port ayarı ve başlatma
 CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}"]

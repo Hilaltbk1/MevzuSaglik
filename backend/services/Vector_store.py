@@ -121,7 +121,7 @@ def initialize_vector_store(rebuild_db=False):
 if __name__ == "__main__":
     # Import'u sadece dosya çalışınca, fonksiyon içinde yapıyoruz (Döngü kırıldı!)
     try:
-        from utils import llm_client
+        from backend.utils import llm_client
 
         print("✅ Bağımlılıklar yüklendi, veritabanı işlemi başlıyor...")
         initialize_vector_store(rebuild_db=True)

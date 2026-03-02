@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 root_path = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(root_path))
 
-from utils import llm_client
+from backend.utils import llm_client
 from prompts.judge_prompt import JUDGE_PROMPT
 
 tqdm.pandas()
