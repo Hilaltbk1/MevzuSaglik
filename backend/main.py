@@ -1,11 +1,11 @@
-
-
 from database.db_setup import engine
-from utils import create_app
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+sys.path.append(os.path.dirname(current_dir))
 
+from utils import create_app
 # Diğer importlar bundan sonra gelsin:
 from database.base import Base
 # --- BU SATIR TABLOLARI OLUŞTURUR ---

@@ -2,16 +2,18 @@ import os
 import pickle
 from dotenv import load_dotenv
 
-# Ana LangChain bileşenleri
+# Google AI
 from langchain_google_genai import ChatGoogleGenerativeAI, HarmCategory, HarmBlockThreshold
+
+# Retrievers & Core
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-
-# --- GÜNCEL VE DOĞRU IMPORTLAR ---
-from langchain.chains import create_stuff_documents_chain
-from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.retrievers import EnsembleRetriever
-# ---------------------------------
+
+# Chains (0.2.x Uyumlu Yeni Adresler)
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains.history_aware_retriever import create_history_aware_retriever
+from langchain.chains.retrieval import create_retrieval_chain
 
 from backend.config.configuration import Settings
 from backend.prompt.My_Prompt import create_prompt
@@ -24,7 +26,7 @@ def retrieval_chain():
     from backend.services.Vector_store import initialize_vector_store
 
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
+        model="gemini-1.5-flash",
         # Modern sürümlerde version="v1" yerine doğrudan api_version kullanılır
         # Eğer kütüphane eskiyse bunu görmezden gelebilir ama biz yine de yazalım,
         google_api_key=settings.GOOGLE_API_KEY,
