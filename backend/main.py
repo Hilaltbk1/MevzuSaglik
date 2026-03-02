@@ -1,5 +1,5 @@
-from backend.database import Base
-from backend.database import engine
+from database.base import Base
+from database.db_setup import engine
 from utils import create_app
 
 # --- BU SATIR TABLOLARI OLUŞTURUR ---
