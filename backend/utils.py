@@ -1,9 +1,11 @@
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from backend.config import Settings
+
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+
+from backend.config.configuration import Settings
 from backend.routers import search, history, session_router
 import google.generativeai as genai
 settings = Settings()
