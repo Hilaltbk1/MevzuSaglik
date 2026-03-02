@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from config.configuration import Settings
+from backend.config.configuration import Settings
 
 #Settings den nesne oluşturduk
 settings=Settings()

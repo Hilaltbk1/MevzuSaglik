@@ -1,8 +1,5 @@
-from fastapi import FastAPI
-
-from database.base import Base
-from database.db_setup import engine
-from routers import search, history,session_router
+from backend.database import Base
+from backend.database import engine
 from utils import create_app
 
 # --- BU SATIR TABLOLARI OLUŞTURUR ---
@@ -12,9 +9,6 @@ Base.metadata.create_all(bind=engine)
 
 #routers dahil etme
 
-
-
-import schemas # Modellerinin olduğu yer
 
 app=create_app()
 

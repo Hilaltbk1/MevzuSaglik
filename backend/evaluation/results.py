@@ -21,8 +21,8 @@ load_dotenv()
 # =========================
 # FILE PATHS
 # =========================
-path_golden = r"C:\Users\hilal\MevzuSaglik\evaluation\data\processed\cleaned_synthetic_dataset.json"
-path_rag_results = r"C:\Users\hilal\MevzuSaglik\evaluation\data\processed\rag_test_result.json"
+path_golden = r"/backend/evaluation/data/processed/cleaned_synthetic_dataset.json"
+path_rag_results = r"/backend/evaluation/data/processed/rag_test_result.json"
 
 # =========================
 # LOAD & MERGE DATA

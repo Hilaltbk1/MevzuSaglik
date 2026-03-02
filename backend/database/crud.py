@@ -1,8 +1,7 @@
 import uuid
 from sqlalchemy.orm import Session
-from schemas import SessionModel, LogModel
-from schemas.query_model import QueryRequest
-from  schemas.message_model import  MessageModel
+from backend.schemas import SessionModel, LogModel
+from backend.schemas.message_model import  MessageModel
 
 #----------------------CREATE İŞLEMLERİ----------------------------------
 #MESSAGE -create

@@ -1,12 +1,9 @@
-from fastapi import Depends
 from langchain_core.messages import HumanMessage, AIMessage
-from database.db_setup import get_db
-from schemas.query_model import QueryRequest, QueryResponse
-from services.Retrievers import retrieval_chain
-from typing import List
+from backend.schemas.query_model import QueryRequest, QueryResponse
+from backend.services.Retrievers import retrieval_chain
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from database import crud
+from backend.database import crud
 
 _chain = None
 
@@ -38,7 +35,7 @@ def ask_question(db: Session, request: QueryRequest) -> QueryResponse:
             chat_history.append(AIMessage(content=msg.content))
 
     # 3. Kullanıcı mesajını kaydet
-    human_message = crud.create_message(db, s_id,request.query, "human")
+    human_message = crud.create_message(db, s_id, request.query, "human")
 
     # 2. AI Yanıtı Oluşturma
     current_chain = get_chain()

@@ -4,14 +4,15 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # ÖNCE requirements dosyasını kopyalayıp yüklemelisiniz
-COPY requirements.txt .
+COPY ../requirements.txt .
 
 # Önce pip'i güncelleyin, sonra paketleri kurun
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # SONRA geri kalan kodları kopyalamalısınız
-COPY . .
+COPY .. .
 
 
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}
+# Değişkenin shell tarafından yorumlanması için bu formatı tercih edebilirsin
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}"]

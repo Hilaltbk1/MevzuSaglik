@@ -1,14 +1,12 @@
 from logging.config import fileConfig
-import os
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 # BURASI ÇOK ÖNEMLİ: Tüm modellerini buraya import etmelisin!
-from schemas import MessageModel, SessionModel, LogModel
 from alembic import context
 
-from config.configuration import Settings
-from database.base import Base
+from backend.config import Settings
+from backend.database import Base
 
 
 # this is the Alembic Config object, which provides

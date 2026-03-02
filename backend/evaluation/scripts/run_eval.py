@@ -12,8 +12,7 @@ import json
 from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEmbeddings
 from tqdm import tqdm
-from services.Retrievers import retrieval_chain
-import os
+from backend.services.Retrievers import retrieval_chain
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
@@ -23,7 +22,7 @@ load_dotenv()
 
 
 def run_evaluation_inference():
-    path=r"C:\Users\hilal\MevzuSaglik\evaluation\data\processed\cleaned_synthetic_dataset.json"
+    path= r"/backend/evaluation/data/processed/cleaned_synthetic_dataset.json"
     with open(path,"r",encoding="utf-8") as f:
         golden_data = json.load(f)
 
@@ -45,7 +44,7 @@ def run_evaluation_inference():
         })
 
         #çıktıları kaydet
-    o_path=r"C:\Users\hilal\MevzuSaglik\evaluation\data\processed\rag_test_result.json"
+    o_path= r"/backend/evaluation/data/processed/rag_test_result.json"
     with open(o_path,"w",encoding="utf-8") as f:
         json.dump(results,f,ensure_ascii=False,indent=4)
         print("işlem tamamlandı")

@@ -2,7 +2,6 @@ from langchain_core.documents import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import json
-from pathlib import Path
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client.models import VectorParams, Distance
 from qdrant_client import QdrantClient
@@ -18,7 +17,7 @@ os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 
 
 def initialize_vector_store(rebuild_db=False):
-    from preprocessing.preprocessing import file_path, flatten_mevzuat_object
+    from backend.preprocessing.preprocessing import file_path, flatten_mevzuat_object
     print("1. Fonksiyon başladı...")
 
     chunks = None
@@ -34,7 +33,7 @@ def initialize_vector_store(rebuild_db=False):
 
         # --- DÜZELTİLEN YER: Kesin Dosya Yolu ---
         # Hatalı olanı bununla değiştir:
-        PROCESSED_DATA_PATH =r"C:\Users\hilal\MevzuSaglik\data\Json\islenmis_mevzuat_verileri.json"
+        PROCESSED_DATA_PATH = r"/backend/data/Json/islenmis_mevzuat_verileri.json"
         # --- DÜZELTİLEN YER: LLM KONTROL MANTIĞI ---
         # Artık rebuild_db=True olsa bile eğer yedek dosya varsa LLM'i çalıştırmaz, dosyadan okur.
         if os.path.exists(PROCESSED_DATA_PATH):

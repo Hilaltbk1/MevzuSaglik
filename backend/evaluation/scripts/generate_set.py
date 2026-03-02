@@ -14,7 +14,7 @@ root_path = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(root_path))
 
 # Services importu
-from services.Vector_store import initialize_vector_store
+from backend.services.Vector_store import initialize_vector_store
 
 # Veritabanını başlat
 print("⚙️ Veritabanına bağlanılıyor...", flush=True)

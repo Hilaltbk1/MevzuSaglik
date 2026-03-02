@@ -13,15 +13,15 @@ from langchain.chains import create_history_aware_retriever, create_retrieval_ch
 from langchain.retrievers import EnsembleRetriever
 # ---------------------------------
 
-from config.configuration import Settings
-from prompt.My_Prompt import create_prompt
+from backend.config.configuration import Settings
+from backend.prompt.My_Prompt import create_prompt
 # ------------------------------
 
 load_dotenv()  # En başa taşıdık
 settings = Settings()
 # Satır 2 civarındaki hata için:
 def retrieval_chain():
-    from services.Vector_store import initialize_vector_store
+    from backend.services.Vector_store import initialize_vector_store
 
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",

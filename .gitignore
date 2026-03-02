@@ -14,8 +14,8 @@ chroma_data/
 
 .vscode/
 # Büyük Model Dosyaları ve Veriler
-models/
-data/Json/islenmis_mevzuat_verileri.json
+backend/models/
+backend/data/Json/islenmis_mevzuat_verileri.json
 # Çevresel Değişkenler (Gizli anahtarların gitmesin!)
 # Docker logları
 *.log
