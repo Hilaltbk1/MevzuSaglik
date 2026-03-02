@@ -8,7 +8,7 @@ from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
 
 # --- GÜNCEL VE DOĞRU IMPORTLAR ---
-from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains import create_stuff_documents_chain
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.retrievers import EnsembleRetriever
 # ---------------------------------

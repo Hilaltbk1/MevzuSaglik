@@ -2,12 +2,15 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Requirements'ı kopyala ve kur
+# 1. Önce requirements'ı kopyalayıp kütüphaneleri kuruyoruz
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ÖNEMLİ: Tüm dosyaları bir 'backend' klasörü içine kopyalıyoruz
-COPY backend ./backend/
+# 2. PROJENİN TAMAMINI kopyalıyoruz (backend klasörüyle birlikte)
+COPY . .
 
-# Uvicorn'u bu yeni yapıya göre başlatıyoruz
+# 3. Python'a /app dizinini ana yol olarak tanıtıyoruz (Import hatalarını önler)
+ENV PYTHONPATH=/app
+
+# 4. Uygulamayı başlatıyoruz
 CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
