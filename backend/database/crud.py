@@ -8,7 +8,6 @@ from backend.schemas.message_model import  MessageModel
 def create_message(db: Session, session_id: int, content: str, sender_type: str):
     new_message = MessageModel(
         session_id=session_id,
-
         sender_type=sender_type,
         content=content
     )

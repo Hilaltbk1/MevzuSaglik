@@ -14,15 +14,10 @@ genai.configure(api_key=settings.GOOGLE_API_KEY)
 # llm_client olarak Gemini modelini tanımla
 llm_client = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash",
-    google_api_key=settings.GOOGLE_API_KEY,
-    safety_settings={
-            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-        }
+    google_api_key=settings.GOOGLE_API_KEY
+)
 
-                                   )
+
 
 def create_app() -> FastAPI:
 

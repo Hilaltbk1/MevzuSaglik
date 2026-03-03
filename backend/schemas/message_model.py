@@ -10,8 +10,6 @@ class MessageModel(Base):
 
     id=Column(Integer, primary_key=True)
     session_id =Column(Integer,ForeignKey("session.id"),nullable=False)
-
-
     session=relationship("SessionModel",back_populates="messages")
     sender_type=Column(String(50),nullable=False)
     content=Column(Text,nullable=False)

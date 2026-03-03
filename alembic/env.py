@@ -5,8 +5,8 @@ from sqlalchemy import pool
 # BURASI ÇOK ÖNEMLİ: Tüm modellerini buraya import etmelisin!
 from alembic import context
 
-from backend.config import Settings
-from backend.database import Base
+from backend.config.configuration import Settings
+from backend.database.base import Base
 
 
 # this is the Alembic Config object, which provides
@@ -69,10 +69,16 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    connect_args = {
+        "ssl": {
+            "ca": "C:/Users/hilal/MevzuSaglik/ca.pem" # Eğer Windows'taysan "C:/yol/ca.pem" gibi yazmalısın
+        }
+    }
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args=connect_args
     )
 
     with connectable.connect() as connection:

@@ -18,6 +18,7 @@ async def create_new_session_api(request:dict , db: Session = Depends(get_db)):
     new_session_obj= crud.create_session(db, user_name)
     return {
         "id": new_session_obj.id,
+
         "session_uuid":new_session_obj.session_uuid,
     }
 
