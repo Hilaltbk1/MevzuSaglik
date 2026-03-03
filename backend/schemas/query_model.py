@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -13,6 +13,6 @@ class QueryResponse(BaseModel):
     query:str
     answer : str
     sources : List[str]
-    status:str
+    status: Optional[str] = None
     session_uuid:str
 
