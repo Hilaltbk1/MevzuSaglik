@@ -6,11 +6,10 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 # Retrievers & Core
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-# Chains (0.2.x Uyumlu Yeni Adresler)
+# Chains (0.2.x uyumlu yeni adresler)
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains.retrieval import create_retrieval_chain
-
 from backend.config.configuration import Settings
 from backend.prompt.My_Prompt import create_prompt
 # ------------------------------
