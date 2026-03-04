@@ -6,7 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 # Retrievers & Core
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-from langchain.retrievers import EnsembleRetriever
+from langchain.retrievers.ensemble import EnsembleRetriever
 # Chains (0.2.x Uyumlu Yeni Adresler)
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
