@@ -6,7 +6,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 # Retrievers & Core
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-from langchain.retrievers.ensemble import EnsembleRetriever
 # Chains (0.2.x Uyumlu Yeni Adresler)
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
@@ -47,12 +46,15 @@ def retrieval_chain():
             return bm25
 
     #vector search
-    vector_retrievers=v_db.as_retriever(search_type="similarity",search_kwargs={
-        "k": 3,
-         })
-    # BM25
-    bm25_retrievers=get_bm25_retriever(split_text)
-    mix_retrievers=EnsembleRetriever(retrievers=[vector_retrievers,bm25_retrievers],weights=[0.5,0.5])
+    vector_retriever = v_db.as_retriever(
+        search_type="similarity",
+        search_kwargs={"k": 3},
+    )
+    # BM25 (gerekirse ileride kullanılmak üzere hazır)
+    bm25_retriever = get_bm25_retriever(split_text)
+
+    # Şimdilik EnsembleRetriever yerine yalnızca vektör tabanlı retriever kullanıyoruz.
+    mix_retriever = vector_retriever
 
     # 5. Final Retrieval Chain
     qa_pr,c_pr = create_prompt()
@@ -62,10 +64,10 @@ def retrieval_chain():
         template="[KAYNAK: {Mevzuat_Adi}]\nİÇERİK: {page_content}"
     )
 
-    history_aware_retriever=create_history_aware_retriever(
+    history_aware_retriever = create_history_aware_retriever(
         llm,
-        mix_retrievers,
-        c_pr
+        mix_retriever,
+        c_pr,
     )
 
 
