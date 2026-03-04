@@ -1,9 +1,7 @@
 from backend.database.db_setup import engine
-
-
-
 import sys
 import os
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 sys.path.append(os.path.dirname(current_dir))

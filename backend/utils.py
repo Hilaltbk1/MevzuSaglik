@@ -1,11 +1,12 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-# Harm ayarlarını direkt langchain_google_genai üzerinden alalım, diğeri hata veriyor olabilir
-from langchain_google_genai import HarmCategory, HarmBlockThreshold
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from backend.config.configuration import Settings
 from backend.routers import search, history, session_router
 import google.generativeai as genai
+
+from backend.services.Retrievers import retrieval_chain
+
 settings = Settings()
 
 # Doğru başlatma:
@@ -14,8 +15,7 @@ genai.configure(api_key=settings.GOOGLE_API_KEY)
 # llm_client olarak Gemini modelini tanımla
 llm_client = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash",
-    google_api_key=settings.GOOGLE_API_KEY,
-    safety_settings={}
+    google_api_key=settings.GOOGLE_API_KEY
 )
 
 

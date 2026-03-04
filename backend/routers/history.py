@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from backend.database.db_setup import get_db
 from backend.services.session import get_session_history
 

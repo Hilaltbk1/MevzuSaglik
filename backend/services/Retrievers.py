@@ -1,15 +1,12 @@
 import os
 import pickle
 from dotenv import load_dotenv
-
 # Google AI
-from langchain_google_genai import ChatGoogleGenerativeAI, HarmCategory, HarmBlockThreshold
-
+from langchain_google_genai import ChatGoogleGenerativeAI
 # Retrievers & Core
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
 from langchain.retrievers import EnsembleRetriever
-
 # Chains (0.2.x Uyumlu Yeni Adresler)
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
@@ -27,16 +24,8 @@ def retrieval_chain():
 
     llm = ChatGoogleGenerativeAI(
         model="gemini-1.5-flash",
-        # Modern sürümlerde version="v1" yerine doğrudan api_version kullanılır
-        # Eğer kütüphane eskiyse bunu görmezden gelebilir ama biz yine de yazalım,
         google_api_key=settings.GOOGLE_API_KEY,
-        safety_settings={
-            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-        },
-        temperature=0
+        temperature=0,
     )
 
     #vector_store,chunks

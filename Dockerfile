@@ -5,26 +5,27 @@ WORKDIR /app
 # 1. Pip'i güncelle
 RUN pip install --upgrade pip
 
-# 2. Gereksinimleri DOSYADAN DEĞİL, direkt komutla kuruyoruz (Çakışmayı böyle aşacağız)
+# 2. Gerekli Python paketlerini kur (versiyon sabitlemeden)
 RUN pip install --no-cache-dir \
-    langchain==0.2.17 \
-    langchain-community==0.2.19 \
-    langchain-core==0.2.43 \
-    langchain-google-genai==1.0.10 \
-    langchain-qdrant==0.1.2 \
-    langgraph==0.2.76 \
-    sqlalchemy==2.0.31 \
-    pymysql==1.1.1 \
-    python-dotenv==1.0.1 \
-    uvicorn==0.30.1 \
-    fastapi==0.111.0 \
-    cryptography==46.0.5
+    langchain \
+    langchain-community \
+    langchain-core \
+    langchain-google-genai \
+    langchain-qdrant \
+    langgraph \
+    google-generativeai \
+    sqlalchemy \
+    pymysql \
+    python-dotenv \
+    uvicorn \
+    fastapi \
+    cryptography
 
 # 3. Proje dosyalarını kopyala
 COPY . .
 
-# 4. Klasör yapısı ve Port ayarları
+# 4. PYTHONPATH ve PORT
 ENV PYTHONPATH="/app"
-ENV PORT=8000
 
-CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT}"]
+# Render PORT değişkenini kendisi veriyor, yoksa 8000 kullan
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
