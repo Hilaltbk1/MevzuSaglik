@@ -24,8 +24,7 @@ RUN pip install --no-cache-dir \
 COPY . .
 
 # 4. Klasör yapısı ve Port ayarları
-ENV PYTHONPATH="/app/backend"
-ENV PORT=10000
+ENV PYTHONPATH="/app"
+ENV PORT=8000
 
-# 5. Uygulamayı başlat
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT}"]
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT}"]
