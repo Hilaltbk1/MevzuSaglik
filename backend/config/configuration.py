@@ -1,39 +1,28 @@
-
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
 class Settings:
     def __init__(self):
-        # strip() ekleyerek görünmez boşlukları temizliyoruz
-        raw_db_url = os.environ.get("DATABASE_URL", "").strip()
+        # Tüm değişkenleri temizleyerek alıyoruz
+        self.DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+        self.GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "").strip()
+        self.QDRANT_HOST = os.environ.get("QDRANT_HOST", "").strip()
+        self.QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY", "").strip()
 
-        # Sadece var olup olmadığına değil, uzunluğuna da bakıyoruz
-        if len(raw_db_url) < 10:
-            print(f"KRİTİK UYARI: DATABASE_URL bulundu ama çok kısa veya boş! Gelen: '{raw_db_url}'")
-            # Eğer boşsa veya hatalıysa, sistemin çökmemesi için geçici bir kontrol
-            self.DATABASE_URL = None
+        # Dosya yolu ve model isimleri
+        self.DOCUMENT_PATH = os.environ.get("DOCUMENT_PATH", "./Data/Json/mevzuat_verileri.json")
+        self.LLM_MODEL_NAME = os.environ.get("LLM_MODEL_NAME", "gemini-1.5-flash")
+
+        # Kontrol Logu
+        if not self.DATABASE_URL:
+            print("--- KRİTİK HATA: DATABASE_URL SİSTEMDE BULUNAMADI! ---")
+            print(f"Sistemdeki Mevcut Anahtarlar: {list(os.environ.keys())}")
         else:
-            self.DATABASE_URL = raw_db_url
-            print("DATABASE_URL başarıyla yüklendi (Uzunluk kontrolü tamam).")
-    print(f"Sistemdeki Mevcut Değişkenler: {list(os.environ.keys())}")
-
-    GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+            print(f"BAŞARI: DATABASE_URL yüklendi (Karakter Sayısı: {len(self.DATABASE_URL)})")
 
 
-    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
-    # Dosya Yolları
-    DOCUMENT_PATH = os.getenv("DOCUMENT_PATH", "./Data/Json/mevzuat_verileri.json")
-    DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
-    LLM_MODEL_NAME = os.getenv(
-        "LLM_MODEL_NAME","gemini-1.5-flash"
-    )
-    EMBEDDING_MODEL_NAME = os.getenv(
-        "EMBEDDING_MODEL_NAME","gemini-embedding-001"
-    )
-
-    VECTOR_DB_COLLECTION = "mevzu_saglik_docs"
-    TEMPERATURE = 0
-    MAX_TOKENS = 1000
-
-
+# DİĞER DOSYALARIN BU NESNEYİ KULLANMASI İÇİN:
+settings = Settings()
