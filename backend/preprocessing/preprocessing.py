@@ -6,8 +6,7 @@ from backend.config.configuration import settings  # 'Settings' yerine 'settings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Dosya yollarını güvenli hale getirelim
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # settings üzerinden küçük harfle erişiyoruz
 if not settings.DOCUMENT_PATH:
     # Eğer boşsa varsayılan bir yol atayalım ki sistem çökmesin
@@ -15,7 +14,8 @@ if not settings.DOCUMENT_PATH:
 else:
     target_doc_path = settings.DOCUMENT_PATH
 
-file_path = Path(os.getcwd()) / target_doc_path
+
+file_path = os.path.join(BASE_DIR, "data", "Json", "mevzuat_verileri.json")
 
 
 # Tabloyu metin haline getirme fonksiyonu
