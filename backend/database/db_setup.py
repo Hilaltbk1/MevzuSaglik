@@ -14,6 +14,7 @@ settings=Settings()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ssl_path = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "ca.pem"))
 
+print(f"BAĞLANILAN URL: {settings.DATABASE_URL}")
 #engıne olusturma
 engine = create_engine(
     settings.DATABASE_URL,
@@ -21,7 +22,8 @@ engine = create_engine(
         "ssl": {
             "ca": ssl_path
         }
-    }
+    },
+    pool_pre_ping=True
 )
 #session oluşturmam lazım
 SessionLocal=sessionmaker(autocommit=False,autoflush=False,bind=engine)
