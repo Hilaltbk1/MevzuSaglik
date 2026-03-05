@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 import pickle
 from typing import List, Any, Dict, Optional # Optional ekledik

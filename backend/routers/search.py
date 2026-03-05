@@ -1,3 +1,4 @@
+from __future__ import annotations
 from fastapi import APIRouter,Depends, HTTPException
 from backend.database.db_setup import get_db
 from backend.schemas.query_model import QueryResponse, QueryRequest

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from langchain_core.messages import HumanMessage, AIMessage
 from backend.schemas.query_model import QueryRequest, QueryResponse
 from backend.services.Retrievers import retrieval_chain
