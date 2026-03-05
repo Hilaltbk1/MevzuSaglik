@@ -14,19 +14,19 @@ RUN pip install --upgrade pip
 
 # 5. Aşama: Paketleri TEK BİR komutta kur (Bağımlılıkları daha iyi yönetir)
 RUN pip install --no-cache-dir \
-    "protobuf==4.25.3" \
-    "pydantic>=2.9.0" \
-    "uvicorn[standard]" \
-    fastapi \
     langchain==0.2.17 \
     langchain-community==0.2.19 \
+    langchain-core==0.2.43 \
     langchain-google-genai==1.0.10 \
-    langchain-qdrant \
-    google-generativeai==0.7.2 \
-    pymysql \
-    cryptography \
-    sqlalchemy \
-    python-dotenv
+    langchain-qdrant==0.1.2 \
+    langgraph==0.2.76 \
+    google-generativeai==0.8.3 \
+    sqlalchemy==2.0.31 \
+    pymysql==1.1.1 \
+    python-dotenv==1.0.1 \
+    uvicorn==0.30.1 \
+    fastapi==0.111.0 \
+    cryptography==46.0.5
 
 # 6. Aşama: Proje dosyalarını kopyala
 COPY . .
