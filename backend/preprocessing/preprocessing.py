@@ -1,26 +1,30 @@
+from __future__ import annotations  # EN ÜSTTE OLMAK ZORUNDA!
+import os
 from pathlib import Path
-from typing import Dict, Any
-from backend.config.configuration import Settings
+from typing import Dict, Any, List, Optional
+from backend.config.configuration import settings  # 'Settings' yerine 'settings' aldık
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from __future__ import annotations
+
+# Dosya yollarını güvenli hale getirelim
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if not Settings.DOCUMENT_PATH:
-    raise ValueError("DOCUMENT_PATH .env dosyasında tanımlı değil")
+# settings üzerinden küçük harfle erişiyoruz
+if not settings.DOCUMENT_PATH:
+    # Eğer boşsa varsayılan bir yol atayalım ki sistem çökmesin
+    target_doc_path = "backend/data/Json/mevzuat_verileri.json"
+else:
+    target_doc_path = settings.DOCUMENT_PATH
 
-file_path = BASE_DIR / Settings.DOCUMENT_PATH
+file_path = Path(os.getcwd()) / target_doc_path
 
-if not file_path.exists():
-    raise FileNotFoundError(f"Dosya bulunamadı: {file_path}")
 
-#tabloyu metin haline getirme
+# Tabloyu metin haline getirme fonksiyonu
 def format_table_as_text(table_data: list) -> str:
-    if not table_data or not isinstance(table_data[0], list):
+    if not table_data or not isinstance(table_data, list) or not isinstance(table_data[0], list):
         return ""
 
     headers = table_data[0]
     rows = table_data[1:]
-
     semantic_rows = []
 
     for idx, row in enumerate(rows, start=1):
@@ -30,12 +34,15 @@ def format_table_as_text(table_data: list) -> str:
                 header = str(headers[col_idx]).strip()
                 value = str(cell).strip()
                 row_parts.append(f"{header}: {value}")
-
         semantic_rows.append(f"SATIR {idx}:\n" + "\n".join(row_parts))
 
     return "\n\n".join(semantic_rows)
 
+
 def verbalize_tables_with_llm(formatted_tables_text: str, model_name):
+    if not formatted_tables_text.strip():
+        return ""
+
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=3000,
         chunk_overlap=200,
@@ -45,58 +52,46 @@ def verbalize_tables_with_llm(formatted_tables_text: str, model_name):
     final_processed_chunks = []
 
     for chunk in initial_chunks:
-        # Tablo benzeri yapı kontrolü
         if "SATIR" in chunk or ":" in chunk:
-            print("Tablo tespit edildi")
-
+            print("--- Tablo bölgesi LLM ile işleniyor ---")
             prompt = (
                 "Sen profesyonel bir sağlık mevzuatı uzmanısın. "
                 "Aşağıdaki metindeki tabloları oku ve bunları akıcı, doğal bir dile çevir:\n\n"
                 f"{chunk}"
             )
 
-            # --- DÜZELTİLEN KISIM: LangChain invoke kullanımı ---
             try:
-                # model_name burada aslında senin utils'den gelen llm_client'ındır.
                 response = model_name.invoke(prompt)
-                processed_text = response.content # .text yerine .content
+                # response.content kullanımı LangChain Gemini için doğrudur
+                processed_text = getattr(response, "content", str(response))
                 final_processed_chunks.append(processed_text)
             except Exception as e:
                 print(f"LLM İşleme Hatası: {e}")
-                final_processed_chunks.append(chunk) # Hata olursa ham hali kalsın
-            # -----------------------------------------------
+                final_processed_chunks.append(chunk)
         else:
             final_processed_chunks.append(chunk)
 
     return "\n\n".join(final_processed_chunks)
-    #tek bir  mevzuatları ragın anlayacagı sekle getir
-def flatten_mevzuat_object(mevzuat_object: Dict[str, Any],model_name) -> str:
 
+
+def flatten_mevzuat_object(mevzuat_object: Dict[str, Any], model_name) -> str:
     flat_parts = []
-
     flat_parts.append(f"MEVZUAT ADI: {mevzuat_object.get('Mevzuat Adı', 'YOK')}")
     flat_parts.append(f"MEVZUAT TÜRÜ: {mevzuat_object.get('Mevzuat Türü', 'YOK')}")
 
-    # İçerik
     content_list = mevzuat_object.get("Mevzuat İçeriği", [])
     if isinstance(content_list, list) and content_list:
         flat_parts.append("\n".join(str(x).strip() for x in content_list))
 
-    # Tabloları formatlayarak ekle
     tables = mevzuat_object.get("Tablolar", [])
     if isinstance(tables, list) and tables:
-
         semantic_tables = [format_table_as_text(t) for t in tables if isinstance(t, list)]
         combined_semantic_text = "\n\n".join(semantic_tables)
 
-        # Sadece bu kısmı LLM'e göndeririz
-        print(f"--- Tablo verileri LLM'e gönderiliyor... ---")
-        llm_verbalized_text = verbalize_tables_with_llm(combined_semantic_text, model_name)
-
-        flat_parts.append("\n=== TABLO DETAYLARI VE CEZALAR ===")
-        flat_parts.append(llm_verbalized_text)
+        if combined_semantic_text.strip():
+            print(f"--- Tablo verileri LLM'e gönderiliyor... ---")
+            llm_verbalized_text = verbalize_tables_with_llm(combined_semantic_text, model_name)
+            flat_parts.append("\n=== TABLO DETAYLARI VE CEZALAR ===")
+            flat_parts.append(llm_verbalized_text)
 
     return "\n\n".join(flat_parts)
-
-
-
