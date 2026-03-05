@@ -1,15 +1,18 @@
 import os
 import pickle
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Optional # Optional ekledik
+
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-from backend.config.configuration import Settings
-from backend.prompt.My_Prompt import create_prompt
+
+# Buradaki import yollarını şu şekilde netleştirin:
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
+from backend.config.configuration import Settings
+from backend.prompt.My_Prompt import create_prompt
 load_dotenv()
 settings = Settings()
 
