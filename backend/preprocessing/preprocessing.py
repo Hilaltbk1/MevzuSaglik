@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from backend.config.configuration import settings  # 'Settings' yerine 'settings' aldık
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Dosya yollarını güvenli hale getirelim
 BASE_DIR = Path(__file__).resolve().parent.parent
