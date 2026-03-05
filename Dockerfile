@@ -29,7 +29,8 @@ RUN pip install --no-cache-dir \
     "langchain-text-splitters" \
     "langchain-google-genai" \
     "langchain-qdrant" \
-    "qdrant-client"
+    "qdrant-client"\
+    "jinja2"  #
 # 6. Aşama: Proje dosyalarını kopyala
 COPY . .
 
