@@ -93,7 +93,7 @@ def retrieval_chain():
             search_query = self._build_search_query(question, chat_history)
 
             # 2) İlgili dokümanları al
-            docs = self.retriever.get_relevant_documents(search_query)
+            docs = self.retriever.invoke(search_query)
 
             # 3) Doküman içeriğini formatla
             formatted_docs = []
