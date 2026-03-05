@@ -1,4 +1,4 @@
-# 1. Aşama: Python 3.12 Kullan (Hatanın tek çözümü budur)
+# 1. Aşama: Python 3.12 Kullan (Tip hatasını çözen tek sürüm)
 FROM python:3.12-slim
 
 # 2. Aşama: Çalışma dizini
@@ -10,28 +10,28 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# 4. Aşama: Paketleri kur (Versiyonlar 3.12 ile uyumlu hale getirildi)
+# 4. Aşama: Pip güncelleme
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir \
-    "pydantic>=2.9.0" \
-    "protobuf==5.26.1" \
-    "grpcio==1.62.1" \
-    "qdrant-client==1.12.1" \
-    "google-generativeai==0.7.2" \
-    "langchain==0.2.17" \
-    "langchain-community==0.2.19" \
-    "langchain-google-genai==1.0.10" \
-    "langchain-qdrant==0.2.1" \
-    "sqlalchemy==2.0.31" \
-    "pymysql==1.1.1" \
-    "python-dotenv==1.0.1" \
-    "uvicorn==0.30.1" \
-    "fastapi==0.111.0" \
-    "cryptography==46.0.5" \
-    "rank_bm25"
 
-# 5. Aşama: Proje dosyalarını kopyala
+# 5. Aşama: Paketleri kur (Kavgalı versiyonları Pip kendisi çözsün)
+RUN pip install --no-cache-dir \
+    "pydantic>=2.0" \
+    "fastapi" \
+    "uvicorn" \
+    "python-dotenv" \
+    "sqlalchemy" \
+    "pymysql" \
+    "cryptography" \
+    "rank_bm25" \
+    "google-generativeai" \
+    "langchain" \
+    "langchain-community" \
+    "langchain-google-genai" \
+    "langchain-qdrant" \
+    "qdrant-client"
+
+# 6. Aşama: Proje dosyalarını kopyala
 COPY . .
 
-# 6. Aşama: Başlatma (Hatalı importları önlemek için modül olarak başlatıyoruz)
+# 7. Aşama: Başlatma
 CMD ["python", "-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "10000"]
