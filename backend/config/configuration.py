@@ -25,3 +25,4 @@ class Settings:
     MAX_TOKENS = 1000
 
 
+settings = Settings()
