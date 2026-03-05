@@ -21,7 +21,7 @@ def retrieval_chain():
     from backend.services.Vector_store import initialize_vector_store
 
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model="gemini-2.5-flash",
         google_api_key=settings.GOOGLE_API_KEY,
         temperature=0,
     )
