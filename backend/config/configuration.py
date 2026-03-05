@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
 
 class Settings:
     print(f"Sistemdeki Mevcut Değişkenler: {list(os.environ.keys())}")
