@@ -11,7 +11,7 @@ class Settings:
 
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
     # Dosya Yolları
-    DOCUMENT_PATH = os.getenv("DOCUMENT_PATH", "./Data/Json/mevzuat_verileri.json")
+    DOCUMENT_PATH = os.getenv("DOCUMENT_PATH", "./data/Json/mevzuat_verileri.json")
     DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
     LLM_MODEL_NAME = os.getenv(
         "LLM_MODEL_NAME","gemini-1.5-flash"
