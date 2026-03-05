@@ -6,7 +6,8 @@ WORKDIR /app
 
 # 3. Aşama: Gerekli sistem araçlarını kur (Bazen derleme için gerekebilir)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+    dnsutils \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # 4. Aşama: Önce pip'i güncelle
