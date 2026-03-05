@@ -3,17 +3,26 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # 1. Pip'i güncelle
-RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip
 
-# 2. Gerekli Python paketlerini kur (versiyon sabitlemeden)
+# 2. Önce en kritik bağımlılıkları ve tipleri kur (EnumTypeWrapper hatasını engeller)
 RUN pip install --no-cache-dir \
-    langchain \
-    langchain-community \
-    langchain-core \
-    langchain-google-genai \
+    "pydantic>=2.9.0" \
+    "google-auth>=2.47.0" \
+    "protobuf==4.25.3"
+
+# 3. Langchain paketlerini topluca kur
+RUN pip install --no-cache-dir \
+    langchain==0.2.17 \
+    langchain-community==0.2.19 \
+    langchain-core==0.2.43 \
+    langchain-google-genai==1.0.10 \
     langchain-qdrant \
     langgraph \
-    google-generativeai \
+    google-generativeai==0.7.2
+
+# 4. Diğer kütüphaneler
+RUN pip install --no-cache-dir \
     sqlalchemy \
     pymysql \
     python-dotenv \
@@ -21,11 +30,9 @@ RUN pip install --no-cache-dir \
     fastapi \
     cryptography
 
-# 3. Proje dosyalarını kopyala
+# 5. Proje dosyalarını kopyala
 COPY . .
 
-# 4. PYTHONPATH ve PORT
 ENV PYTHONPATH="/app"
 
-# Render PORT değişkenini kendisi veriyor, yoksa 8000 kullan
 CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
