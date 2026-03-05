@@ -14,6 +14,8 @@ RUN pip install --upgrade pip
 
 # 5. Aşama: Paketleri TEK BİR komutta kur (Bağımlılıkları daha iyi yönetir)
 RUN pip install --no-cache-dir \
+    "protobuf==4.25.3" \
+    "pydantic>=2.9.0" \
     langchain==0.2.17 \
     langchain-community==0.2.19 \
     langchain-core==0.2.43 \
@@ -26,7 +28,7 @@ RUN pip install --no-cache-dir \
     python-dotenv==1.0.1 \
     uvicorn==0.30.1 \
     fastapi==0.111.0 \
-    cryptography==46.0.5
+    cryptography
 
 # 6. Aşama: Proje dosyalarını kopyala
 COPY . .
