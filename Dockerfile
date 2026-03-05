@@ -14,7 +14,7 @@ RUN pip install --upgrade pip
 
 # 5. Aşama: Paketleri TEK BİR komutta kur (Bağımlılıkları daha iyi yönetir)
 RUN pip install --no-cache-dir \
-    "protobuf==4.25.3" \
+    protobuf==4.25.3 \
     "pydantic>=2.9.0,<3" \
     langchain==0.2.17 \
     langchain-community==0.2.19 \
@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir \
     langchain-google-genai==1.0.10 \
     langchain-qdrant==0.1.2 \
     langgraph==0.2.76 \
-    google-generativeai==0.7.2 \     # ← 0.8.3 yerine 0.7.2 koy (1.0.10 ile uyumlu)
+    google-generativeai==0.7.2 \
     sqlalchemy==2.0.31 \
     pymysql==1.1.1 \
     python-dotenv==1.0.1 \
