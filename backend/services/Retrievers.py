@@ -2,14 +2,11 @@ from __future__ import annotations
 import os
 import pickle
 from typing import List, Any, Dict, Optional # Optional ekledik
-
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-
-# Buradaki import yollarını şu şekilde netleştirin:
-from langchain.chains import create_retrieval_chain
+from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
 from backend.config.configuration import Settings
