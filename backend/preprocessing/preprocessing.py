@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict, Any
 from backend.config.configuration import Settings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-
+from __future__ import annotations
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 if not Settings.DOCUMENT_PATH:

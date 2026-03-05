@@ -34,8 +34,7 @@ def initialize_vector_store(rebuild_db=False):
 
         # --- DÜZELTİLEN YER: Kesin Dosya Yolu ---
         # Hatalı olanı bununla değiştir:
-        PROCESSED_DATA_PATH = r"/backend/data/Json/islenmis_mevzuat_verileri.json"
-        # --- DÜZELTİLEN YER: LLM KONTROL MANTIĞI ---
+        PROCESSED_DATA_PATH = os.path.join(os.getcwd(), "backend", "data", "Json", "islenmis_mevzuat_verileri.json")        # --- DÜZELTİLEN YER: LLM KONTROL MANTIĞI ---
         # Artık rebuild_db=True olsa bile eğer yedek dosya varsa LLM'i çalıştırmaz, dosyadan okur.
         if os.path.exists(PROCESSED_DATA_PATH):
             print(f"✅ Yedek bulundu! LLM'i atlayıp Qdrant işlemlerine geçiyorum...")

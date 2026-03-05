@@ -1,3 +1,4 @@
+from __future__ import annotations
 from langchain_google_genai import ChatGoogleGenerativeAI
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware

@@ -38,7 +38,7 @@ def retrieval_chain():
         raise ValueError("Hata: Vektör veritabanı başlatılamadı! Qdrant bağlantısını kontrol et.")
 
     def get_bm25_retriever(split_text):
-        picke_path = "/bm25_index.pkl"
+        picke_path = os.path.join(os.getcwd(), "bm25_index.pkl")
 
         if os.path.exists(picke_path):
             with open(picke_path, "rb") as f:

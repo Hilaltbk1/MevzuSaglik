@@ -1,3 +1,4 @@
+from __future__ import annotations
 from backend.database.db_setup import engine
 import sys
 import os
