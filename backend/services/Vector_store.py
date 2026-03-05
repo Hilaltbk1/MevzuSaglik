@@ -73,6 +73,7 @@ def initialize_vector_store(rebuild_db=False):
         client = QdrantClient(
             url=QDRANT_HOST,
             api_key=QDRANT_API_KEY,
+            prefer_grpc=False,
             timeout=300
         )
         COLLECTION_NAME = "mevzu_saglik_docs"
