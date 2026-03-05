@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
-from langchain.chains.retrieval import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
 
 from backend.config.configuration import Settings
 from backend.prompt.My_Prompt import create_prompt

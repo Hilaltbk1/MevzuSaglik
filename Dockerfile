@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 4. Aşama: Pip güncelleme
 RUN pip install --upgrade pip
 
-# 5. Aşama: Paketleri kur (Kavgalı versiyonları Pip kendisi çözsün)
 RUN pip install --no-cache-dir \
     "pydantic>=2.0" \
     "fastapi" \
@@ -24,12 +23,13 @@ RUN pip install --no-cache-dir \
     "cryptography" \
     "rank_bm25" \
     "google-generativeai" \
-    "langchain" \
+    "langchain>=0.2.0" \
     "langchain-community" \
+    "langchain-core" \
+    "langchain-text-splitters" \
     "langchain-google-genai" \
     "langchain-qdrant" \
     "qdrant-client"
-
 # 6. Aşama: Proje dosyalarını kopyala
 COPY . .
 
