@@ -28,7 +28,10 @@ print("Tablolar kontrol ediliyor/oluşturuluyor...")
 Base.metadata.create_all(bind=engine)
 
 app=create_app()
+demo = gr.Interface(...)  # veya gr.Blocks() ile tam arayüzün
 
+# Gradio'yu /gradio yoluna mount et (veya kök yola)
+app = mount_gradio_app(app, demo, path="/")
 @app.get("/")
 def home():
     return {"HİLAL TABAK"}
