@@ -30,23 +30,22 @@ def get_user_sessions(user_name):
 
 
 def get_session_history(session_uuid):
-    """Seçilen oturumun mesajlarını getirir ve Gradio formatına çevirir"""
-    if not session_uuid:
-        return []
+    if not session_uuid: return []
     try:
         res = requests.get(f"{BACKEND_URL}/session/history/{session_uuid}", timeout=10)
         if res.status_code == 200:
             raw_history = res.json().get("history", [])
             formatted = []
-            for msg in raw_history:
-                # Backend'den gelen veriyi 'role' ve 'content' sözlük yapısına çeviriyoruz
-                formatted.append({
-                    "role": msg.get("role", "assistant"),
-                    "content": msg.get("content", "")
-                })
+            for item in raw_history:
+                # Eğer item bir liste ise (eski format), sözlüğe çevir:
+                if isinstance(item, list):
+                    formatted.append({"role": "user", "content": item[0]})
+                    formatted.append({"role": "assistant", "content": item[1]})
+                else:
+                    formatted.append(item)
             return formatted
         return []
-    except Exception:
+    except:
         return []
 
 
