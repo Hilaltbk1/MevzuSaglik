@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir \
     "pydantic>=2.0" \
     "fastapi" \
     "uvicorn" \
+    "python-multipart" \
     "python-dotenv" \
     "sqlalchemy" \
     "pymysql" \
