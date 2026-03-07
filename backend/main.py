@@ -1,5 +1,4 @@
 from __future__ import annotations
-from backend.database.db_setup import engine
 import sys
 import os
 
@@ -9,9 +8,9 @@ sys.path.append(os.path.dirname(current_dir))
 
 from backend.utils import create_app
 from backend.database.base import Base
+from backend.database.db_setup import engine
 
-
-# Qdrant/gRPC tip hatasını runtime'da ezmek için "Monkey Patch"
+# Qdrant/gRPC patch
 def patch_grpc_type_error():
     try:
         import grpc
@@ -23,15 +22,12 @@ def patch_grpc_type_error():
 
 patch_grpc_type_error()
 
-
 print("Tablolar kontrol ediliyor/oluşturuluyor...")
 Base.metadata.create_all(bind=engine)
 
-app=create_app()
-demo = gr.Interface(...)  # veya gr.Blocks() ile tam arayüzün
+app = create_app()
 
-# Gradio'yu /gradio yoluna mount et (veya kök yola)
-app = mount_gradio_app(app, demo, path="/")
+# Kök yol için basit yanıt (opsiyonel, istersen sil)
 @app.get("/")
 def home():
-    return {"HİLAL TABAK"}
+    return {"message": "MevzuSağlık Backend çalışıyor! API'ler hazır."}
