@@ -24,7 +24,7 @@ def initialize_vector_store(rebuild_db=False):
     chunks = None
     vector_store = None
     try:
-        # --- 1. JSON Okuma ---
+
         print(f"2. Dosya yolu okunuyor: {file_path}")
         with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -32,12 +32,10 @@ def initialize_vector_store(rebuild_db=False):
 
         doc_list = []
 
-        # --- DÜZELTİLEN YER: Kesin Dosya Yolu ---
-        # Hatalı olanı bununla değiştir:
-        # Dosyanın bulunduğu dizini baz alarak yol oluşturur
+
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         PROCESSED_DATA_PATH = os.path.join(BASE_DIR, "data", "Json", "islenmis_mevzuat_verileri.json")
-        # Artık rebuild_db=True olsa bile eğer yedek dosya varsa LLM'i çalıştırmaz, dosyadan okur.
+
         if os.path.exists(PROCESSED_DATA_PATH):
             print(f"✅ Yedek bulundu! LLM'i atlayıp Qdrant işlemlerine geçiyorum...")
             with open(PROCESSED_DATA_PATH, "r", encoding="utf-8") as f:
@@ -52,13 +50,13 @@ def initialize_vector_store(rebuild_db=False):
                     metadata={"Mevzuat_Adi": d.get("Mevzuat Adı", ""), "Mevzuat_Türü": d.get("Mevzuat Türü", "")}
                 ))
 
-            # İşlem bittiğinde kaydet
+
             json_data = [{"page_content": d.page_content, "metadata": d.metadata} for d in doc_list]
             with open(PROCESSED_DATA_PATH, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, ensure_ascii=False, indent=4)
             print(f"💾 İşlenmiş veriler yedeklendi: {PROCESSED_DATA_PATH}")
 
-        # --- 2. Chunking ---
+
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=500, chunk_overlap=150, length_function=len,
             separators=["\n\n", "\n", ". ", " ", ""]
@@ -68,10 +66,9 @@ def initialize_vector_store(rebuild_db=False):
 
         embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
-        # --- 3. Qdrant Bağlantısı ---
-        QDRANT_HOST = os.getenv("QDRANT_HOST")  # Örn: https://xxxx.qdrant.io
+
+        QDRANT_HOST = os.getenv("QDRANT_HOST")
         QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-        # Bulut bağlantısı için url ve api_key parametrelerini kullanıyoruz
         client = QdrantClient(
             url=QDRANT_HOST,
             api_key=QDRANT_API_KEY,
@@ -82,7 +79,7 @@ def initialize_vector_store(rebuild_db=False):
 
         exists = client.collection_exists(COLLECTION_NAME)
 
-        # Eğer rebuild_db True ise veya koleksiyon yoksa: SİL ve 3072 boyutunda YENİDEN KUR
+
         if rebuild_db or not exists:
             if exists:
                 print(f"🗑️ Eski hatalı koleksiyon siliniyor: {COLLECTION_NAME}")
@@ -122,7 +119,7 @@ def initialize_vector_store(rebuild_db=False):
 
 
 if __name__ == "__main__":
-    # Import'u sadece dosya çalışınca, fonksiyon içinde yapıyoruz (Döngü kırıldı!)
+
     try:
         from backend.utils import llm_client
 

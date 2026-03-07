@@ -1,8 +1,24 @@
 from __future__ import annotations
+
+import os
 import uuid
+from typing import List
+import io
+from fastapi import UploadFile
+from google.generativeai import embedding
+from langchain_core.documents import Document
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_qdrant import QdrantVectorStore
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from qdrant_client import QdrantClient
 from sqlalchemy.orm import Session
+
+from backend.preprocessing.preprocessing import flatten_mevzuat_object
 from backend.schemas import SessionModel, LogModel
 from backend.schemas.message_model import  MessageModel
+from backend.utils import llm_client
+# Embedding modelini bir kez oluştur
+embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
 #----------------------CREATE İŞLEMLERİ----------------------------------
 #MESSAGE -create
@@ -79,10 +95,47 @@ def read_all_logs(db:Session):
     return db.query(LogModel).all()
 
 
+async def upload_files(files :List[UploadFile]):
+    doc_list=[]
+    for file in files:
+        content=await file.read()
+        pdf_file=io.BytesIO(content)
+
+        processed_data=flatten_mevzuat_object(pdf_file,llm_client)
+
+        doc_list.append(Document(
+            page_content=str(processed_data),
+            metadata={"Mevzuat_Adi": processed_data.get("Mevzuat Adı", ""), "Mevzuat_Türü": processed_data.get("Mevzuat Türü", "")}
+        ))
 
 
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500, chunk_overlap=150, length_function=len,
+        separators=["\n\n", "\n", ". ", " ", ""]
+    )
+    chunks = text_splitter.split_documents(doc_list)
 
+    QDRANT_HOST = os.getenv("QDRANT_HOST")
+    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+    client = QdrantClient(
+            url=QDRANT_HOST,
+            api_key=QDRANT_API_KEY,
+            prefer_grpc=False,
+            timeout=300
+        )
+    COLLECTION_NAME = "mevzu_saglik_docs"
 
+    vector_store = QdrantVectorStore(
+        client=client,
+        collection_name=COLLECTION_NAME,
+        embedding=embedding  # 'embedding' objesinin dışarıda tanımlı olduğundan emin ol
+    )
+
+    if chunks:
+        vector_store.add_documents(documents=chunks)
+        print(f"✅ {len(chunks)} parça Qdrant'a başarıyla eklendi.")
+
+    return {"message": f"{len(files)} dosya işlendi ve {len(chunks)} parça kaydedildi."}
 
 
 

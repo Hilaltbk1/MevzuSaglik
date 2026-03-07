@@ -2,7 +2,6 @@ from __future__ import annotations
 from langchain_core.prompts import ChatPromptTemplate
 
 def create_prompt():
-    # 1. Soru Cevap Promptu (QA)
     qa_ninja = """
         Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
         Görevin kullanıcı sorusunu sana "BULUNAN BİLGİLER" başlığı altında verilen metin parçalarına dayanarak yanıtlamaktır.
@@ -25,7 +24,7 @@ def create_prompt():
         template_format="jinja2"
     )
 
-    # 2. Soruyu Bağlamına Göre Yeniden Düzenleme Promptu (Contextualize)
+
     c_ninja = """
         Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
         Görevin sadece verilen sohbet geçmişini ve son kullanıcı sorusunu analiz ederek, veritabanında arama yapmak ve 

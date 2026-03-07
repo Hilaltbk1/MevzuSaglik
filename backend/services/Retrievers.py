@@ -1,7 +1,7 @@
 from __future__ import annotations
 import os
 import pickle
-from typing import List, Any, Dict, Optional # Optional ekledik
+from typing import List, Any, Dict
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.retrievers import BM25Retriever

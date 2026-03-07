@@ -1,15 +1,12 @@
-from __future__ import annotations  # EN ÜSTTE OLMAK ZORUNDA!
+from __future__ import annotations
 import os
-from pathlib import Path
-from typing import Dict, Any, List, Optional
-from backend.config.configuration import settings  # 'Settings' yerine 'settings' aldık
+from typing import Dict, Any
+from backend.config.configuration import settings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-# Dosya yollarını güvenli hale getirelim
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# settings üzerinden küçük harfle erişiyoruz
 if not settings.DOCUMENT_PATH:
-    # Eğer boşsa varsayılan bir yol atayalım ki sistem çökmesin
     target_doc_path = "backend/data/Json/mevzuat_verileri.json"
 else:
     target_doc_path = settings.DOCUMENT_PATH
@@ -18,7 +15,6 @@ else:
 file_path = os.path.join(BASE_DIR, "data", "Json", "mevzuat_verileri.json")
 
 
-# Tabloyu metin haline getirme fonksiyonu
 def format_table_as_text(table_data: list) -> str:
     if not table_data or not isinstance(table_data, list) or not isinstance(table_data[0], list):
         return ""
@@ -62,7 +58,6 @@ def verbalize_tables_with_llm(formatted_tables_text: str, model_name):
 
             try:
                 response = model_name.invoke(prompt)
-                # response.content kullanımı LangChain Gemini için doğrudur
                 processed_text = getattr(response, "content", str(response))
                 final_processed_chunks.append(processed_text)
             except Exception as e:
@@ -91,7 +86,7 @@ def flatten_mevzuat_object(mevzuat_object: Dict[str, Any], model_name) -> str:
         if combined_semantic_text.strip():
             print(f"--- Tablo verileri LLM'e gönderiliyor... ---")
             llm_verbalized_text = verbalize_tables_with_llm(combined_semantic_text, model_name)
-            flat_parts.append("\n=== TABLO DETAYLARI VE CEZALAR ===")
+            flat_parts.append("\n=== TABLO DETAYLARI ===")
             flat_parts.append(llm_verbalized_text)
 
     return "\n\n".join(flat_parts)

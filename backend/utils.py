@@ -13,9 +13,9 @@ settings = Settings()
 # Doğru başlatma:
 genai.configure(api_key=settings.GOOGLE_API_KEY)
 
-# llm_client olarak Gemini modelini tanımla
+
 llm_client = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",
+    model="gemini-2.5-flash",
     google_api_key=settings.GOOGLE_API_KEY
 )
 
@@ -32,11 +32,10 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    from backend.routers import search, history, session_router
+    from backend.routers import search, history, session_router,add_documents
     app.include_router(search.router)
     app.include_router(history.router)
     app.include_router(session_router.router)
-
-
+    app.include_router(add_documents.router)
 
     return app
