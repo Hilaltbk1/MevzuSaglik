@@ -20,6 +20,51 @@ from backend.utils import llm_client
 # Embedding modelini bir kez oluştur
 embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
+
+async def upload_files(files :List[UploadFile]):
+    doc_list=[]
+    for file in files:
+        content=await file.read()
+        pdf_file=io.BytesIO(content)
+
+        processed_data=flatten_mevzuat_object(pdf_file,llm_client)
+
+        doc_list.append(Document(
+            page_content=str(processed_data),
+            metadata={"Mevzuat_Adi": processed_data.get("Mevzuat Adı", ""), "Mevzuat_Türü": processed_data.get("Mevzuat Türü", "")}
+        ))
+
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500, chunk_overlap=150, length_function=len,
+        separators=["\n\n", "\n", ". ", " ", ""]
+    )
+    chunks = text_splitter.split_documents(doc_list)
+
+    QDRANT_HOST = os.getenv("QDRANT_HOST")
+    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+    client = QdrantClient(
+            url=QDRANT_HOST,
+            api_key=QDRANT_API_KEY,
+            prefer_grpc=False,
+            timeout=300
+        )
+    COLLECTION_NAME = "mevzu_saglik_docs"
+
+    vector_store = QdrantVectorStore(
+        client=client,
+        collection_name=COLLECTION_NAME,
+        embedding=embedding  # 'embedding' objesinin dışarıda tanımlı olduğundan emin ol
+    )
+
+    if chunks:
+        vector_store.add_documents(documents=chunks)
+        print(f"✅ {len(chunks)} parça Qdrant'a başarıyla eklendi.")
+
+    return {"message": f"{len(files)} dosya işlendi ve {len(chunks)} parça kaydedildi."}
+
+
+
 #----------------------CREATE İŞLEMLERİ----------------------------------
 #MESSAGE -create
 def create_message(db: Session, session_id: int, content: str, sender_type: str):
@@ -93,50 +138,6 @@ def read_all_sessions(db:Session):
 
 def read_all_logs(db:Session):
     return db.query(LogModel).all()
-
-
-async def upload_files(files :List[UploadFile]):
-    doc_list=[]
-    for file in files:
-        content=await file.read()
-        pdf_file=io.BytesIO(content)
-
-        processed_data=flatten_mevzuat_object(pdf_file,llm_client)
-
-        doc_list.append(Document(
-            page_content=str(processed_data),
-            metadata={"Mevzuat_Adi": processed_data.get("Mevzuat Adı", ""), "Mevzuat_Türü": processed_data.get("Mevzuat Türü", "")}
-        ))
-
-
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500, chunk_overlap=150, length_function=len,
-        separators=["\n\n", "\n", ". ", " ", ""]
-    )
-    chunks = text_splitter.split_documents(doc_list)
-
-    QDRANT_HOST = os.getenv("QDRANT_HOST")
-    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-    client = QdrantClient(
-            url=QDRANT_HOST,
-            api_key=QDRANT_API_KEY,
-            prefer_grpc=False,
-            timeout=300
-        )
-    COLLECTION_NAME = "mevzu_saglik_docs"
-
-    vector_store = QdrantVectorStore(
-        client=client,
-        collection_name=COLLECTION_NAME,
-        embedding=embedding  # 'embedding' objesinin dışarıda tanımlı olduğundan emin ol
-    )
-
-    if chunks:
-        vector_store.add_documents(documents=chunks)
-        print(f"✅ {len(chunks)} parça Qdrant'a başarıyla eklendi.")
-
-    return {"message": f"{len(files)} dosya işlendi ve {len(chunks)} parça kaydedildi."}
-
 
 
 
