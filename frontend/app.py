@@ -37,9 +37,12 @@ def upload_documents(files: List):
         return "Dosya seçilmedi."
     try:
         prepared = []
+        # Mevcut döngü yerine bunu deneyebilirsin:
         for f in files:
-            with open(f.name, "rb") as file_obj:
-                prepared.append(("files", (f.name, file_obj.read(), f.content_type or "application/octet-stream")))
+            # f bir dosya nesnesidir, .name ve .content_type özelliklerine sahiptir
+            file_content = open(f.name, "rb").read()
+            prepared.append(("files", (f.name, file_content, "application/octet-stream")))
+
         res = requests.post(f"{BACKEND_URL}/add_documents/add", files=prepared)
         if res.status_code == 200:
             return res.json().get("message", "Yükleme başarılı")
