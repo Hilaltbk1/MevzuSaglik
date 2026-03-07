@@ -18,11 +18,12 @@ from backend.schemas import SessionModel, LogModel
 from backend.schemas.message_model import  MessageModel
 
 # Embedding modelini bir kez oluştur
-embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
 
 async def upload_files(files :List[UploadFile]):
     from backend.utils import llm_client
+    embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+
     doc_list=[]
     for file in files:
         content=await file.read()
