@@ -16,12 +16,13 @@ from sqlalchemy.orm import Session
 from backend.preprocessing.preprocessing import flatten_mevzuat_object
 from backend.schemas import SessionModel, LogModel
 from backend.schemas.message_model import  MessageModel
-from backend.utils import llm_client
+
 # Embedding modelini bir kez oluştur
 embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
 
 async def upload_files(files :List[UploadFile]):
+    from backend.utils import llm_client
     doc_list=[]
     for file in files:
         content=await file.read()

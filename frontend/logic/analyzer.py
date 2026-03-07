@@ -3,7 +3,7 @@ import requests
 class Analyzer:
     def __init__(self):
         # Sunucunun çalıştığı adres. Eğer sunucu farklı porttaysa burayı güncelle.
-        self.base_url = "http://localhost:8080"
+        self.base_url = "https://mevzusaglik.onrender.com"
 
     def create_new_session(self, user_name):
         url = f"{self.base_url}/session/create_session"
