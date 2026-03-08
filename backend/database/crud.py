@@ -31,9 +31,19 @@ async def upload_files(files :List[UploadFile]):
 
         processed_data=flatten_mevzuat_object(pdf_file,llm_client)
 
+        if isinstance(processed_data, dict):
+            meta_source = processed_data
+            page_content = str(processed_data)
+        else:
+            # dict değilse bile en azından metin olarak kaydet
+            meta_source = {}
+            page_content = str(processed_data)
+
         doc_list.append(Document(
             page_content=str(processed_data),
-            metadata={"Mevzuat_Adi": processed_data.get("Mevzuat Adı", ""), "Mevzuat_Türü": processed_data.get("Mevzuat Türü", "")}
+            metadata={
+                "Mevzuat_Adi": processed_data.get("Mevzuat Adı", ""),
+                "Mevzuat_Türü": processed_data.get("Mevzuat Türü", "")},
         ))
 
 
