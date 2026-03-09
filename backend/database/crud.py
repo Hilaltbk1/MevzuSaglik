@@ -42,8 +42,8 @@ async def upload_files(files :List[UploadFile]):
         doc_list.append(Document(
             page_content=str(processed_data),
             metadata={
-                "Mevzuat_Adi": processed_data.get("Mevzuat Adı", ""),
-                "Mevzuat_Türü": processed_data.get("Mevzuat Türü", "")},
+                "Mevzuat_Adi": meta_source.get("Mevzuat Adı", ""),
+                "Mevzuat_Türü": meta_source.get("Mevzuat Türü", "")},
         ))
 
 
