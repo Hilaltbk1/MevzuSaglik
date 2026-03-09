@@ -4,18 +4,12 @@ FROM python:3.12-slim
 # Çalışma dizini
 WORKDIR /app
 
-# Sistem bağımlılıkları (minimumda tutuyoruz)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
 
 # Pip güncelle
 RUN pip install --no-cache-dir --upgrade pip
 
 # Tüm bağımlılıkları kur (Gradio + backend paketleri)
-RUN pip install --no-cache-dir \
+RUN pip install --no-cache-dir --default-timeout=1000 \
     fastapi \
     uvicorn \
     python-multipart \

@@ -20,32 +20,35 @@ from backend.schemas.message_model import  MessageModel
 # Embedding modelini bir kez oluştur
 
 
-async def upload_files(files :List[UploadFile]):
+async def upload_files(files: List[UploadFile]):
     from backend.utils import llm_client
     embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
-    doc_list=[]
+    doc_list = []
     for file in files:
-        content=await file.read()
-        pdf_file=io.BytesIO(content)
+        content = await file.read()
+        pdf_file = io.BytesIO(content)
 
-        processed_data=flatten_mevzuat_object(pdf_file,llm_client)
+        # Mevzuat objesini işle
+        processed_data = flatten_mevzuat_object(pdf_file, llm_client)
 
+        # GÜVENLİ VERİ ÇEKME (Fix)
         if isinstance(processed_data, dict):
-            meta_source = processed_data
+            m_adi = processed_data.get("Mevzuat Adı", "Bilinmeyen Mevzuat")
+            m_turu = processed_data.get("Mevzuat Türü", "Genel")
             page_content = str(processed_data)
         else:
-            # dict değilse bile en azından metin olarak kaydet
-            meta_source = {}
+            m_adi = "Bilinmeyen"
+            m_turu = "Genel"
             page_content = str(processed_data)
 
         doc_list.append(Document(
-            page_content=str(processed_data),
+            page_content=page_content,
             metadata={
-                "Mevzuat_Adi": meta_source.get("Mevzuat Adı", ""),
-                "Mevzuat_Türü": meta_source.get("Mevzuat Türü", "")},
+                "Mevzuat_Adi": m_adi,
+                "Mevzuat_Türü": m_turu
+            },
         ))
-
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=500, chunk_overlap=150, length_function=len,
