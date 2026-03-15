@@ -12,19 +12,18 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 # --- YARDIMCI FONKSİYONLAR ---
 
 def format_to_messages(raw_data):
-    """Her türlü veriyi Gradio'nun mesaj formatına zorla dönüştürür"""
+    """Her türlü veriyi Gradio'nun eski (list of tuples) formatına dönüştürür"""
     formatted = []
     if not isinstance(raw_data, list):
         return []
 
-    for item in raw_data:
-        # Eğer veri zaten doğru formattaysa (dict): {"role": "...", "content": "..."}
-        if isinstance(item, dict) and "content" in item:
-            formatted.append(item)
-        # Eğer veri eski formatta ise (list): ["soru", "cevap"]
-        elif isinstance(item, list) and len(item) == 2:
-            formatted.append({"role": "user", "content": str(item[0])})
-            formatted.append({"role": "assistant", "content": str(item[1])})
+    # Chat history genellikle [ {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."} ] şeklindedir
+    # Bunu [ (user_msg, assistant_msg), ... ] formatına çevirmeliyiz
+    for i in range(0, len(raw_data), 2):
+        if i + 1 < len(raw_data):
+            user_msg = raw_data[i].get("content", "") if isinstance(raw_data[i], dict) else str(raw_data[i])
+            assistant_msg = raw_data[i+1].get("content", "") if isinstance(raw_data[i+1], dict) else str(raw_data[i+1])
+            formatted.append((user_msg, assistant_msg))
     return formatted
 
 
@@ -127,7 +126,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
 
         # SAĞ PANEL
         with gr.Column(scale=4):
-            chatbot = gr.Chatbot(height=650, type="messages", show_label=False, elem_classes="chat-area")
+            chatbot = gr.Chatbot(height=650, show_label=False, elem_classes="chat-area")
             with gr.Row():
                 txt_in = gr.Textbox(placeholder="Mesajınızı buraya yazın...", scale=9, container=False)
                 send_btn = gr.Button("✈️", scale=1, variant="primary")
@@ -153,11 +152,9 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
 
     def do_chat(msg, history, sid, uname):
         if not msg.strip(): return history, ""
-        # Yeni mesajı ekle
-        history.append({"role": "user", "content": msg})
         # Backend yanıtı
         ans = process_question(msg, uname, sid)
-        history.append({"role": "assistant", "content": ans})
+        history.append((msg, ans))
         return history, ""
 
 

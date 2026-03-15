@@ -15,13 +15,14 @@ PLAN_PRICE_IDS = {
 
 @router.post("/checkout")
 def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db)):
+    BASE_URL = os.getenv("BACKEND_URL", "https://mevzusaglik.onrender.com")
     session = stripe.checkout.Session.create(
         payment_method_types=["card"],
-        mode="subscription",                                      # ← "subsription" → "subscription"
+        mode="subscription",
         line_items=[{"price": PLAN_PRICE_IDS[plan], "quantity": 1}],
         metadata={"tenant_id": str(tenant_id), "plan": plan},
-        success_url="https://mevzusaglik.onrender.com/success",   # ← tam URL olmalı
-        cancel_url="https://mevzusaglik.onrender.com/cancel",     # ← "cansel" → "cancel", tam URL
+        success_url=f"{BASE_URL}/success",
+        cancel_url=f"{BASE_URL}/cancel",
     )
     return {"checkout_url": session.url}
 
