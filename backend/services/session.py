@@ -6,22 +6,22 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from backend.database import crud
 
-_chain = None
+_chains = {}
 
 
-def get_chain():
-    global _chain
-    if _chain is None:
-        print("⛓️ RAG Zinciri ilk kez oluşturuluyor, bu biraz zaman alabilir...")
-        _chain = retrieval_chain()
-    return _chain
-
-
+def get_chain(tenant_id:int):
+    if tenant_id not in _chains:
+        print(f"Tenant {tenant_id} için zincir oluşturuluyor...")
+        _chains[tenant_id]=retrieval_chain()
+    return _chains[tenant_id]
 # services/session.py
-def ask_question(db: Session, request: QueryRequest) -> QueryResponse:
+def ask_question(db: Session, request: QueryRequest,tenant_id:int=0) -> QueryResponse:
     db_session= crud.get_session_by_uuid(db, request.session_uuid)
     if not db_session:
         raise HTTPException(status_code=404, detail="Oturum bulunamadı")
+
+    if db_session.tenant_id != tenant_id:
+        raise HTTPException(status_code=403,detail="Bu oturuma erişim yetkiniz yok")
 
     s_id = db_session.id
 
@@ -39,7 +39,7 @@ def ask_question(db: Session, request: QueryRequest) -> QueryResponse:
     human_message = crud.create_message(db, s_id, request.query, "human")
 
     # 2. AI Yanıtı Oluşturma
-    current_chain = get_chain()
+    current_chain = get_chain(tenant_id)
 
     try:
         response = current_chain.full_chain.invoke({"input": request.query, "chat_history": chat_history})

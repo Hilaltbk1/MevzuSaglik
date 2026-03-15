@@ -7,7 +7,7 @@ from alembic import context
 
 from backend.config.configuration import Settings
 from backend.database.base import Base
-
+from backend.schemas.tenant_model import TenantModel # Bunu ekle!
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -70,9 +70,7 @@ def run_migrations_online() -> None:
 
     """
     connect_args = {
-        "ssl": {
-            "ca": "C:/Users/hilal/MevzuSaglik/ca.pem" # Eğer Windows'taysan "C:/yol/ca.pem" gibi yazmalısın
-        }
+        "sslmode": "require"
     }
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
@@ -80,6 +78,7 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
         connect_args=connect_args
     )
+
 
     with connectable.connect() as connection:
         context.configure(

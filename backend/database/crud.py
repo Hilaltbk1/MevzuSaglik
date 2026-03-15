@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import PyPDF2
 import os
 import uuid
 from typing import List
@@ -14,9 +14,9 @@ from qdrant_client import QdrantClient
 from sqlalchemy.orm import Session
 
 from backend.preprocessing.preprocessing import flatten_mevzuat_object
-from backend.schemas import SessionModel, LogModel
+from backend.schemas import SessionModel, LogModel, PlanType
 from backend.schemas.message_model import  MessageModel
-
+from backend.schemas.tenant_model import TenantModel
 # Embedding modelini bir kez oluştur
 
 
@@ -24,32 +24,43 @@ async def upload_files(files: List[UploadFile]):
     from backend.utils import llm_client
     embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
-    doc_list = []
+    doc_list=[]
     for file in files:
-        content = await file.read()
-        pdf_file = io.BytesIO(content)
+        try:
+            # 1. Dosyayı oku
+            content = await file.read()
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
 
-        # Mevzuat objesini işle
-        processed_data = flatten_mevzuat_object(pdf_file, llm_client)
+            # 2. PDF metnini çıkar
+            full_text = ""
+            for page in pdf_reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    full_text += page_text + "\n"
 
-        # GÜVENLİ VERİ ÇEKME (Fix)
-        if isinstance(processed_data, dict):
-            m_adi = processed_data.get("Mevzuat Adı", "Bilinmeyen Mevzuat")
-            m_turu = processed_data.get("Mevzuat Türü", "Genel")
-            page_content = str(processed_data)
-        else:
-            m_adi = "Bilinmeyen"
-            m_turu = "Genel"
-            page_content = str(processed_data)
+            # 3. KRİTİK NOKTA: Sözlüğü burada biz oluşturuyoruz
+            # flatten_mevzuat_object fonksiyonu bu anahtarları (key) bekliyor
+            data_for_preprocessing = {
+                "Mevzuat Adı": str(file.filename),
+                "Mevzuat Türü": "Sağlık Mevzuatı",
+                "Mevzuat İçeriği": [full_text],
+                "Tablolar": []
+            }
 
-        doc_list.append(Document(
-            page_content=page_content,
-            metadata={
-                "Mevzuat_Adi": m_adi,
-                "Mevzuat_Türü": m_turu
-            },
-        ))
+            # 4. HATA BURADAYDI: Fonksiyona artık BytesIO değil, DICT gönderiyoruz
+            page_content = flatten_mevzuat_object(data_for_preprocessing, llm_client)
 
+            doc_list.append(Document(
+                page_content=str(page_content),
+                metadata={
+                    "Mevzuat_Adi": str(file.filename),
+                    "Mevzuat_Türü": "Sağlık Mevzuatı",
+                    "Dosya_Adi": str(file.filename)
+                },
+            ))
+        except Exception as e:
+            print(f"❌ Dosya işleme hatası ({file.filename}): {str(e)}")
+            continue
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=500, chunk_overlap=150, length_function=len,
         separators=["\n\n", "\n", ". ", " ", ""]
@@ -94,9 +105,10 @@ def create_message(db: Session, session_id: int, content: str, sender_type: str)
     return new_message
 
 #SESSİON-craete
-def create_session(db: Session, user_name: str):
+def create_session(db: Session, user_name: str,tenant_id:int):
     new_session=SessionModel(
         user_name=user_name,
+        tenant_id=tenant_id,
         session_uuid=str(uuid.uuid4()),
     )
     db.add(new_session)
@@ -155,8 +167,12 @@ def read_all_logs(db:Session):
     return db.query(LogModel).all()
 
 
-
-
+def create_tenant(db:Session,name:str,plan:PlanType,api_key:str):
+    tenant= TenantModel(name=name,api_key=api_key,plan=plan)
+    db.add(tenant)
+    db.commit()
+    db.refresh(tenant)
+    return tenant
 
 
 

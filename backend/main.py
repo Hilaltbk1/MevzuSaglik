@@ -28,6 +28,12 @@ Base.metadata.create_all(bind=engine)
 app = create_app()
 
 # Kök yol için basit yanıt (opsiyonel, istersen sil)
+# backend/main.py
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
 @app.get("/")
 def home():
-    return {"message": "MevzuSağlık Backend çalışıyor! API'ler hazır."}
+    return FileResponse("frontend/index.html")

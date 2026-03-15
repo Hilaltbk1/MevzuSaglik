@@ -28,7 +28,8 @@ RUN pip install --no-cache-dir --default-timeout=1000 \
     qdrant-client \
     jinja2 \
     pydantic>=2.0 \
-    gradio>=4.44.0   # Gradio'yu ekledik!
+    gradio>=4.44.0\
+    psycopg2-binary   # Gradio'yu ekledik!
 
 # Önce requirements.txt varsa onu kur (cache avantajı için)
 COPY requirements.txt ./

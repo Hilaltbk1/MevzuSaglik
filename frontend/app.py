@@ -3,6 +3,8 @@ import requests
 import os
 from typing import List
 
+TENANT_API_KEY = os.environ.get("TENANT_API_KEY", "")
+HEADERS = {"X-API-Key": TENANT_API_KEY}
 # Backend URL
 BACKEND_URL = "https://mevzusaglik.onrender.com"
 
@@ -59,15 +61,14 @@ def get_session_history(session_uuid):
 def process_question(message, user_name, session_uuid):
     if not session_uuid: return "⚠️ Önce bir sohbet seçin."
     try:
-        res = requests.post(f"{BACKEND_URL}/search/ask", json={
-            "query": message, "user_name": user_name, "session_uuid": session_uuid
-        }, timeout=120)
-        if res.status_code == 200:
-            data = res.json()
-            ans = data.get("answer", "Yanıt yok.")
-            src = data.get("sources", [])
-            if src: ans += f"\n\n**📚 Kaynaklar:**\n" + "\n".join([f"• {s}" for s in src])
-            return ans
+        res = requests.post(f"{BACKEND_URL}/search/ask",
+                            json={"query": message, "user_name": user_name, "session_uuid": session_uuid},
+                            headers=HEADERS, timeout=120)
+        if res.status_code == 429:
+            return "⚠️ Günlük limitinize ulaştınız. Lütfen planınızı yükseltin."
+        if res.status_code == 403:
+            return "🔒 Erişim reddedildi. API anahtarınızı kontrol edin."
+
         return f"❌ Hata: {res.status_code}"
     except Exception as e:
         return f"📡 Bağlantı Hatası: {str(e)}"
