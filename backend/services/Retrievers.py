@@ -21,7 +21,7 @@ def retrieval_chain():
     from backend.services.Vector_store import initialize_vector_store
 
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
+        model=settings.LLM_MODEL_NAME or "gemini-2.5-flash",
         google_api_key=settings.GOOGLE_API_KEY,
         temperature=0,
     )
@@ -32,7 +32,9 @@ def retrieval_chain():
         raise ValueError("Hata: Vektör veritabanı başlatılamadı! Qdrant bağlantısını kontrol et.")
 
     def get_bm25_retriever(split_text):
-        picke_path = os.path.join(os.getcwd(), "bm25_index.pkl")
+        # Proje kök dizinindeki pkl dosyasını bulmak için:
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        picke_path = os.path.join(BASE_DIR, "bm25_index.pkl")
 
         if os.path.exists(picke_path):
             with open(picke_path, "rb") as f:

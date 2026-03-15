@@ -21,8 +21,11 @@ from backend.schemas.tenant_model import TenantModel
 
 
 async def upload_files(files: List[UploadFile]):
-    from backend.utils import llm_client
-    embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+    from backend.llm_client import llm_client
+    embedding = GoogleGenerativeAIEmbeddings(
+        model="models/gemini-embedding-001",
+        output_dimensionality=3072
+    )
 
     doc_list=[]
     for file in files:

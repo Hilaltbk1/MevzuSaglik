@@ -7,21 +7,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from backend.config.configuration import Settings
+from backend.llm_client import llm_client
 from backend.routers import search, history, session_router,admin
 import google.generativeai as genai
-
-from backend.services.Retrievers import retrieval_chain
-
-settings = Settings()
-
-# Doğru başlatma:
-genai.configure(api_key=settings.GOOGLE_API_KEY)
-
-
-llm_client = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    google_api_key=settings.GOOGLE_API_KEY
-)
 
 
 def create_app() -> FastAPI:

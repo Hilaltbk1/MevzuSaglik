@@ -27,6 +27,15 @@ Base.metadata.create_all(bind=engine)
 
 app = create_app()
 
+# Gradio Arayüzünü FastAPI'ye bağla (Opsiyonel ama Render için önerilir)
+try:
+    import gradio as gr
+    from frontend.app import demo
+    app = gr.mount_gradio_app(app, demo, path="/chat")
+    print("✅ Gradio arayüzü /chat yoluna bağlandı.")
+except Exception as e:
+    print(f"⚠️ Gradio bağlama hatası: {e}")
+
 # Kök yol için basit yanıt (opsiyonel, istersen sil)
 # backend/main.py
 from fastapi.staticfiles import StaticFiles

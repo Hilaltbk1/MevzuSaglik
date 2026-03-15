@@ -19,6 +19,7 @@ os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 
 def initialize_vector_store(rebuild_db=False):
     from backend.preprocessing.preprocessing import file_path, flatten_mevzuat_object
+    from backend.llm_client import llm_client
     print("1. Fonksiyon başladı...")
 
     chunks = None
@@ -64,7 +65,10 @@ def initialize_vector_store(rebuild_db=False):
         chunks = text_splitter.split_documents(doc_list)
         print(f"4. Chunking tamamlandı. Toplam parça sayısı: {len(chunks)}")
 
-        embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+        embedding = GoogleGenerativeAIEmbeddings(
+            model="models/gemini-embedding-001",
+            output_dimensionality=3072
+        )
 
 
         QDRANT_HOST = os.getenv("QDRANT_HOST")

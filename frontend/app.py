@@ -6,7 +6,7 @@ from typing import List
 TENANT_API_KEY = os.environ.get("TENANT_API_KEY", "")
 HEADERS = {"X-API-Key": TENANT_API_KEY}
 # Backend URL
-BACKEND_URL = "https://mevzusaglik.onrender.com"
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 
 # --- YARDIMCI FONKSİYONLAR ---
@@ -64,12 +64,16 @@ def process_question(message, user_name, session_uuid):
         res = requests.post(f"{BACKEND_URL}/search/ask",
                             json={"query": message, "user_name": user_name, "session_uuid": session_uuid},
                             headers=HEADERS, timeout=120)
+        
+        if res.status_code == 200:
+            return res.json().get("answer", "⚠️ Cevap alınamadı.")
+            
         if res.status_code == 429:
             return "⚠️ Günlük limitinize ulaştınız. Lütfen planınızı yükseltin."
         if res.status_code == 403:
             return "🔒 Erişim reddedildi. API anahtarınızı kontrol edin."
 
-        return f"❌ Hata: {res.status_code}"
+        return f"❌ Hata: {res.status_code} - {res.text}"
     except Exception as e:
         return f"📡 Bağlantı Hatası: {str(e)}"
 
