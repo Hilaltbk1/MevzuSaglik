@@ -28,6 +28,8 @@ async def get_user_session_api(user_name:str,db:Session = Depends(get_db)):
     sessions = crud.read_user_sessions(db, user_name)
     result = []
     for s in sessions:
+        if not s.messages:
+            continue
         content_obj = next((m.content for m in s.messages if m.sender_type == "human"), "Yeni Sohbet")
         first_message = str(content_obj)
         title = f"{first_message:.30}..." if len(first_message) > 30 else first_message

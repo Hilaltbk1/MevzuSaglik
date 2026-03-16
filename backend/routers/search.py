@@ -21,7 +21,7 @@ async def create_query(
         db:Session=Depends(get_db),
         tenant=Depends(get_current_tenant),
 ):
-    check_daily_quota(tenant,db)
+    check_daily_quota(tenant, request.user_name, db)
     try:
         result=ask_question(db,request,tenant_id=tenant.id)
         if not result:
