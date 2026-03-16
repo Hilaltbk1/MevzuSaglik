@@ -61,11 +61,6 @@ async def upload_files(files: List[UploadFile]):
         if file.filename in existing_files:
             skipped_files.append(file.filename)
             continue
-            
-
-        model="models/gemini-embedding-001",
-        output_dimensionality=3072
-    )
 
     doc_list=[]
     for file in files:
