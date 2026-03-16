@@ -42,7 +42,7 @@ from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 
 from fastapi.responses import FileResponse
-from backend.utils import retrieval_chain
+from backend.services.Retrievers import retrieval_chain
 
 # =========================
 # USAGE LOGGING (TÜBİTAK H2.3)

@@ -31,4 +31,3 @@ datasets
 pandas
 tqdm
 sentence-transformers
-flaskrank # Opsiyonel: Eğer ileride daha gelişmiş reranker istersen
