@@ -73,8 +73,8 @@ def initialize_vector_store(rebuild_db=False):
         )
 
 
-        QDRANT_HOST = os.getenv("QDRANT_HOST")
-        QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+        QDRANT_HOST = os.getenv("QDRANT_HOST", "").strip()
+        QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip()
         client = QdrantClient(
             url=QDRANT_HOST,
             api_key=QDRANT_API_KEY,
