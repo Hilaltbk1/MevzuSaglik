@@ -463,7 +463,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
           <li>10 belge yükleme</li>
           <li>E-posta desteği</li>
         </ul>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="showLogin('register')">Pro'ya Geç</button>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="buyPlan('pro')">Pro'ya Geç</button>
       </div>
       <div class="price-card">
         <div class="price-plan">Kurumsal</div>
@@ -828,6 +828,31 @@ async function newChat() {
       </div>`;
   } catch(e) {
     console.error("Yeni oturum oluşturulamadı.", e);
+  }
+}
+
+async function buyPlan(plan) {
+  if (!currentUser) {
+    showLogin('register');
+    return;
+  }
+  try {
+    // Backend API'nize (billing/checkout) tenant_id ve plan gönderin
+    // *Not: Normalde tenant_id login olurken alınmalıdır. Demo için sabit 1 gönderiyoruz.
+    const res = await fetch(`${BACKEND_URL}/billing/checkout?tenant_id=1&plan=${plan}`, {
+      method: 'POST',
+      headers: HEADERS
+    });
+    if (!res.ok) {
+        alert("Ödeme ekranı oluşturulamadı.");
+        return;
+    }
+    const data = await res.json();
+    if (data.checkout_url) {
+      window.location.href = data.checkout_url; // Stripe'a yönlendir
+    }
+  } catch(e) {
+    console.error("Ödeme hatası:", e);
   }
 }
 
