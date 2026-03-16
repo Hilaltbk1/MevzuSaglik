@@ -11,19 +11,30 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 # --- YARDIMCI FONKSİYONLAR ---
 
-def format_to_messages(raw_data):
-    """Her türlü veriyi Gradio'nun eski (list of tuples) formatına dönüştürür"""
+def format_to_messages(messages_list):
+    """Backend'den gelen mesaj listesini Gradio chatbot formatına çevirir"""
     formatted = []
-    if not isinstance(raw_data, list):
-        return []
-
-    # Chat history genellikle [ {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."} ] şeklindedir
-    # Bunu [ (user_msg, assistant_msg), ... ] formatına çevirmeliyiz
-    for i in range(0, len(raw_data), 2):
-        if i + 1 < len(raw_data):
-            user_msg = raw_data[i].get("content", "") if isinstance(raw_data[i], dict) else str(raw_data[i])
-            assistant_msg = raw_data[i+1].get("content", "") if isinstance(raw_data[i+1], dict) else str(raw_data[i+1])
-            formatted.append((user_msg, assistant_msg))
+    # Mesajları sender_type'a göre eşleştir (human, ai, human, ai...)
+    # Gradio [(user, bot), (user, bot)] formatı bekler
+    temp_user = None
+    for msg in messages_list:
+        content = msg.get("content", "")
+        sender = msg.get("sender", "human")
+        
+        if sender == "human":
+            temp_user = content
+        else:
+            if temp_user is not None:
+                formatted.append((temp_user, content))
+                temp_user = None
+            else:
+                # Eğer AI mesajı tek başına geldse (beklenmez ama güvenlik için)
+                formatted.append((None, content))
+    
+    # Eğer en son bir user mesajı kaldıysa ve yanıtı yoksa
+    if temp_user is not None:
+        formatted.append((temp_user, None))
+        
     return formatted
 
 
@@ -48,12 +59,18 @@ def get_user_sessions(user_name):
 def get_session_history(session_uuid):
     if not session_uuid: return []
     try:
-        res = requests.get(f"{BACKEND_URL}/session/history/{session_uuid}", timeout=10)
+        res = requests.get(f"{BACKEND_URL}/history/{session_uuid}", timeout=10)
         if res.status_code == 200:
-            raw_history = res.json().get("history", [])
-            return format_to_messages(raw_history)  # Korumalı dönüştürme
+            data = res.json()
+            if not data or not isinstance(data, list):
+                return []
+            
+            # Backend'den gelen format: [{ "messages": [...] }]
+            raw_history = data[0].get("messages", [])
+            return format_to_messages(raw_history)
         return []
-    except:
+    except Exception as e:
+        print(f"Geçmiş çekme hatası: {e}")
         return []
 
 
