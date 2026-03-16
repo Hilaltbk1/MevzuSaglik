@@ -51,9 +51,21 @@ def create_new_session(user_name):
 def get_user_sessions(user_name):
     try:
         res = requests.get(f"{BACKEND_URL}/session/user_sessions/{user_name}", timeout=10)
-        return res.json().get("sessions", []) if res.status_code == 200 else []
+        if res.status_code == 200:
+            sessions = res.json()
+            # Oturumları (Görünen İsim, UUID) formatına çevir
+            return [(f"📅 {s['created_at'][:16]} - {s['session_uuid'][:8]}", s['session_uuid']) for s in sessions]
+        return []
     except:
         return []
+
+
+def start_new_session(uname):
+    """Yeni bir oturum başlatır ve arayüzü hazırlar"""
+    sess = create_new_session(uname)
+    new_sid = sess.get("session_uuid") if sess else None
+    old_sessions = get_user_sessions(uname)
+    return new_sid, [], gr.update(choices=old_sessions, value=new_sid)
 
 
 def get_session_history(session_uuid):
@@ -114,11 +126,13 @@ custom_css = """
 .gradio-container { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 .login-card { max-width: 450px !important; margin: 80px auto !important; padding: 30px; border-radius: 20px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 .chat-area { border-radius: 15px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05); background: white !important; }
+/* Sol paneldeki oturum listesi için özel stil */
+.session-list { background: #ffffff !important; border: none !important; }
 """
 
 with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red"), css=custom_css) as demo:
     u_name = gr.State("Misafir")
-    u_code = gr.State("Anonymous") # TÜBİTAK Araştırma Kodu için State
+    u_code = gr.State("Anonymous")
     s_uuid = gr.State(None)
 
     # GİRİŞ EKRANI
@@ -131,24 +145,25 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     # ANA EKRAN
     with gr.Row(visible=False) as main_box:
         # SOL PANEL
-        with gr.Column(scale=1, min_width=280):
-            gr.Markdown("### 👤 Menü")
+        with gr.Column(scale=1, min_width=300):
+            gr.Markdown("### 👤 Profil")
             u_info = gr.Markdown("**Kullanıcı:** -")
             u_code_info = gr.Markdown("**Kod:** -")
-            new_btn = gr.Button("➕ Yeni Sohbet", variant="secondary")
+            new_btn = gr.Button("➕ Yeni Sohbet Başlat", variant="primary")
             gr.Markdown("---")
-            gr.Markdown("### 🕒 Geçmiş")
-            hist_drop = gr.Dropdown(label="Eski Oturumlar", choices=[], interactive=True)
+            gr.Markdown("### 🕒 Eski Sohbetleriniz")
+            # Dropdown yerine Radio (List) kullanarak alt alta dizilmesini sağladık
+            session_list = gr.Radio(label="Seçili Oturum", choices=[], interactive=True, elem_classes="session-list")
             gr.Markdown("---")
-            up_btn = gr.UploadButton("📤 Belge Yükle", file_count="multiple")
-            up_status = gr.Textbox(label="Durum", interactive=False)
-            logout_btn = gr.Button("🚪 Çıkış", size="sm", variant="stop")
+            up_btn = gr.UploadButton("📤 Mevzuat Yükle", file_count="multiple")
+            up_status = gr.Textbox(label="Yükleme Durumu", interactive=False)
+            logout_btn = gr.Button("🚪 Güvenli Çıkış", size="sm", variant="stop")
 
         # SAĞ PANEL
         with gr.Column(scale=4):
             chatbot = gr.Chatbot(height=650, show_label=False, elem_classes="chat-area")
             with gr.Row():
-                txt_in = gr.Textbox(placeholder="Mesajınızı buraya yazın...", scale=9, container=False)
+                txt_in = gr.Textbox(placeholder="Mevzuat hakkında sorunuzu yazın...", scale=9, container=False)
                 send_btn = gr.Button("✈️", scale=1, variant="primary")
 
 
@@ -157,9 +172,8 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     def do_login(name, code):
         name = name.strip() or "Misafir"
         code = code.strip() or "Anonymous"
-        sess = create_new_session(name)
-        old = get_user_sessions(name)
-        sid = sess.get("session_uuid") if sess else None
+        # Giriş yapınca yeni bir temiz oturum oluştur
+        sid, hist, session_update = start_new_session(name)
         return {
             login_box: gr.update(visible=False),
             main_box: gr.update(visible=True),
@@ -168,10 +182,25 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
             s_uuid: sid,
             u_info: f"**Kullanıcı:** {name}",
             u_code_info: f"**Kod:** {code}",
-            hist_drop: gr.update(choices=old, value=sid),
-            chatbot: []
+            session_list: session_update,
+            chatbot: hist
         }
 
+    def do_logout():
+        return {
+            login_box: gr.update(visible=True),
+            main_box: gr.update(visible=False),
+            u_name: "Misafir",
+            u_code: "Anonymous",
+            s_uuid: None,
+            chatbot: [],
+            name_in: "",
+            code_in: ""
+        }
+
+    def do_new_chat(uname):
+        sid, hist, session_update = start_new_session(uname)
+        return sid, hist, session_update
 
     def do_chat(msg, history, sid, uname, ucode):
         if not msg.strip(): return history, ""
@@ -180,19 +209,24 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         history.append((msg, ans))
         return history, ""
 
-
     def do_session_change(sid):
         return sid, get_session_history(sid)
 
 
-    login_btn.click(do_login, [name_in, code_in], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, hist_drop, chatbot])
-    hist_drop.change(do_session_change, hist_drop, [s_uuid, chatbot])
-    new_btn.click(lambda n, c: do_login(n, c), [u_name, u_code], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, hist_drop, chatbot])
+    login_btn.click(do_login, [name_in, code_in], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, session_list, chatbot])
+    
+    # Oturum listesinden birine tıklandığında
+    session_list.change(do_session_change, session_list, [s_uuid, chatbot])
+    
+    # Yeni sohbet butonu
+    new_btn.click(do_new_chat, [u_name], [s_uuid, chatbot, session_list])
+    
     up_btn.upload(upload_documents, up_btn, up_status)
 
     send_btn.click(do_chat, [txt_in, chatbot, s_uuid, u_name, u_code], [chatbot, txt_in])
     txt_in.submit(do_chat, [txt_in, chatbot, s_uuid, u_name, u_code], [chatbot, txt_in])
-    logout_btn.click(lambda: [gr.update(visible=True), gr.update(visible=False)], None, [login_box, main_box])
+    
+    logout_btn.click(do_logout, None, [login_box, main_box, u_name, u_code, s_uuid, chatbot, name_in, code_in])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
