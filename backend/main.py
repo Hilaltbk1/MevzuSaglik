@@ -36,10 +36,45 @@ try:
 except Exception as e:
     print(f"⚠️ Gradio bağlama hatası: {e}")
 
-# Kök yol için basit yanıt (opsiyonel, istersen sil)
-# backend/main.py
+import csv
+from datetime import datetime
+from fastapi import Request
 from fastapi.staticfiles import StaticFiles
+
 from fastapi.responses import FileResponse
+from backend.utils import retrieval_chain
+
+# =========================
+# USAGE LOGGING (TÜBİTAK H2.3)
+# =========================
+LOG_FILE = "usage_logs.csv"
+
+def log_usage(user_id="Anonymous"):
+    """Kullanım istatistiklerini KVKK'ya uygun şekilde kaydeder."""
+    file_exists = os.path.isfile(LOG_FILE)
+    try:
+        with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(["timestamp", "user_id"])
+            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id])
+    except Exception as e:
+        print(f"Loglama hatası: {e}")
+
+@app.post("/chat")
+async def chat(request: Request):
+    data = await request.json()
+    user_input = data.get("message")
+    user_id = data.get("user_id", "Anonymous") # Kullanıcı kodunu al
+    
+    # Kullanımı logla (H2.3 için)
+    log_usage(user_id)
+    
+    # RAG zincirini çalıştır
+    container = retrieval_chain()
+    response = container.full_chain.invoke({"input": user_input, "chat_history": []})
+    
+    return {"response": response["answer"]}
 
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 

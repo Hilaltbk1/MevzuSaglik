@@ -17,6 +17,9 @@ Türk Sağlık Mevzuatı konusunda uzman bir denetçi olarak, aşağıdaki RAG s
 ### DENETÇİ TALİMATLARI:
 - **Sadakat Kontrolü:** Sistem yanıtı, Bağlam (Context) dışına çıkıp kendi genel bilgisini kullanmış mı? (Kullanmışsa puan kır).
 - **Referans Keskinliği:** Eğer yanıt "Yönetmelik uyarınca" diyor ama Referans Yanıt "Atık Yönetimi Yönetmeliği Madde 6" diyorsa, sistem yanıtını 2 PUAN ile cezalandır.
+- **BAĞLAM KISITI (ÖNEMLİ):** Eğer sistemin verdiği yanıt Bağlam (Context) içinde yer alıyorsa ancak Referans Yanıt (İdeal) Bağlam'da bulunmayan dış bilgiler (ek yönetmelik isimleri vb.) içeriyorsa, sistemin bu dış bilgileri bilmemesi bir HATA DEĞİLDİR. Eğer sistem Bağlam'daki bilgileri doğru ve dürüstçe sunmuşsa 4 PUAN ver.
+- **DÜRÜST YANIT:** Eğer bilgi Bağlam'da yoksa ve sistem dürüstçe "mevzuat bulunmamaktadır" diyorsa, bu bir halüsinasyondan kaçınma başarısıdır. Bu durumda sistem yanıtını (eğer gerçekten bağlamda yoksa) 3 veya 4 puan ile ödüllendir (soruyla alakasız uydurma cevap vermediği için).
+- **KAYNAK ADI İSTİSNASI (KRİTİK):** Sistem yanıtında geçen "X Yönetmeliği" gibi isimler, Bağlam (Context) içindeki döküman etiketlerinden (Örn: [Döküman: X Yönetmeliği]) gelmektedir. Eğer sistem bu etiketlerdeki ismi doğru kullanmışsa, bu metin ana içerikte geçmese bile bunu asla "uydurma" veya "hallüsinasyon" olarak değerlendirme. Bu durum için puan kırma.
 - **Üslup:** Yanıt bir hukuk danışmanı ciddiyetinde mi, yoksa çok mu yüzeysel?
 
 ### ÇIKTI FORMATI:

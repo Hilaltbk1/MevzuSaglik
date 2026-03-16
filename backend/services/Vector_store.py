@@ -59,7 +59,7 @@ def initialize_vector_store(rebuild_db=False):
 
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500, chunk_overlap=150, length_function=len,
+            chunk_size=800, chunk_overlap=200, length_function=len,
             separators=["\n\n", "\n", ". ", " ", ""]
         )
         chunks = text_splitter.split_documents(doc_list)
@@ -113,21 +113,15 @@ def initialize_vector_store(rebuild_db=False):
             vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
 
         return vector_store, chunks
-
     except Exception as e:
-        print("\n" + "=" * 50)
-        print(f"❌ KRİTİK HATA: {repr(e)}")
-        print("=" * 50 + "\n")
-        raise e
-
-
+        print(f"❌ Hata oluştu: {e}")
+        return None, None
 
 if __name__ == "__main__":
-
-    try:
-        from backend.utils import llm_client
-
-        print("✅ Bağımlılıklar yüklendi, veritabanı işlemi başlıyor...")
-        initialize_vector_store(rebuild_db=True)
-    except Exception as e:
-        print(f"❌ Çalıştırma hatası: {e}")
+    # Veritabanını sıfırdan oluşturmak için rebuild_db=True yapıyoruz
+    print("🚀 Veritabanı güncelleniyor (800 chunk size)...")
+    v_db, ch = initialize_vector_store(rebuild_db=True)
+    if v_db:
+        print("✅ Veritabanı başarıyla güncellendi ve yeni koleksiyon oluşturuldu.")
+    else:
+        print("❌ Güncelleme başarısız.")

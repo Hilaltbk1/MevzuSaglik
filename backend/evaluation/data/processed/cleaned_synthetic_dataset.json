@@ -1,15 +1,5 @@
 [
     {
-        "chunk_id": 0,
-        "question": "Bir sağlık çalışanı, serbest dolaşımda bulunmayan koruma ürünlerini nasıl taşıyabilir?",
-        "ground_truth": "Bu tür ürünlerin kara, demir, deniz veya hava yoluyla taşınması, gümrük gözetimi ve denetimi altında yapılmalıdır. Yani, bu ürünler için transit rejimi hükümlerine uygun hareket edilmesi gerekmektedir. (Gümrük Kanunu, Madde 84 uyarınca)"
-    },
-    {
-        "chunk_id": 0,
-        "question": "Biyosidal ürünlerin gümrükten geçişinde dikkat edilmesi gereken hususlar nelerdir?",
-        "ground_truth": "Bu ürünlerin geçişi sırasında gümrük denetimi yapılması zorunludur ve bu süreçte mevzuatın belirlediği şartlara uygun olarak hareket edilmelidir. Aksi takdirde, ürünlerin geçişinde sorunlar yaşanabilir. (Gümrük Kanunu, Madde 84 uyarınca)"
-    },
-    {
         "chunk_id": 4,
         "question": "Salgın incelemesi yapılması gerektiğini hangi durumlarda anlayabiliriz?",
         "ground_truth": "Vaka artışlarının gözlemlenmesi veya belirli bir bölgede hastalık kümelenmelerinin tespit edilmesi durumunda salgın incelemesi gereklidir. Bu tür durumlar, sağlık otoriteleri tarafından ciddiye alınmalı ve gerekli adımlar atılmalıdır."
@@ -18,11 +8,6 @@
         "chunk_id": 4,
         "question": "Bir hastalıkta artış yaşanması durumunda ne gibi adımlar izlenmelidir?",
         "ground_truth": "Eğer belirli bir hastalıkta artış yaşanıyorsa, öncelikle bu durumu analiz etmek ve incelemek gerekir. Sağlık çalışanları, artışın nedenlerini araştırmalı ve bu veriler ışığında uygun önlemleri almalıdır. Bu süreç, salgın incelemesi ile desteklenmelidir."
-    },
-    {
-        "chunk_id": 6,
-        "question": "Sağlık göstergeleri belirlenirken dikkate alınması gereken temel unsurlar nelerdir?",
-        "ground_truth": "Sağlık göstergeleri oluşturulurken, öncelikle ölçütlerin doğru tanımlanması, veri toplama yöntemlerinin güvenilir olması ve bu verilerin analizinde uygun istatistiksel yöntemlerin kullanılması önem taşır. Bu süreç, sağlık hizmetlerinin etkinliğini ve kalitesini artırmak için gereklidir. (Sağlık Göstergeleri Yönetmeliği)"
     },
     {
         "chunk_id": 6,
@@ -38,11 +23,6 @@
         "chunk_id": 12,
         "question": "Bir sağlık çalışanı, hasta bilgilerini kaydederken neden gizlilik ilkesine uymalıdır?",
         "ground_truth": "Hasta bilgileri, kişisel ve özel veriler içermektedir. Bu nedenle, sağlık çalışanlarının bu bilgileri koruması ve gizlilik ilkesine uyması zorunludur. Aksi takdirde, hasta güvenliği tehlikeye girebilir ve kurumun itibarı zarar görebilir. Bu durum, sağlık hizmetlerinin kalitesini de olumsuz etkiler. (Kişisel Verilerin Korunması Kanunu)"
-    },
-    {
-        "chunk_id": 13,
-        "question": "Eğer bir sağlık çalışanı daha önce emekli sandığına tabi bir görevde bulunmuşsa, bu durumun kendisine sağladığı avantajlar neler olabilir?",
-        "ground_truth": "Bu tür bir görevde çalışmış bir kişinin, mevcut intibak işlemlerinde kazanılmış hakları korunur. Yani, önceki görevden elde ettiği haklar, yeni pozisyonda geçerliliğini korur. Bu durum, çalışanın daha yüksek bir dereceye ve dolayısıyla daha iyi bir maaşa erişimini etkileyebilir. Ancak, bu yükseklik öğrenim durumuna göre sınırlı kalır. (Sosyal Sigortalar Kanunu uyarınca)"
     },
     {
         "chunk_id": 13,
@@ -188,5 +168,35 @@
         "chunk_id": 49,
         "question": "Yaşlıların sağlık sorunları için acil durumlarda nasıl bir müdahale planı oluşturmalıyız?",
         "ground_truth": "Acil durumlarda yaşlı bireyler için hazırlanan müdahale planında, hızlı bir değerlendirme yaparak yaşlı kişinin sağlık geçmişini göz önünde bulundurmak, acil servisle iletişime geçmek ve varsa yanlarında taşıdıkları ilaçların kontrolünü sağlamak gereklidir. Bu plan, yaşlı bireyin acil sağlık ihtiyaçlarına hızlı ve etkili bir şekilde cevap vermek amacı taşır. (Acil Sağlık Hizmetleri Yönetmeliği)"
+    },
+    {
+        "chunk_id": 999,
+        "question": "Uzay hukukuna göre sağlık çalışanlarının Mars kolonilerindeki nöbet süreleri ne kadardır?",
+        "ground_truth": "Sistemimde bu konuda kayıtlı mevzuat bulunmamaktadır. (Bu soru sistemin bilmediği konuda uydurma yapıp yapmadığını ölçmek için eklenmiştir)"
+    },
+    {
+        "chunk_id": 999,
+        "question": "Sağlık Bakanlığı tarafından yayınlanan 2025 yılı kripto para kullanım yönetmeliği maddeleri nelerdir?",
+        "ground_truth": "Sistemimde bu konuda kayıtlı mevzuat bulunmamaktadır. (Modelin güncel olmayan veya alakasız konularda uydurma yapmasını test eder)"
+    },
+    {
+        "chunk_id": 60,
+        "question": "Bir hastanın tıbbi müdahale öncesinde 'Aydınlatılmış Onam' formunu imzalaması, hekimin her türlü sorumluluğunu ortadan kaldırır mı?",
+        "ground_truth": "Hayır, kaldırmaz. Hasta Hakları Yönetmeliği'ne göre onam formu sadece bilgilendirmeyi belgeler. Hekimin tıbbi uygulama hatası (malpraktis) veya ihmali durumunda hukuki sorumluluğu devam eder. Onam, sadece komplikasyonlar ve riskler hakkında rıza gösterildiğini ifade eder."
+    },
+    {
+        "chunk_id": 65,
+        "question": "Radyasyonla çalışan sağlık personeline verilen 'Şua İzni' süresi ne kadardır ve bu izin başka bir izinle birleştirilebilir mi?",
+        "ground_truth": "Sağlık Hizmetlerinde İyonlaştırıcı Radyasyon Kaynakları ile Çalışan Personelin Radyasyon Doz Limitleri Hakkında Yönetmelik uyarınca, bu personel yılda 30 gün sağlık izni (şua izni) kullanır. Bu izin, yıllık ücretli izinle birleştirilebilir ve kullandırılması zorunludur."
+    },
+    {
+        "chunk_id": 70,
+        "question": "E-Nabız sistemindeki kişisel sağlık verilerinin paylaşımı konusunda vatandaşın 'Gizlilik Tercihleri' acil durumlarda nasıl esnetilebilir?",
+        "ground_truth": "Kişisel Sağlık Verileri Hakkında Yönetmelik gereğince, vatandaş verilerini gizlemiş olsa dahi, bilincin kapalı olduğu acil durumlarda 'acil müdahale' butonu ile hekimler hayati verilere kısıtlı süreli erişebilir. Bu işlem sistemde kayıt altına alınır ve sonradan denetlenebilir."
+    },
+    {
+        "chunk_id": 75,
+        "question": "Özel hastanelerin acil servislerine başvuran acil durumdaki hastalardan ilave ücret veya katılım payı talep edilebilir mi?",
+        "ground_truth": "Hayır, edilemez. Özel Hastaneler Yönetmeliği ve Sosyal Güvenlik Kurumu (SGK) mevzuatına göre, acil hal sona erene kadar yapılan tüm tıbbi müdahaleler ücretsizdir. Hastadan hiçbir isim altında (fark ücreti, katılım payı vb.) ödeme talep edilemez."
     }
 ]

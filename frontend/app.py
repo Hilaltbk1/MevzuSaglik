@@ -12,19 +12,18 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 # --- YARDIMCI FONKSİYONLAR ---
 
 def format_to_messages(raw_data):
-    """Her türlü veriyi Gradio'nun mesaj formatına zorla dönüştürür"""
+    """Her türlü veriyi Gradio'nun eski (list of tuples) formatına dönüştürür"""
     formatted = []
     if not isinstance(raw_data, list):
         return []
 
-    for item in raw_data:
-        # Eğer veri zaten doğru formattaysa (dict): {"role": "...", "content": "..."}
-        if isinstance(item, dict) and "content" in item:
-            formatted.append(item)
-        # Eğer veri eski formatta ise (list): ["soru", "cevap"]
-        elif isinstance(item, list) and len(item) == 2:
-            formatted.append({"role": "user", "content": str(item[0])})
-            formatted.append({"role": "assistant", "content": str(item[1])})
+    # Chat history genellikle [ {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."} ] şeklindedir
+    # Bunu [ (user_msg, assistant_msg), ... ] formatına çevirmeliyiz
+    for i in range(0, len(raw_data), 2):
+        if i + 1 < len(raw_data):
+            user_msg = raw_data[i].get("content", "") if isinstance(raw_data[i], dict) else str(raw_data[i])
+            assistant_msg = raw_data[i+1].get("content", "") if isinstance(raw_data[i+1], dict) else str(raw_data[i+1])
+            formatted.append((user_msg, assistant_msg))
     return formatted
 
 
@@ -58,15 +57,15 @@ def get_session_history(session_uuid):
         return []
 
 
-def process_question(message, user_name, session_uuid):
+def process_question(message, user_name, session_uuid, user_code="Anonymous"):
     if not session_uuid: return "⚠️ Önce bir sohbet seçin."
     try:
-        res = requests.post(f"{BACKEND_URL}/search/ask",
-                            json={"query": message, "user_name": user_name, "session_uuid": session_uuid},
+        res = requests.post(f"{BACKEND_URL}/chat",
+                            json={"message": message, "user_name": user_name, "session_uuid": session_uuid, "user_id": user_code},
                             headers=HEADERS, timeout=120)
         
         if res.status_code == 200:
-            return res.json().get("answer", "⚠️ Cevap alınamadı.")
+            return res.json().get("response", "⚠️ Cevap alınamadı.")
             
         if res.status_code == 429:
             return "⚠️ Günlük limitinize ulaştınız. Lütfen planınızı yükseltin."
@@ -102,12 +101,14 @@ custom_css = """
 
 with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red"), css=custom_css) as demo:
     u_name = gr.State("Misafir")
+    u_code = gr.State("Anonymous") # TÜBİTAK Araştırma Kodu için State
     s_uuid = gr.State(None)
 
     # GİRİŞ EKRANI
     with gr.Column(visible=True, elem_classes="login-card") as login_box:
         gr.Markdown("<center><h1>⚕️ MevzuSağlık AI</h1><p>Dijital Mevzuat Asistanı</p></center>")
-        name_in = gr.Textbox(label="Kullanıcı Adı", placeholder="İsminizi yazın...", lines=1)
+        name_in = gr.Textbox(label="Ad Soyad", placeholder="Adınızı yazın...", lines=1)
+        code_in = gr.Textbox(label="Araştırma Kodu (Opsiyonel)", placeholder="Size verilen kodu yazın...", lines=1)
         login_btn = gr.Button("🚀 Giriş Yap", variant="primary")
 
     # ANA EKRAN
@@ -116,6 +117,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         with gr.Column(scale=1, min_width=280):
             gr.Markdown("### 👤 Menü")
             u_info = gr.Markdown("**Kullanıcı:** -")
+            u_code_info = gr.Markdown("**Kod:** -")
             new_btn = gr.Button("➕ Yeni Sohbet", variant="secondary")
             gr.Markdown("---")
             gr.Markdown("### 🕒 Geçmiş")
@@ -127,7 +129,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
 
         # SAĞ PANEL
         with gr.Column(scale=4):
-            chatbot = gr.Chatbot(height=650, type="messages", show_label=False, elem_classes="chat-area")
+            chatbot = gr.Chatbot(height=650, show_label=False, elem_classes="chat-area")
             with gr.Row():
                 txt_in = gr.Textbox(placeholder="Mesajınızı buraya yazın...", scale=9, container=False)
                 send_btn = gr.Button("✈️", scale=1, variant="primary")
@@ -135,8 +137,9 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
 
     # --- ETKİLEŞİM ---
 
-    def do_login(name):
+    def do_login(name, code):
         name = name.strip() or "Misafir"
+        code = code.strip() or "Anonymous"
         sess = create_new_session(name)
         old = get_user_sessions(name)
         sid = sess.get("session_uuid") if sess else None
@@ -144,20 +147,20 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
             login_box: gr.update(visible=False),
             main_box: gr.update(visible=True),
             u_name: name,
+            u_code: code,
             s_uuid: sid,
             u_info: f"**Kullanıcı:** {name}",
+            u_code_info: f"**Kod:** {code}",
             hist_drop: gr.update(choices=old, value=sid),
             chatbot: []
         }
 
 
-    def do_chat(msg, history, sid, uname):
+    def do_chat(msg, history, sid, uname, ucode):
         if not msg.strip(): return history, ""
-        # Yeni mesajı ekle
-        history.append({"role": "user", "content": msg})
         # Backend yanıtı
-        ans = process_question(msg, uname, sid)
-        history.append({"role": "assistant", "content": ans})
+        ans = process_question(msg, uname, sid, ucode)
+        history.append((msg, ans))
         return history, ""
 
 
@@ -165,13 +168,13 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         return sid, get_session_history(sid)
 
 
-    login_btn.click(do_login, name_in, [login_box, main_box, u_name, s_uuid, u_info, hist_drop, chatbot])
+    login_btn.click(do_login, [name_in, code_in], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, hist_drop, chatbot])
     hist_drop.change(do_session_change, hist_drop, [s_uuid, chatbot])
-    new_btn.click(lambda n: do_login(n), u_name, [login_box, main_box, u_name, s_uuid, u_info, hist_drop, chatbot])
+    new_btn.click(lambda n, c: do_login(n, c), [u_name, u_code], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, hist_drop, chatbot])
     up_btn.upload(upload_documents, up_btn, up_status)
 
-    send_btn.click(do_chat, [txt_in, chatbot, s_uuid, u_name], [chatbot, txt_in])
-    txt_in.submit(do_chat, [txt_in, chatbot, s_uuid, u_name], [chatbot, txt_in])
+    send_btn.click(do_chat, [txt_in, chatbot, s_uuid, u_name, u_code], [chatbot, txt_in])
+    txt_in.submit(do_chat, [txt_in, chatbot, s_uuid, u_name, u_code], [chatbot, txt_in])
     logout_btn.click(lambda: [gr.update(visible=True), gr.update(visible=False)], None, [login_box, main_box])
 
 if __name__ == "__main__":

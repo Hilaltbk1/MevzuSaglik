@@ -11,10 +11,28 @@ chroma_data/
 .venv/
 
 # IDE ayarları
-
 .vscode/
+
 # Büyük Model Dosyaları ve Veriler
 backend/models/
-# Çevresel Değişkenler (Gizli anahtarların gitmesin!)
-# Docker logları
+bm25_index.pkl
+islenmis_mevzuat_verileri.json
+
+# Gizli Anahtarlar ve Sertifikalar
+ca.pem
+*.pem
+*.key
+
+# Loglar ve Kullanım Verileri
 *.log
+usage_logs.csv
+usage_logs_v2.csv
+
+# Docker logları
+# Diğer gereksizler
+venv/
+node_modules/
+dist/
+build/
+.DS_Store
+

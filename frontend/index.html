@@ -624,8 +624,9 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </div>
 
 <script>
-const BACKEND_URL = 'http://localhost:8000';
-const TENANT_API_KEY = 'ecea57ae955f01e1c22000559d761a8d4cb8df0c7ed7fc2d7659e536bcb75317';  // .env'den alınacak
+// Eğer localhost'taysak localhost'u, canlıdaysak mevcut adresi kullan
+const BACKEND_URL = window.location.origin;
+const TENANT_API_KEY = 'ecea57ae955f01e1c22000559d761a8d4cb8df0c7ed7fc2d7659e536bcb75317';
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
 let currentUser = '';

@@ -11,12 +11,16 @@ def create_prompt():
         BULUNAN BİLGİLER:{{ context }}
 
         TALİMATLAR:
-            1. ROL AYRIMI: Metin içinde farklı unvanların görevleri karışık olabilir. SADECE sorulan unvana ait görevleri getir.
-            2. KAYNAK GÖSTERİMİ: Yanıtına "X Yönetmeliği'nin Y Maddesine göre..." diyerek başla.
-            3. FORMAT: Yanıtı Markdown liste (* kullanarak) şeklinde ve her madde yeni satırda olacak şekilde yaz.
-            4. SINIR: Bilgi dökümanlarda yoksa uydurma, "Sistemimde bu konuda kayıtlı mevzuat bulunmamaktadır" de.
-            5. KAYNAKÇA: Yanıtı "Yararlanılan Kaynaklar:" başlığı altında mevzuat adlarını listeleyerek bitir.
-            6. CEVAP BAŞLANGICI: Cevabına asla kullanıcı sorusunu tekrar ederek başlama. Doğrudan kaynak göstererek (Örn: X Yönetmeliği'ne göre...) bilgi vermeye geç.
+            1. SADECE VERİLEN METNE SADIK KAL: Asla dış dünyadan bildiğin genel bilgileri (COVID-19, güncel haberler vb.) ekleme. Eğer verilen "BULUNAN BİLGİLER" içinde o bilgi yoksa, kesinlikle "Sistemimde bu konuda kayıtlı mevzuat bulunmamaktadır" de. Ancak, eğer bağlamda soruyla dolaylı yoldan ilgili (örneğin genel bir soruya spesifik bir örnek üzerinden cevap veren) bilgiler varsa, "Mevcut kayıtlarda [X] özelinde şu bilgiler yer almaktadır..." şeklinde açıklama yap.
+            2. CÜMLE BAZLI KANIT (GROUNDING): Yanıtındaki her bir bilginin hangi dökümandan alındığını cümlenin sonunda parantez içinde belirt. (Örn: "...yapılması zorunludur. [Döküman: X Yönetmeliği]").
+            3. OTOMATİK DENETİM: Cevabını yazdıktan sonra kendi kendini denetle: "Bu bilgi gerçekten metinde var mı?" Eğer metinde geçmiyorsa o cümleyi hemen sil.
+            4. AYRINTILI ANALİZ: "BULUNAN BİLGİLER" içindeki dökümanları dikkatlice oku. Soruyla ilgili en ufak bir ipucu veya madde varsa onu mutlaka yanıtına dahil et. Bilgiyi eksik bırakma.
+            5. ROL AYRIMI: Metin içinde farklı unvanların görevleri karışık olabilir. SADECE sorulan unvana ait görevleri getir.
+            6. KAYNAK GÖSTERİMİ: Yanıtına "[Döküman Adı] uyarınca..." diyerek başla. 
+            7. HUKUKİ BAĞLAÇLAR: Metindeki "ve", "veya", "ancak" gibi bağlaçların anlamını bozma. Şartları birleştirme veya ayırma.
+            8. FORMAT: Yanıtı Markdown liste (* kullanarak) şeklinde ve her madde yeni satırda olacak şekilde yaz.
+            9. KAYNAKÇA: Yanıtı "Yararlanılan Kaynaklar:" başlığı altında mevzuat adlarını listeleyerek bitir.
+            10. CEVAP BAŞLANGICI: Cevabına asla kullanıcı sorusunu tekrar ederek başlama. Doğrudan kaynak göstererek bilgi vermeye geç.
             """
 
     qa_prompt = ChatPromptTemplate.from_template(
