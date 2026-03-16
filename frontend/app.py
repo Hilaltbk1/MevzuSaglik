@@ -50,11 +50,11 @@ def create_new_session(user_name):
 
 def get_user_sessions(user_name):
     try:
-        res = requests.get(f"{BACKEND_URL}/session/user_sessions/{user_name}", timeout=10)
+        res = requests.get(f"{BACKEND_URL}/session/sessions/{user_name}", timeout=10)
         if res.status_code == 200:
             sessions = res.json()
             # Oturumları (Görünen İsim, UUID) formatına çevir
-            return [(f"📅 {s['created_at'][:16]} - {s['session_uuid'][:8]}", s['session_uuid']) for s in sessions]
+            return [(f"💬 {s.get('title', 'Yeni Sohbet')}", s['session_uuid']) for s in sessions]
         return []
     except:
         return []

@@ -664,6 +664,22 @@ async function doLogin() {
     hideLogin();
     document.getElementById('landing-page').style.display = 'none';
     document.getElementById('app-page').style.display = 'block';
+    
+    // Yükleme Sonrası Reset ve Session Getirme
+    messageCount = 0;
+    document.getElementById('messages-container').innerHTML =
+        `<div class="empty-state" id="empty-state">
+          <div class="empty-icon">⚕</div>
+          <div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div>
+          <div class="empty-desc">Sağlık mevzuatı hakkında herhangi bir sorunuzu sorabilirsiniz.</div>
+          <div class="suggestions">
+            <div class="suggestion" onclick="askSuggestion(this)">Hemşirenin aylık nöbet süresi kaç saattir?</div>
+            <div class="suggestion" onclick="askSuggestion(this)">Uzman hekim muayene ücreti nasıl belirlenir?</div>
+            <div class="suggestion" onclick="askSuggestion(this)">Sağlık çalışanlarının izin hakları nelerdir?</div>
+            <div class="suggestion" onclick="askSuggestion(this)">İlaç ruhsatlandırma süreci nasıl işler?</div>
+          </div>
+        </div>`;
+    loadSidebarSessions();
   } catch(e) {
     // Demo mod: backend yoksa da giriş yap
     currentUser = name;
@@ -691,6 +707,12 @@ async function sendMessage() {
 
   // Kullanıcı mesajı
   appendMessage('user', text);
+  
+  if (messageCount === 1) {
+    // İlk mesajsa sidebar'ı yepyeni bir title ile güncellemek için biraz bekleyip yükleyebiliriz
+    // Backend'in bunu session_uuid ile birlikte kaydetmesini bekle
+    setTimeout(loadSidebarSessions, 2000);
+  }
 
   // Typing indicator
   const typingId = appendTyping();
@@ -786,13 +808,86 @@ function askSuggestion(el) {
   sendMessage();
 }
 
-function newChat() {
-  document.getElementById('messages-container').innerHTML =
-    `<div class="empty-state" id="empty-state">
-      <div class="empty-icon">⚕</div>
-      <div class="empty-title">Yeni sohbet başladı</div>
-      <div class="empty-desc">Sağlık mevzuatı hakkında bir soru sorun.</div>
-    </div>`;
+async function newChat() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/session/create_session`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({user_name: currentUser})
+    });
+    const data = await res.json();
+    currentSessionUUID = data.session_uuid;
+    messageCount = 0;
+    document.getElementById('messages-container').innerHTML =
+      `<div class="empty-state" id="empty-state">
+        <div class="empty-icon">⚕</div>
+        <div class="empty-title">Yeni sohbet başladı</div>
+        <div class="empty-desc">Sağlık mevzuatı hakkında bir soru sorun.</div>
+      </div>`;
+  } catch(e) {
+    console.error("Yeni oturum oluşturulamadı.", e);
+  }
+}
+
+async function loadSidebarSessions() {
+  if (!currentUser) return;
+  try {
+    const res = await fetch(`${BACKEND_URL}/session/sessions/${currentUser}`, {
+      headers: HEADERS
+    });
+    if (!res.ok) return;
+    const sessions = await res.json();
+    
+    const list = document.getElementById('chat-history-list');
+    list.innerHTML = '';
+    
+    sessions.forEach(s => {
+      const is_active = s.session_uuid === currentSessionUUID ? 'active' : '';
+      const div = document.createElement('div');
+      div.className = `chat-item ${is_active}`;
+      div.onclick = () => loadChat(s.session_uuid);
+      div.innerHTML = `<span class="chat-item-icon">💬</span>${s.title}`;
+      list.appendChild(div);
+    });
+  } catch(e) {
+    console.error("Sohbet geçmişi yüklenemedi", e);
+  }
+}
+
+async function loadChat(session_uuid) {
+  try {
+    currentSessionUUID = session_uuid;
+    // UI update for active session item
+    document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
+    // we would actually need to add 'active' back but it gets refreshed when clicking another
+    const res = await fetch(`${BACKEND_URL}/history/${session_uuid}`, {
+      headers: HEADERS
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    
+    const container = document.getElementById('messages-container');
+    container.innerHTML = '';
+    messageCount = 0;
+    
+    if (data.length > 0 && data[0].messages) {
+      const messages = data[0].messages;
+      messages.forEach(msg => {
+        const role = msg.sender === 'human' ? 'user' : 'ai';
+        appendMessage(role, msg.content, []);
+        messageCount++;
+      });
+    } else {
+        container.innerHTML =
+        `<div class="empty-state" id="empty-state">
+          <div class="empty-icon">⚕</div>
+          <div class="empty-title">Önceki Sohbet</div>
+          <div class="empty-desc">Bu sohbet boş görünüyor.</div>
+        </div>`;
+    }
+  } catch(e) {
+    console.error("Sohbet yüklenemedi", e);
+  }
 }
 
 function updateQuota() {
@@ -823,6 +918,8 @@ function doLogout() {
   document.getElementById('landing-page').style.display = 'block';
   currentUser = '';
   currentSessionUUID = '';
+  messageCount = 0;
+  document.getElementById('chat-history-list').innerHTML = ''; // Sidebarı temizle
 }
 
 // ── SCROLL ANIMATIONS ──
