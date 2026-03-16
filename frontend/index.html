@@ -632,6 +632,7 @@ const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY}
 let currentUser = '';
 let currentSessionUUID = '';
 let messageCount = 0;
+let pendingPlan = null;
 
 // ── MODAL ──
 function showLogin(mode) {
@@ -681,6 +682,12 @@ async function doLogin() {
         </div>`;
     loadSidebarSessions();
     updateQuota();
+
+    if (pendingPlan) {
+      const planToBuy = pendingPlan;
+      pendingPlan = null;
+      buyPlan(planToBuy);
+    }
   } catch(e) {
     // Demo mod: backend yoksa da giriş yap
     currentUser = name;
@@ -691,6 +698,12 @@ async function doLogin() {
     document.getElementById('landing-page').style.display = 'none';
     document.getElementById('app-page').style.display = 'block';
     updateQuota();
+
+    if (pendingPlan) {
+      const planToBuy = pendingPlan;
+      pendingPlan = null;
+      buyPlan(planToBuy);
+    }
   }
 }
 
