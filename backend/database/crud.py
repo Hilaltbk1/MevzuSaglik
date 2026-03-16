@@ -22,7 +22,47 @@ from backend.schemas.tenant_model import TenantModel
 
 async def upload_files(files: List[UploadFile]):
     from backend.llm_client import llm_client
+    from fastapi import HTTPException
     embedding = GoogleGenerativeAIEmbeddings(
+        model="models/gemini-embedding-001",
+        output_dimensionality=3072
+    )
+
+    QDRANT_HOST = os.getenv("QDRANT_HOST")
+    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+    client = QdrantClient(
+        url=QDRANT_HOST,
+        api_key=QDRANT_API_KEY,
+        prefer_grpc=False,
+        timeout=300
+    )
+    COLLECTION_NAME = "mevzu_saglik_docs"
+    
+    # Mevcut dosyaları almak için basit bir scroll/search
+    existing_files = set()
+    try:
+        if client.collection_exists(COLLECTION_NAME):
+            scroll_res, _ = client.scroll(
+                collection_name=COLLECTION_NAME,
+                limit=10000,
+                with_payload=["Mevzuat_Adi"]
+            )
+            for point in scroll_res:
+                if point.payload and "Mevzuat_Adi" in point.payload:
+                    existing_files.add(point.payload["Mevzuat_Adi"])
+    except Exception as e:
+        print("Mevcut dosyalar kontrol edilirken hata:", e)
+
+    doc_list=[]
+    processed_count = 0
+    skipped_files = []
+    
+    for file in files:
+        if file.filename in existing_files:
+            skipped_files.append(file.filename)
+            continue
+            
+
         model="models/gemini-embedding-001",
         output_dimensionality=3072
     )
@@ -90,7 +130,11 @@ async def upload_files(files: List[UploadFile]):
         vector_store.add_documents(documents=chunks)
         print(f"✅ {len(chunks)} parça Qdrant'a başarıyla eklendi.")
 
-    return {"message": f"{len(files)} dosya işlendi ve {len(chunks)} parça kaydedildi."}
+    msg = f"{processed_count} dosya işlendi ve {len(chunks)} parça kaydedildi."
+    if skipped_files:
+        msg += f" (Atlanan var olan dosyalar: {', '.join(skipped_files)})"
+
+    return {"message": msg}
 
 
 

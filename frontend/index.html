@@ -680,6 +680,7 @@ async function doLogin() {
           </div>
         </div>`;
     loadSidebarSessions();
+    updateQuota();
   } catch(e) {
     // Demo mod: backend yoksa da giriş yap
     currentUser = name;
@@ -689,6 +690,7 @@ async function doLogin() {
     hideLogin();
     document.getElementById('landing-page').style.display = 'none';
     document.getElementById('app-page').style.display = 'block';
+    updateQuota();
   }
 }
 
@@ -890,11 +892,20 @@ async function loadChat(session_uuid) {
   }
 }
 
-function updateQuota() {
-  const used = parseInt(document.getElementById('quota-used').textContent) + 1;
-  const total = parseInt(document.getElementById('quota-total').textContent);
-  document.getElementById('quota-used').textContent = used;
-  document.getElementById('quota-fill').style.width = (used/total*100) + '%';
+async function updateQuota() {
+  if (!currentUser) return;
+  try {
+    const res = await fetch(`${BACKEND_URL}/session/user_quota/${currentUser}`, {
+      headers: HEADERS
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    document.getElementById('quota-used').textContent = data.used;
+    document.getElementById('quota-total').textContent = data.total;
+    document.getElementById('quota-fill').style.width = (data.used/data.total*100) + '%';
+  } catch(e) {
+    console.error("Kota bilgisi alınamadı", e);
+  }
 }
 
 async function handleUpload(input) {

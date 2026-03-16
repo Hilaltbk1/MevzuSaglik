@@ -39,3 +39,20 @@ async def get_user_session_api(user_name:str,db:Session = Depends(get_db)):
             "created_at": s.created_at
         })
     return result
+
+from sqlalchemy import func
+from backend.schemas.message_model import MessageModel
+from backend.schemas.session_model import SessionModel
+
+@router.get("/user_quota/{user_name}")
+async def get_user_quota_api(user_name: str, db: Session = Depends(get_db)):
+    kullanici_toplam_sayi = (
+        db.query(func.count(MessageModel.id))
+        .join(MessageModel.session)
+        .filter(
+            SessionModel.user_name == user_name,
+            MessageModel.sender_type == "human"
+        ).scalar()
+    )
+    return {"used": kullanici_toplam_sayi, "total": 20}
+
