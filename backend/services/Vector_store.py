@@ -14,7 +14,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
-os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
+langchain_api_key = os.getenv("LANGCHAIN_API_KEY")
+if langchain_api_key:
+    os.environ["LANGCHAIN_API_KEY"] = langchain_api_key
 
 
 def initialize_vector_store(rebuild_db=False):
