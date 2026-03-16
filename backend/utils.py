@@ -8,14 +8,11 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from backend.config.configuration import Settings
 from backend.llm_client import llm_client
-from backend.routers import search, history, session_router,admin
+from backend.routers import search, history, session_router, admin, add_documents, billing, health
 import google.generativeai as genai
 
 
 def create_app() -> FastAPI:
-    # utils.py — create_app içine
-    from backend.routers import health
-
     app = FastAPI(title="MevzuSaglik")
 
     app.add_middleware(
@@ -26,11 +23,11 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    from backend.routers import search, history, session_router,add_documents
     app.include_router(search.router)
     app.include_router(history.router)
     app.include_router(session_router.router)
     app.include_router(add_documents.router)
     app.include_router(admin.router)
     app.include_router(health.router)
+    app.include_router(billing.router)
     return app
