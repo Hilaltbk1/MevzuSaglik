@@ -14,12 +14,9 @@ python-jose[cryptography]
 stripe
 python-multipart
 psycopg2-binary
-
-langchain-community
+langchain-community<0.3.0
 rank-bm25
 huggingface-hub
 sentence-transformers
-
-langchain
-
-langchain-text-splitters
+langchain<0.3.0
+langchain-text-splitters<0.3.0
