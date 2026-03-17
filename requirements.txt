@@ -13,3 +13,4 @@ passlib
 python-jose[cryptography]
 stripe
 python-multipart
+psycopg2-binary
