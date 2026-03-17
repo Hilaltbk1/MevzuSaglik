@@ -9,7 +9,7 @@ router = APIRouter(prefix="/billing", tags=["Faturalama"])
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
 
 PLAN_PRICE_IDS = {
-    "pro":"price_1TBEDZCy8ysSERSo2askuLJo ",   # ← prod_ değil price_ olmalı (aşağıda açıkladım)
+    "pro":"price_1TBEDZCy8ysSERSo2askuLJo",   # ← prod_ değil price_ olmalı (aşağıda açıkladım)
     "enterprise":"price_1TBEL2Cy8ysSERSoBPUXm1ns",
 }
 
