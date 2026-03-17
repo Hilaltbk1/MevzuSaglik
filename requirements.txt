@@ -19,3 +19,5 @@ langchain-community
 rank-bm25
 huggingface-hub
 sentence-transformers
+
+langchain
