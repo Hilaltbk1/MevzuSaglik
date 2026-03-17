@@ -532,8 +532,12 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       <label class="form-label">Kullanıcı Adı</label>
       <input class="form-input" id="username-input" type="text" placeholder="Ad Soyad veya kullanıcı adı"/>
     </div>
-    <button class="modal-btn" onclick="doLogin()">Devam Et →</button>
-    <p class="modal-footer">
+    <div class="form-group">
+      <label class="form-label">Parola</label>
+      <input class="form-input" id="password-input" type="password" placeholder="Parolanızı giriniz"/>
+    </div>
+    <button class="modal-btn" onclick="doSubmitAuth()">Devam Et →</button>
+    <p class="modal-footer" id="modal-toggle-text">
       Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>
     </p>
     <p style="text-align:center;margin-top:12px"><a href="#" style="color:var(--muted);font-size:13px" onclick="hideLogin()">Vazgeç</a></p>
@@ -634,33 +638,57 @@ let currentSessionUUID = '';
 let messageCount = 0;
 let pendingPlan = null;
 
-// ── MODAL ──
+// ── MODAL & AUTH ──
+let currentAuthMode = 'login'; // 'login' or 'register'
+
 function showLogin(mode) {
+  currentAuthMode = mode;
   document.getElementById('loginModal').classList.add('show');
-  document.getElementById('modal-sub').textContent =
-    mode === 'register' ? 'Ücretsiz hesap oluşturun' : 'Hesabınıza giriş yapın';
+  document.getElementById('password-input').value = '';
+  document.getElementById('username-input').value = '';
+
+  if (mode === 'register') {
+    document.getElementById('modal-sub').textContent = 'Ücretsiz hesap oluşturun';
+    document.getElementById('modal-toggle-text').innerHTML = `Zaten hesabınız var mı? <a href="#" onclick="showLogin('login')">Giriş yapın</a>`;
+  } else {
+    document.getElementById('modal-sub').textContent = 'Hesabınıza giriş yapın';
+    document.getElementById('modal-toggle-text').innerHTML = `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
+  }
 }
 function hideLogin() {
   document.getElementById('loginModal').classList.remove('show');
 }
 
-// ── LOGIN ──
-async function doLogin() {
+// ── LOGIN / REGISTER ──
+async function doSubmitAuth() {
   const name = document.getElementById('username-input').value.trim();
-  if (!name) return;
+  const password = document.getElementById('password-input').value.trim();
+  if (!name || !password) {
+      alert("Kullanıcı adı ve parola zorunludur.");
+      return;
+  }
+
+  const endpoint = currentAuthMode === 'register' ? '/auth/register' : '/auth/login';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/session/create_session`, {
+    const res = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: 'POST',
       headers: HEADERS,
-      body: JSON.stringify({user_name: name})
+      body: JSON.stringify({user_name: name, password: password})
     });
+    
+    if (!res.ok) {
+        const err = await res.json();
+        alert(err.detail || "Bir hata oluştu.");
+        return;
+    }
+
     const data = await res.json();
-    currentUser = name;
+    currentUser = data.user_name || name;
     currentSessionUUID = data.session_uuid;
 
-    document.getElementById('sidebar-username').textContent = name;
-    document.getElementById('user-avatar-text').textContent = name[0].toUpperCase();
+    document.getElementById('sidebar-username').textContent = currentUser;
+    document.getElementById('user-avatar-text').textContent = currentUser[0].toUpperCase();
 
     hideLogin();
     document.getElementById('landing-page').style.display = 'none';
@@ -683,27 +711,15 @@ async function doLogin() {
     loadSidebarSessions();
     updateQuota();
 
+    // Satın al butonuna tıklanarak geldiyse hemen satın almaya gönder
     if (pendingPlan) {
       const planToBuy = pendingPlan;
       pendingPlan = null;
       buyPlan(planToBuy);
     }
   } catch(e) {
-    // Demo mod: backend yoksa da giriş yap
-    currentUser = name;
-    currentSessionUUID = 'demo-' + Date.now();
-    document.getElementById('sidebar-username').textContent = name;
-    document.getElementById('user-avatar-text').textContent = name[0].toUpperCase();
-    hideLogin();
-    document.getElementById('landing-page').style.display = 'none';
-    document.getElementById('app-page').style.display = 'block';
-    updateQuota();
-
-    if (pendingPlan) {
-      const planToBuy = pendingPlan;
-      pendingPlan = null;
-      buyPlan(planToBuy);
-    }
+      alert("Bağlantı hatası: Sunucuya ulaşılamıyor.");
+      console.error(e);
   }
 }
 
@@ -846,6 +862,7 @@ async function newChat() {
 
 async function buyPlan(plan) {
   if (!currentUser) {
+    pendingPlan = plan;
     showLogin('register');
     return;
   }

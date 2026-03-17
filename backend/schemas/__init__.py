@@ -4,7 +4,8 @@ from backend.schemas.session_model import SessionModel
 from backend.schemas.tenant_model import TenantModel,PlanType
 # HATA ALMAMAN İÇİN BU SATIRI EKLEMELİSİN:
 from backend.schemas.query_model import QueryRequest, QueryResponse
+from backend.schemas.user_model import UserModel
 
 # Tüm modellerin listesi
 __all__ = ["SessionModel", "MessageModel", "LogModel",
-           "TenantModel","PlanType","QueryRequest", "QueryResponse"]
+           "TenantModel","PlanType","QueryRequest", "QueryResponse", "UserModel"]
