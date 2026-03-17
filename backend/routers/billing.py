@@ -6,20 +6,24 @@ from backend.database.db_setup import get_db
 from backend.schemas.tenant_model import TenantModel, PlanType
 
 router = APIRouter(prefix="/billing", tags=["Faturalama"])
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "").strip()
 
 PLAN_PRICE_IDS = {
-    "pro":"price_1TBEDZCy8ysSERSo2askuLJo",   # ← prod_ değil price_ olmalı (aşağıda açıkladım)
-    "enterprise":"price_1TBEL2Cy8ysSERSoBPUXm1ns",
+    "pro":"price_1TBEDZCy8ysSERSo2askuLJo".strip(),   # ← prod_ değil price_ olmalı (aşağıda açıkladım)
+    "enterprise":"price_1TBEL2Cy8ysSERSoBPUXm1ns".strip(),
 }
 
 @router.post("/checkout")
 def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db)):
-    BASE_URL = os.getenv("BACKEND_URL", "https://mevzusaglik.onrender.com")
+    BASE_URL = os.getenv("BACKEND_URL", "https://mevzusaglik.onrender.com").strip()
+    
+    # Explicitly strip any accidental whitespace from the price ID
+    plan_price_id = PLAN_PRICE_IDS[plan].strip()
+    
     session = stripe.checkout.Session.create(
         payment_method_types=["card"],
         mode="subscription",
-        line_items=[{"price": PLAN_PRICE_IDS[plan], "quantity": 1}],
+        line_items=[{"price": plan_price_id, "quantity": 1}],
         metadata={"tenant_id": str(tenant_id), "plan": plan},
         success_url=f"{BASE_URL}/success",
         cancel_url=f"{BASE_URL}/cancel",
