@@ -567,11 +567,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
           <span>＋</span> Yeni Sohbet
         </button>
         <div class="sidebar-section-title">Son Sohbetler</div>
-        <div id="chat-history-list">
-          <div class="chat-item active"><span class="chat-item-icon">💬</span>Hemşire nöbet süreleri</div>
-          <div class="chat-item"><span class="chat-item-icon">💬</span>Hekim çalışma hakları</div>
-          <div class="chat-item"><span class="chat-item-icon">💬</span>SGK bildirimleri</div>
-        </div>
+        <div id="chat-history-list"></div>
         <div style="margin-top:20px">
           <div class="sidebar-section-title">Belge Yükle</div>
           <div class="upload-area" onclick="document.getElementById('file-input').click()">
@@ -584,8 +580,8 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       </div>
       <div class="sidebar-footer">
         <div>
-          <div class="quota-bar"><div class="quota-fill" id="quota-fill" style="width:30%"></div></div>
-          <div class="quota-text"><span id="quota-used">6</span>/<span id="quota-total">20</span> soru kullanıldı</div>
+          <div class="quota-bar"><div class="quota-fill" id="quota-fill" style="width:0%"></div></div>
+          <div class="quota-text"><span id="quota-used">0</span>/<span id="quota-total">20</span> soru kullanıldı</div>
         </div>
         <button class="logout-btn" onclick="doLogout()">🚪 Çıkış Yap</button>
       </div>
@@ -599,7 +595,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       </div>
 
       <div class="messages" id="messages-container">
-        <!-- Empty state -->
         <div class="empty-state" id="empty-state">
           <div class="empty-icon">⚕</div>
           <div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div>
@@ -628,18 +623,19 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </div>
 
 <script>
-// Eğer localhost'taysak localhost'u, canlıdaysak mevcut adresi kullan
 const BACKEND_URL = window.location.origin;
 const TENANT_API_KEY = 'ecea57ae955f01e1c22000559d761a8d4cb8df0c7ed7fc2d7659e536bcb75317';
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
+// ── GLOBAL STATE ──
 let currentUser = '';
 let currentSessionUUID = '';
+let currentTenantId = null;   // ← YENİ: gerçek tenant_id backend'den geliyor
 let messageCount = 0;
 let pendingPlan = null;
 
 // ── MODAL & AUTH ──
-let currentAuthMode = 'login'; // 'login' or 'register'
+let currentAuthMode = 'login';
 
 function showLogin(mode) {
   currentAuthMode = mode;
@@ -655,6 +651,7 @@ function showLogin(mode) {
     document.getElementById('modal-toggle-text').innerHTML = `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
   }
 }
+
 function hideLogin() {
   document.getElementById('loginModal').classList.remove('show');
 }
@@ -664,8 +661,8 @@ async function doSubmitAuth() {
   const name = document.getElementById('username-input').value.trim();
   const password = document.getElementById('password-input').value.trim();
   if (!name || !password) {
-      alert("Kullanıcı adı ve parola zorunludur.");
-      return;
+    alert("Kullanıcı adı ve parola zorunludur.");
+    return;
   }
 
   const endpoint = currentAuthMode === 'register' ? '/auth/register' : '/auth/login';
@@ -678,14 +675,15 @@ async function doSubmitAuth() {
     });
 
     if (!res.ok) {
-        const err = await res.json();
-        alert(err.detail || "Bir hata oluştu.");
-        return;
+      const err = await res.json();
+      alert(err.detail || "Bir hata oluştu.");
+      return;
     }
 
     const data = await res.json();
     currentUser = data.user_name || name;
     currentSessionUUID = data.session_uuid;
+    currentTenantId = data.tenant_id;   // ← YENİ: tenant_id saklanıyor
 
     document.getElementById('sidebar-username').textContent = currentUser;
     document.getElementById('user-avatar-text').textContent = currentUser[0].toUpperCase();
@@ -694,32 +692,32 @@ async function doSubmitAuth() {
     document.getElementById('landing-page').style.display = 'none';
     document.getElementById('app-page').style.display = 'block';
 
-    // Yükleme Sonrası Reset ve Session Getirme
     messageCount = 0;
     document.getElementById('messages-container').innerHTML =
-        `<div class="empty-state" id="empty-state">
-          <div class="empty-icon">⚕</div>
-          <div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div>
-          <div class="empty-desc">Sağlık mevzuatı hakkında herhangi bir sorunuzu sorabilirsiniz.</div>
-          <div class="suggestions">
-            <div class="suggestion" onclick="askSuggestion(this)">Hemşirenin aylık nöbet süresi kaç saattir?</div>
-            <div class="suggestion" onclick="askSuggestion(this)">Uzman hekim muayene ücreti nasıl belirlenir?</div>
-            <div class="suggestion" onclick="askSuggestion(this)">Sağlık çalışanlarının izin hakları nelerdir?</div>
-            <div class="suggestion" onclick="askSuggestion(this)">İlaç ruhsatlandırma süreci nasıl işler?</div>
-          </div>
-        </div>`;
+      `<div class="empty-state" id="empty-state">
+        <div class="empty-icon">⚕</div>
+        <div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div>
+        <div class="empty-desc">Sağlık mevzuatı hakkında herhangi bir sorunuzu sorabilirsiniz.</div>
+        <div class="suggestions">
+          <div class="suggestion" onclick="askSuggestion(this)">Hemşirenin aylık nöbet süresi kaç saattir?</div>
+          <div class="suggestion" onclick="askSuggestion(this)">Uzman hekim muayene ücreti nasıl belirlenir?</div>
+          <div class="suggestion" onclick="askSuggestion(this)">Sağlık çalışanlarının izin hakları nelerdir?</div>
+          <div class="suggestion" onclick="askSuggestion(this)">İlaç ruhsatlandırma süreci nasıl işler?</div>
+        </div>
+      </div>`;
+
     loadSidebarSessions();
     updateQuota();
 
-    // Satın al butonuna tıklanarak geldiyse hemen satın almaya gönder
+    // Ödeme bekliyorsa login sonrası devam et
     if (pendingPlan) {
       const planToBuy = pendingPlan;
       pendingPlan = null;
       buyPlan(planToBuy);
     }
   } catch(e) {
-      alert("Bağlantı hatası: Sunucuya ulaşılamıyor.");
-      console.error(e);
+    alert("Bağlantı hatası: Sunucuya ulaşılamıyor.");
+    console.error(e);
   }
 }
 
@@ -729,23 +727,19 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  // Empty state'i kaldır
-  document.getElementById('empty-state').style.display = 'none';
+  const emptyState = document.getElementById('empty-state');
+  if (emptyState) emptyState.style.display = 'none';
 
   input.value = '';
   input.style.height = 'auto';
   messageCount++;
 
-  // Kullanıcı mesajı
   appendMessage('user', text);
 
   if (messageCount === 1) {
-    // İlk mesajsa sidebar'ı yepyeni bir title ile güncellemek için biraz bekleyip yükleyebiliriz
-    // Backend'in bunu session_uuid ile birlikte kaydetmesini bekle
     setTimeout(loadSidebarSessions, 2000);
   }
 
-  // Typing indicator
   const typingId = appendTyping();
 
   try {
@@ -764,8 +758,6 @@ async function sendMessage() {
 
     const data = await res.json();
     appendMessage('ai', data.answer, data.sources || []);
-
-    // Kota güncelle
     updateQuota();
 
   } catch(e) {
@@ -777,7 +769,7 @@ async function sendMessage() {
 function appendMessage(role, text, sources=[]) {
   const container = document.getElementById('messages-container');
   const now = new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
-  const avatarText = role === 'user' ? currentUser[0]?.toUpperCase() || 'K' : '⚕';
+  const avatarText = role === 'user' ? (currentUser[0]?.toUpperCase() || 'K') : '⚕';
 
   const div = document.createElement('div');
   div.className = `message ${role}`;
@@ -860,29 +852,37 @@ async function newChat() {
   }
 }
 
+// ── BUY PLAN — DÜZELTİLDİ ──
 async function buyPlan(plan) {
-  if (!currentUser) {
+  // Giriş yapılmamışsa önce login yaptır, sonra devam et
+  if (!currentUser || !currentTenantId) {
     pendingPlan = plan;
     showLogin('register');
     return;
   }
+
   try {
-    // Backend API'nize (billing/checkout) tenant_id ve plan gönderin
-    // *Not: Normalde tenant_id login olurken alınmalıdır. Demo için sabit 1 gönderiyoruz.
-    const res = await fetch(`${BACKEND_URL}/billing/checkout?tenant_id=1&plan=${plan}`, {
-      method: 'POST',
-      headers: HEADERS
-    });
-    if (!res.ok) {
-        alert("Ödeme ekranı oluşturulamadı.");
-        return;
-    }
+    const res = await fetch(
+      `${BACKEND_URL}/billing/checkout?tenant_id=${currentTenantId}&plan=${plan}`,
+      { method: 'POST', headers: HEADERS }
+    );
+
     const data = await res.json();
+
+    if (!res.ok) {
+      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || `Hata kodu: ${res.status}`));
+      return;
+    }
+
     if (data.checkout_url) {
-      window.location.href = data.checkout_url; // Stripe'a yönlendir
+      window.location.href = data.checkout_url;
+    } else {
+      alert('Stripe ödeme linki alınamadı. Lütfen tekrar deneyin.');
+      console.error('Beklenmeyen yanıt:', data);
     }
   } catch(e) {
-    console.error("Ödeme hatası:", e);
+    alert('Sunucuya bağlanılamadı: ' + e.message);
+    console.error('buyPlan hatası:', e);
   }
 }
 
@@ -899,9 +899,9 @@ async function loadSidebarSessions() {
     list.innerHTML = '';
 
     sessions.forEach(s => {
-      const is_active = s.session_uuid === currentSessionUUID ? 'active' : '';
+      const isActive = s.session_uuid === currentSessionUUID ? 'active' : '';
       const div = document.createElement('div');
-      div.className = `chat-item ${is_active}`;
+      div.className = `chat-item ${isActive}`;
       div.onclick = () => loadChat(s.session_uuid);
       div.innerHTML = `<span class="chat-item-icon">💬</span>${s.title}`;
       list.appendChild(div);
@@ -914,9 +914,6 @@ async function loadSidebarSessions() {
 async function loadChat(session_uuid) {
   try {
     currentSessionUUID = session_uuid;
-    // UI update for active session item
-    document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
-    // we would actually need to add 'active' back but it gets refreshed when clicking another
     const res = await fetch(`${BACKEND_URL}/history/${session_uuid}`, {
       headers: HEADERS
     });
@@ -927,15 +924,14 @@ async function loadChat(session_uuid) {
     container.innerHTML = '';
     messageCount = 0;
 
-    if (data.length > 0 && data[0].messages) {
-      const messages = data[0].messages;
-      messages.forEach(msg => {
+    if (data.length > 0 && data[0].messages && data[0].messages.length > 0) {
+      data[0].messages.forEach(msg => {
         const role = msg.sender === 'human' ? 'user' : 'ai';
         appendMessage(role, msg.content, []);
         messageCount++;
       });
     } else {
-        container.innerHTML =
+      container.innerHTML =
         `<div class="empty-state" id="empty-state">
           <div class="empty-icon">⚕</div>
           <div class="empty-title">Önceki Sohbet</div>
@@ -957,7 +953,7 @@ async function updateQuota() {
     const data = await res.json();
     document.getElementById('quota-used').textContent = data.used;
     document.getElementById('quota-total').textContent = data.total;
-    document.getElementById('quota-fill').style.width = (data.used/data.total*100) + '%';
+    document.getElementById('quota-fill').style.width = (data.used / data.total * 100) + '%';
   } catch(e) {
     console.error("Kota bilgisi alınamadı", e);
   }
@@ -984,8 +980,9 @@ function doLogout() {
   document.getElementById('landing-page').style.display = 'block';
   currentUser = '';
   currentSessionUUID = '';
+  currentTenantId = null;
   messageCount = 0;
-  document.getElementById('chat-history-list').innerHTML = ''; // Sidebarı temizle
+  document.getElementById('chat-history-list').innerHTML = '';
 }
 
 // ── SCROLL ANIMATIONS ──
