@@ -26,11 +26,8 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--navy);color:var(--white);font-family:var(--ff-body);font-size:16px;line-height:1.7;overflow-x:hidden}
-
-/* ── NOISE TEXTURE OVERLAY ── */
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
 
-/* ── NAVBAR ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,22,40,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-logo{font-family:var(--ff-display);font-size:22px;font-weight:700;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:10px}
 .nav-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
@@ -47,7 +44,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:fl
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);font-weight:600}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,168,83,0.35)}
 
-/* ── HERO ── */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
 .hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(13,148,136,0.15) 0%,transparent 70%);pointer-events:none}
 .hero-glow2{position:absolute;bottom:10%;right:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(212,168,83,0.08) 0%,transparent 70%);pointer-events:none}
@@ -68,14 +64,12 @@ h1.hero-title .gold{color:var(--gold)}
 .scroll-line{width:1px;height:40px;background:linear-gradient(var(--teal),transparent);animation:scrollLine 2s ease infinite}
 @keyframes scrollLine{0%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1);transform-origin:bottom}}
 
-/* ── SECTIONS ── */
 section{padding:100px 40px;position:relative}
 .container{max-width:1100px;margin:0 auto}
 .section-label{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal2);margin-bottom:16px}
 .section-title{font-family:var(--ff-display);font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.15;margin-bottom:20px}
 .section-sub{font-size:17px;color:var(--muted);max-width:520px;font-weight:300}
 
-/* ── FEATURES ── */
 .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:56px}
 .feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;transition:all .3s;position:relative;overflow:hidden}
 .feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:0;transition:opacity .3s}
@@ -85,7 +79,6 @@ section{padding:100px 40px;position:relative}
 .feature-title{font-family:var(--ff-display);font-size:20px;font-weight:600;margin-bottom:10px}
 .feature-desc{font-size:14px;color:var(--muted);line-height:1.7}
 
-/* ── HOW IT WORKS ── */
 .steps{display:flex;flex-direction:column;gap:0;margin-top:56px;position:relative}
 .steps::before{content:'';position:absolute;left:28px;top:48px;bottom:48px;width:1px;background:linear-gradient(var(--teal),rgba(13,148,136,0))}
 .step{display:flex;gap:32px;align-items:flex-start;padding:32px 0}
@@ -94,7 +87,6 @@ section{padding:100px 40px;position:relative}
 .step-title{font-family:var(--ff-display);font-size:22px;font-weight:600;margin-bottom:8px}
 .step-desc{color:var(--muted);font-size:15px;max-width:480px}
 
-/* ── PRICING ── */
 .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:56px;max-width:900px;margin-left:auto;margin-right:auto}
 .price-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 32px;position:relative;transition:all .3s}
 .price-card.featured{background:linear-gradient(135deg,rgba(13,148,136,0.12),rgba(13,148,136,0.06));border-color:rgba(13,148,136,0.4)}
@@ -109,7 +101,6 @@ section{padding:100px 40px;position:relative}
 .price-features li.disabled{opacity:.4}
 .price-features li.disabled::before{content:'✕';color:var(--muted)}
 
-/* ── CHAT DEMO ── */
 .demo-wrap{background:var(--navy2);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:56px;box-shadow:0 32px 80px rgba(0,0,0,0.4)}
 .demo-header{background:var(--navy3);padding:16px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
 .demo-dots{display:flex;gap:6px}
@@ -128,7 +119,6 @@ section{padding:100px 40px;position:relative}
 .msg-time{font-size:11px;color:var(--muted);padding:0 4px}
 .demo-source{background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--teal3);margin-top:4px;display:flex;align-items:center;gap:6px}
 
-/* ── FOOTER ── */
 footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
 .footer-brand{font-family:var(--ff-display);font-size:22px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
@@ -143,11 +133,8 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
 .footer-links a:hover{color:var(--white)}
 
-/* ── APP (CHAT PAGE) ── */
 #app-page{display:none;min-height:100vh;background:var(--navy)}
 .app-layout{display:flex;height:100vh}
-
-/* Sidebar */
 .sidebar{width:280px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
 .sidebar-header{padding:20px;border-bottom:1px solid var(--border)}
 .sidebar-logo{font-family:var(--ff-display);font-size:18px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:20px}
@@ -171,7 +158,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .logout-btn{width:100%;margin-top:12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:9px;font-family:var(--ff-body);font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
 .logout-btn:hover{border-color:rgba(255,100,100,0.3);color:#ff6b6b}
 
-/* Main chat area */
 .chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .chat-topbar{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--navy)}
 .chat-topbar-title{font-family:var(--ff-display);font-size:17px;font-weight:600}
@@ -202,7 +188,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .suggestion{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s;text-align:left}
 .suggestion:hover{border-color:rgba(13,148,136,0.3);color:var(--white);background:rgba(255,255,255,0.06)}
 
-/* Input area */
 .chat-input-area{padding:20px 24px;border-top:1px solid var(--border);background:var(--navy)}
 .input-wrap{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:12px;display:flex;align-items:flex-end;gap:12px;padding:12px 16px;transition:border-color .2s}
 .input-wrap:focus-within{border-color:rgba(13,148,136,0.4)}
@@ -213,7 +198,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .send-btn svg{width:16px;height:16px;fill:white}
 .input-hint{font-size:11px;color:var(--muted);margin-top:8px;text-align:center}
 
-/* ── LOGIN MODAL ── */
+/* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
 .modal{background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:100%;max-width:420px;animation:modalIn .3s ease}
@@ -228,28 +213,27 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .form-input::placeholder{color:var(--muted)}
 .modal-btn{width:100%;padding:13px;background:var(--teal);border:none;border-radius:8px;color:#fff;font-family:var(--ff-body);font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;margin-top:8px}
 .modal-btn:hover{background:var(--teal2)}
-.modal-divider{text-align:center;color:var(--muted);font-size:13px;margin:20px 0;position:relative}
-.modal-divider::before,.modal-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
-.modal-divider::before{left:0}.modal-divider::after{right:0}
+
+/* Başarı mesajı kutusu */
+.success-box{background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.3);border-radius:10px;padding:20px;text-align:center;margin-bottom:20px}
+.success-box .success-icon{font-size:36px;margin-bottom:8px}
+.success-box p{color:var(--teal3);font-size:14px}
+.success-box strong{color:var(--white);display:block;font-size:16px;margin-bottom:6px}
+
 .modal-footer{text-align:center;font-size:13px;color:var(--muted);margin-top:20px}
 .modal-footer a{color:var(--teal2);text-decoration:none;font-weight:500}
 
-/* ── UPLOAD FILE ── */
 .upload-area{border:1px dashed rgba(13,148,136,0.3);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(13,148,136,0.04);margin-top:16px}
 .upload-area:hover{border-color:rgba(13,148,136,0.6);background:rgba(13,148,136,0.08)}
 .upload-icon{font-size:32px;margin-bottom:8px;opacity:.6}
 .upload-text{font-size:13px;color:var(--muted)}
 .upload-text strong{color:var(--teal2)}
 
-/* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .fade-up.visible{opacity:1;transform:none}
-
-/* ── DIVIDER ── */
 .section-divider{width:48px;height:2px;background:linear-gradient(90deg,var(--teal),transparent);margin-bottom:32px}
 
-/* ── TYPING INDICATOR ── */
 .typing{display:flex;gap:4px;padding:14px 20px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:12px 12px 12px 4px;width:fit-content}
 .typing span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:typing .8s ease infinite}
 .typing span:nth-child(2){animation-delay:.15s}
@@ -269,16 +253,10 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════
-     LANDING PAGE
-══════════════════════════════════════════════ -->
+<!-- LANDING PAGE -->
 <div id="landing-page">
-
 <nav>
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-icon">⚕</div>
-    MevzuSağlık
-  </a>
+  <a href="#" class="nav-logo"><div class="nav-logo-icon">⚕</div>MevzuSağlık</a>
   <div class="nav-links">
     <a href="#ozellikler">Özellikler</a>
     <a href="#nasil-calisir">Nasıl Çalışır</a>
@@ -290,26 +268,14 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
-  <div class="hero-badge">
-    <span class="hero-badge-dot"></span>
-    Yapay Zeka Destekli Mevzuat Araştırması
-  </div>
-  <h1 class="hero-title">
-    Sağlık Mevzuatına<br/>
-    <span class="accent">Anında</span> ve <span class="gold">Doğru</span><br/>
-    Cevaplar
-  </h1>
-  <p class="hero-sub">
-    Binlerce sayfalık sağlık mevzuatını saniyeler içinde tarayın. Doğru kaynaktan, doğru yanıtı alın.
-  </p>
+  <div class="hero-badge"><span class="hero-badge-dot"></span>Yapay Zeka Destekli Mevzuat Araştırması</div>
+  <h1 class="hero-title">Sağlık Mevzuatına<br/><span class="accent">Anında</span> ve <span class="gold">Doğru</span><br/>Cevaplar</h1>
+  <p class="hero-sub">Binlerce sayfalık sağlık mevzuatını saniyeler içinde tarayın. Doğru kaynaktan, doğru yanıtı alın.</p>
   <div class="hero-actions">
-    <button class="btn btn-gold btn-large" onclick="showLogin('register')">
-      Ücretsiz Deneyin
-    </button>
+    <button class="btn btn-gold btn-large" onclick="showLogin('register')">Ücretsiz Deneyin</button>
     <a href="#nasil-calisir" class="btn btn-ghost btn-large">Nasıl Çalışır?</a>
   </div>
   <div class="hero-stats">
@@ -317,13 +283,9 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
     <div class="stat"><div class="stat-num"><span>%99</span></div><div class="stat-label">Kaynak Doğruluğu</div></div>
     <div class="stat"><div class="stat-num"><span>&lt;3s</span></div><div class="stat-label">Ortalama Yanıt Süresi</div></div>
   </div>
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    Aşağı kaydır
-  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Aşağı kaydır</div>
 </section>
 
-<!-- DEMO -->
 <section style="padding:0 40px 100px">
   <div class="container">
     <div class="demo-wrap fade-up">
@@ -332,17 +294,9 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
         <span class="demo-title">MevzuSağlık AI — Örnek Konuşma</span>
       </div>
       <div class="demo-body">
-        <div class="msg user">
-          <div class="msg-bubble">Hemşirelerin nöbet süresi yasal olarak kaç saati geçemez?</div>
-          <div class="msg-time">14:32</div>
-        </div>
+        <div class="msg user"><div class="msg-bubble">Hemşirelerin nöbet süresi yasal olarak kaç saati geçemez?</div><div class="msg-time">14:32</div></div>
         <div class="msg ai">
-          <div class="msg-bubble">
-            <strong>Hemşirelik Yönetmeliği'nin 24. Maddesi'ne göre;</strong><br/><br/>
-            • Hemşireler arka arkaya en fazla <strong>16 saat</strong> nöbet tutabilir.<br/>
-            • Aylık toplam nöbet süresi <strong>130 saati</strong> aşamaz.<br/>
-            • Nöbet sonrası en az <strong>8 saat</strong> dinlenme hakkı zorunludur.
-          </div>
+          <div class="msg-bubble"><strong>Hemşirelik Yönetmeliği'nin 24. Maddesi'ne göre;</strong><br/><br/>• Hemşireler arka arkaya en fazla <strong>16 saat</strong> nöbet tutabilir.<br/>• Aylık toplam nöbet süresi <strong>130 saati</strong> aşamaz.<br/>• Nöbet sonrası en az <strong>8 saat</strong> dinlenme hakkı zorunludur.</div>
           <div class="demo-source">📚 Hemşirelik Yönetmeliği — Madde 24, 25</div>
           <div class="msg-time">14:32</div>
         </div>
@@ -351,7 +305,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
   </div>
 </section>
 
-<!-- FEATURES -->
 <section id="ozellikler">
   <div class="container">
     <div class="fade-up">
@@ -361,41 +314,16 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       <p class="section-sub">Sağlık profesyonelleri için tasarlanmış, en güncel mevzuatla eğitilmiş yapay zeka.</p>
     </div>
     <div class="features-grid">
-      <div class="feature-card fade-up">
-        <div class="feature-icon">🔍</div>
-        <div class="feature-title">Kaynak Gösterimi</div>
-        <div class="feature-desc">Her yanıt, hangi yönetmeliğin hangi maddesinden alındığını açıkça gösterir. Asla kaynaksız bilgi vermez.</div>
-      </div>
-      <div class="feature-card fade-up">
-        <div class="feature-icon">⚡</div>
-        <div class="feature-title">Anlık Yanıt</div>
-        <div class="feature-desc">Binlerce sayfalık mevzuatı 3 saniyeden kısa sürede tarar ve ilgili bilgiyi bulur.</div>
-      </div>
-      <div class="feature-card fade-up">
-        <div class="feature-icon">🏥</div>
-        <div class="feature-title">Sağlık Odaklı</div>
-        <div class="feature-desc">Yalnızca sağlık mevzuatına odaklanmış, diğer alanlarla karışmayan özelleşmiş bir yapay zeka modeli.</div>
-      </div>
-      <div class="feature-card fade-up">
-        <div class="feature-icon">💬</div>
-        <div class="feature-title">Sohbet Geçmişi</div>
-        <div class="feature-desc">Önceki sorularınıza ve yanıtlarına istediğiniz zaman geri dönebilirsiniz. Bağlam korunur.</div>
-      </div>
-      <div class="feature-card fade-up">
-        <div class="feature-icon">📄</div>
-        <div class="feature-title">Belge Yükleme</div>
-        <div class="feature-desc">Kendi kurumunuzun iç yönetmeliklerini yükleyin, sistemin bilgi tabanına ekleyin.</div>
-      </div>
-      <div class="feature-card fade-up">
-        <div class="feature-icon">🔒</div>
-        <div class="feature-title">Güvenli Altyapı</div>
-        <div class="feature-desc">Verileriniz şifrelenir, kurumsal izolasyon sağlanır. KVKK uyumlu altyapı.</div>
-      </div>
+      <div class="feature-card fade-up"><div class="feature-icon">🔍</div><div class="feature-title">Kaynak Gösterimi</div><div class="feature-desc">Her yanıt, hangi yönetmeliğin hangi maddesinden alındığını açıkça gösterir.</div></div>
+      <div class="feature-card fade-up"><div class="feature-icon">⚡</div><div class="feature-title">Anlık Yanıt</div><div class="feature-desc">Binlerce sayfalık mevzuatı 3 saniyeden kısa sürede tarar ve ilgili bilgiyi bulur.</div></div>
+      <div class="feature-card fade-up"><div class="feature-icon">🏥</div><div class="feature-title">Sağlık Odaklı</div><div class="feature-desc">Yalnızca sağlık mevzuatına odaklanmış, özelleşmiş bir yapay zeka modeli.</div></div>
+      <div class="feature-card fade-up"><div class="feature-icon">💬</div><div class="feature-title">Sohbet Geçmişi</div><div class="feature-desc">Önceki sorularınıza ve yanıtlarına istediğiniz zaman geri dönebilirsiniz.</div></div>
+      <div class="feature-card fade-up"><div class="feature-icon">📄</div><div class="feature-title">Belge Yükleme</div><div class="feature-desc">Kendi kurumunuzun iç yönetmeliklerini yükleyin, sisteme ekleyin.</div></div>
+      <div class="feature-card fade-up"><div class="feature-icon">🔒</div><div class="feature-title">Güvenli Altyapı</div><div class="feature-desc">Verileriniz şifrelenir, kurumsal izolasyon sağlanır. KVKK uyumlu altyapı.</div></div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
 <section id="nasil-calisir" style="background:rgba(255,255,255,0.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="container">
     <div class="fade-up">
@@ -404,39 +332,20 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       <h2 class="section-title">3 Adımda Yanıtınızı Alın</h2>
     </div>
     <div class="steps">
-      <div class="step fade-up">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <div class="step-title">Sorunuzu Yazın</div>
-          <div class="step-desc">Doğal dilde, günlük konuştuğunuz gibi sorun. "Bir hekimin haftalık çalışma süresi kaçtır?" gibi.</div>
-        </div>
-      </div>
-      <div class="step fade-up">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <div class="step-title">Yapay Zeka Mevzuatı Tarar</div>
-          <div class="step-desc">Sistem, sorunuzla ilgili tüm yönetmelik ve tebliğleri anında tarar, en ilgili bölümleri seçer.</div>
-        </div>
-      </div>
-      <div class="step fade-up">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <div class="step-title">Kaynaklı Yanıt Gelir</div>
-          <div class="step-desc">Yanıt, hangi yönetmeliğin hangi maddesinden alındığıyla birlikte açık ve anlaşılır şekilde sunulur.</div>
-        </div>
-      </div>
+      <div class="step fade-up"><div class="step-num">1</div><div class="step-content"><div class="step-title">Sorunuzu Yazın</div><div class="step-desc">Doğal dilde, günlük konuştuğunuz gibi sorun.</div></div></div>
+      <div class="step fade-up"><div class="step-num">2</div><div class="step-content"><div class="step-title">Yapay Zeka Mevzuatı Tarar</div><div class="step-desc">Sistem, sorunuzla ilgili tüm yönetmelik ve tebliğleri anında tarar.</div></div></div>
+      <div class="step fade-up"><div class="step-num">3</div><div class="step-content"><div class="step-title">Kaynaklı Yanıt Gelir</div><div class="step-desc">Yanıt, hangi yönetmeliğin hangi maddesinden alındığıyla birlikte sunulur.</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
 <section id="fiyatlar">
   <div class="container" style="text-align:center">
     <div class="fade-up">
       <p class="section-label">Fiyatlar</p>
       <div class="section-divider" style="margin:0 auto 32px"></div>
       <h2 class="section-title">Size Uygun Planı Seçin</h2>
-      <p class="section-sub" style="margin:0 auto">Tüm planlar 14 gün ücretsiz deneme içerir. Kredi kartı gerekmez.</p>
+      <p class="section-sub" style="margin:0 auto">Tüm planlar 14 gün ücretsiz deneme içerir.</p>
     </div>
     <div class="pricing-grid fade-up">
       <div class="price-card">
@@ -444,11 +353,8 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
         <div class="price-amount"><sup>₺</sup>0</div>
         <div class="price-period">sonsuza kadar ücretsiz</div>
         <ul class="price-features">
-          <li>Günde 20 soru</li>
-          <li>3 sohbet oturumu</li>
-          <li>Temel mevzuat erişimi</li>
-          <li class="disabled">Belge yükleme</li>
-          <li class="disabled">Öncelikli destek</li>
+          <li>Günde 20 soru</li><li>3 sohbet oturumu</li><li>Temel mevzuat erişimi</li>
+          <li class="disabled">Belge yükleme</li><li class="disabled">Öncelikli destek</li>
         </ul>
         <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="showLogin('register')">Ücretsiz Başla</button>
       </div>
@@ -457,11 +363,8 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
         <div class="price-amount"><sup>₺</sup>299</div>
         <div class="price-period">aylık</div>
         <ul class="price-features">
-          <li>Günde 500 soru</li>
-          <li>50 sohbet oturumu</li>
-          <li>Tam mevzuat erişimi</li>
-          <li>10 belge yükleme</li>
-          <li>E-posta desteği</li>
+          <li>Günde 500 soru</li><li>50 sohbet oturumu</li><li>Tam mevzuat erişimi</li>
+          <li>10 belge yükleme</li><li>E-posta desteği</li>
         </ul>
         <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="buyPlan('pro')">Pro'ya Geç</button>
       </div>
@@ -470,11 +373,8 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
         <div class="price-amount" style="font-size:36px">Özel</div>
         <div class="price-period">fiyat teklifi alın</div>
         <ul class="price-features">
-          <li>Sınırsız soru</li>
-          <li>Sınırsız oturum</li>
-          <li>Özel mevzuat entegrasyonu</li>
-          <li>Sınırsız belge yükleme</li>
-          <li>7/24 telefon desteği</li>
+          <li>Sınırsız soru</li><li>Sınırsız oturum</li><li>Özel mevzuat entegrasyonu</li>
+          <li>Sınırsız belge yükleme</li><li>7/24 telefon desteği</li>
         </ul>
         <button class="btn btn-ghost" style="width:100%;justify-content:center">İletişime Geçin</button>
       </div>
@@ -482,75 +382,65 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="footer-grid">
-      <div>
-        <div class="footer-brand"><div class="footer-brand-icon">⚕</div>MevzuSağlık</div>
-        <p class="footer-desc">Sağlık profesyonelleri için geliştirilmiş yapay zeka destekli mevzuat asistanı.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Ürün</h4>
-        <a href="#ozellikler">Özellikler</a>
-        <a href="#fiyatlar">Fiyatlar</a>
-        <a href="#nasil-calisir">Nasıl Çalışır</a>
-      </div>
-      <div class="footer-col">
-        <h4>Şirket</h4>
-        <a href="#">Hakkımızda</a>
-        <a href="#">İletişim</a>
-        <a href="#">Blog</a>
-      </div>
-      <div class="footer-col">
-        <h4>Yasal</h4>
-        <a href="#">Gizlilik Politikası</a>
-        <a href="#">Kullanım Şartları</a>
-        <a href="#">KVKK</a>
-      </div>
+      <div><div class="footer-brand"><div class="footer-brand-icon">⚕</div>MevzuSağlık</div><p class="footer-desc">Sağlık profesyonelleri için geliştirilmiş yapay zeka destekli mevzuat asistanı.</p></div>
+      <div class="footer-col"><h4>Ürün</h4><a href="#ozellikler">Özellikler</a><a href="#fiyatlar">Fiyatlar</a><a href="#nasil-calisir">Nasıl Çalışır</a></div>
+      <div class="footer-col"><h4>Şirket</h4><a href="#">Hakkımızda</a><a href="#">İletişim</a><a href="#">Blog</a></div>
+      <div class="footer-col"><h4>Yasal</h4><a href="#">Gizlilik Politikası</a><a href="#">Kullanım Şartları</a><a href="#">KVKK</a></div>
     </div>
     <div class="footer-bottom">
       <p>© 2025 MevzuSağlık. Tüm hakları saklıdır.</p>
-      <div class="footer-links">
-        <a href="#">Twitter</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Destek</a>
-      </div>
+      <div class="footer-links"><a href="#">Twitter</a><a href="#">LinkedIn</a><a href="#">Destek</a></div>
     </div>
   </div>
 </footer>
 </div>
 
 <!-- ══════════════════════════════════════════════
-     LOGIN MODAL
+     LOGIN / REGISTER MODAL
 ══════════════════════════════════════════════ -->
-<div class="modal-overlay" id="loginModal">
+<div class="modal-overlay" id="authModal">
   <div class="modal">
     <div class="modal-logo"><div class="modal-logo-icon">⚕</div>MevzuSağlık</div>
     <p class="modal-sub" id="modal-sub">Hesabınıza giriş yapın</p>
-    <div class="form-group">
-      <label class="form-label">Kullanıcı Adı</label>
-      <input class="form-input" id="username-input" type="text" placeholder="Ad Soyad veya kullanıcı adı"/>
+
+    <!-- Kayıt başarı ekranı -->
+    <div id="register-success" style="display:none">
+      <div class="success-box">
+        <div class="success-icon">✅</div>
+        <strong>Hesabınız oluşturuldu!</strong>
+        <p>Şimdi giriş yaparak devam edebilirsiniz.</p>
+      </div>
+      <button class="modal-btn" onclick="switchToLogin()">Giriş Yap →</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Parola</label>
-      <input class="form-input" id="password-input" type="password" placeholder="Parolanızı giriniz"/>
+
+    <!-- Form -->
+    <div id="auth-form">
+      <div class="form-group">
+        <label class="form-label">Kullanıcı Adı</label>
+        <input class="form-input" id="username-input" type="text" placeholder="Kullanıcı adınızı yazın"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Parola</label>
+        <input class="form-input" id="password-input" type="password" placeholder="Parolanızı giriniz"
+          onkeydown="if(event.key==='Enter') doSubmitAuth()"/>
+      </div>
+      <button class="modal-btn" onclick="doSubmitAuth()" id="submit-btn">Devam Et →</button>
+      <p class="modal-footer" id="modal-toggle-text">
+        Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>
+      </p>
+      <p style="text-align:center;margin-top:12px">
+        <a href="#" style="color:var(--muted);font-size:13px" onclick="hideModal()">Vazgeç</a>
+      </p>
     </div>
-    <button class="modal-btn" onclick="doSubmitAuth()">Devam Et →</button>
-    <p class="modal-footer" id="modal-toggle-text">
-      Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>
-    </p>
-    <p style="text-align:center;margin-top:12px"><a href="#" style="color:var(--muted);font-size:13px" onclick="hideLogin()">Vazgeç</a></p>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     APP PAGE
-══════════════════════════════════════════════ -->
+<!-- APP PAGE -->
 <div id="app-page">
   <div class="app-layout">
-
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo"><div class="sidebar-logo-icon">⚕</div>MevzuSağlık</div>
@@ -558,14 +448,12 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
           <div class="user-avatar" id="user-avatar-text">H</div>
           <div class="user-info">
             <div class="user-name" id="sidebar-username">Kullanıcı</div>
-            <div class="user-plan">Ücretsiz Plan</div>
+            <div class="user-plan" id="sidebar-plan">Ücretsiz Plan</div>
           </div>
         </div>
       </div>
       <div class="sidebar-body">
-        <button class="new-chat-btn" onclick="newChat()">
-          <span>＋</span> Yeni Sohbet
-        </button>
+        <button class="new-chat-btn" onclick="newChat()"><span>＋</span> Yeni Sohbet</button>
         <div class="sidebar-section-title">Son Sohbetler</div>
         <div id="chat-history-list"></div>
         <div style="margin-top:20px">
@@ -587,13 +475,11 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       </div>
     </div>
 
-    <!-- MAIN CHAT -->
     <div class="chat-main">
       <div class="chat-topbar">
         <div class="chat-topbar-title">Sağlık Mevzuatı Asistanı</div>
         <div class="chat-topbar-status"><div class="status-dot"></div>Sistem aktif</div>
       </div>
-
       <div class="messages" id="messages-container">
         <div class="empty-state" id="empty-state">
           <div class="empty-icon">⚕</div>
@@ -607,7 +493,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
           </div>
         </div>
       </div>
-
       <div class="chat-input-area">
         <div class="input-wrap">
           <textarea class="chat-textarea" id="chat-input" placeholder="Sağlık mevzuatı hakkında bir soru sorun..." rows="1"
@@ -628,103 +513,184 @@ const TENANT_API_KEY = 'ecea57ae955f01e1c22000559d761a8d4cb8df0c7ed7fc2d7659e536
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
 // ── GLOBAL STATE ──
-let currentUser = '';
+let currentUser      = '';
 let currentSessionUUID = '';
-let currentTenantId = null;   // ← YENİ: gerçek tenant_id backend'den geliyor
-let messageCount = 0;
-let pendingPlan = null;
+let currentTenantId  = null;
+let messageCount     = 0;
+let pendingPlan      = null;      // kayıt/giriş öncesi seçilen plan
+let currentAuthMode  = 'login';   // 'login' | 'register'
 
-// ── MODAL & AUTH ──
-let currentAuthMode = 'login';
-
+// ══════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════
 function showLogin(mode) {
   currentAuthMode = mode;
-  document.getElementById('loginModal').classList.add('show');
+  document.getElementById('authModal').classList.add('show');
+  document.getElementById('register-success').style.display = 'none';
+  document.getElementById('auth-form').style.display = 'block';
   document.getElementById('password-input').value = '';
   document.getElementById('username-input').value = '';
 
   if (mode === 'register') {
     document.getElementById('modal-sub').textContent = 'Ücretsiz hesap oluşturun';
-    document.getElementById('modal-toggle-text').innerHTML = `Zaten hesabınız var mı? <a href="#" onclick="showLogin('login')">Giriş yapın</a>`;
+    document.getElementById('submit-btn').textContent = 'Kayıt Ol →';
+    document.getElementById('modal-toggle-text').innerHTML =
+      `Zaten hesabınız var mı? <a href="#" onclick="showLogin('login')">Giriş yapın</a>`;
   } else {
     document.getElementById('modal-sub').textContent = 'Hesabınıza giriş yapın';
-    document.getElementById('modal-toggle-text').innerHTML = `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
+    document.getElementById('submit-btn').textContent = 'Giriş Yap →';
+    document.getElementById('modal-toggle-text').innerHTML =
+      `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
   }
 }
 
-function hideLogin() {
-  document.getElementById('loginModal').classList.remove('show');
+function hideModal() {
+  document.getElementById('authModal').classList.remove('show');
 }
 
-// ── LOGIN / REGISTER ──
+// Kayıt başarılı → login formuna geç
+function switchToLogin() {
+  document.getElementById('register-success').style.display = 'none';
+  document.getElementById('auth-form').style.display = 'block';
+  currentAuthMode = 'login';
+  document.getElementById('modal-sub').textContent = 'Hesabınıza giriş yapın';
+  document.getElementById('submit-btn').textContent = 'Giriş Yap →';
+  document.getElementById('modal-toggle-text').innerHTML =
+    `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
+  document.getElementById('password-input').value = '';
+}
+
+// ══════════════════════════════
+//  REGISTER / LOGIN
+// ══════════════════════════════
 async function doSubmitAuth() {
-  const name = document.getElementById('username-input').value.trim();
+  const name     = document.getElementById('username-input').value.trim();
   const password = document.getElementById('password-input').value.trim();
-  if (!name || !password) {
-    alert("Kullanıcı adı ve parola zorunludur.");
-    return;
-  }
+  if (!name || !password) { alert('Kullanıcı adı ve parola zorunludur.'); return; }
 
   const endpoint = currentAuthMode === 'register' ? '/auth/register' : '/auth/login';
 
   try {
-    const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-      method: 'POST',
-      headers: HEADERS,
-      body: JSON.stringify({user_name: name, password: password})
+    const res  = await fetch(`${BACKEND_URL}${endpoint}`, {
+      method: 'POST', headers: HEADERS,
+      body: JSON.stringify({user_name: name, password})
     });
+    const data = await res.json();
 
-    if (!res.ok) {
-      const err = await res.json();
-      alert(err.detail || "Bir hata oluştu.");
+    if (!res.ok) { alert(data.detail || 'Bir hata oluştu.'); return; }
+
+    // ── KAYIT BAŞARILI → başarı ekranı göster, login'e yönlendir ──
+    if (currentAuthMode === 'register') {
+      document.getElementById('auth-form').style.display = 'none';
+      document.getElementById('register-success').style.display = 'block';
+      document.getElementById('modal-sub').textContent = 'Hesap oluşturuldu!';
+      // Kullanıcı adını login inputuna yaz ki tekrar yazmasın
+      document.getElementById('username-input').value = name;
       return;
     }
 
-    const data = await res.json();
-    currentUser = data.user_name || name;
+    // ── GİRİŞ BAŞARILI ──
+    currentUser        = data.user_name || name;
     currentSessionUUID = data.session_uuid;
-    currentTenantId = data.tenant_id;   // ← YENİ: tenant_id saklanıyor
+    currentTenantId    = data.tenant_id;
 
     document.getElementById('sidebar-username').textContent = currentUser;
     document.getElementById('user-avatar-text').textContent = currentUser[0].toUpperCase();
 
-    hideLogin();
-    document.getElementById('landing-page').style.display = 'none';
-    document.getElementById('app-page').style.display = 'block';
+    hideModal();
 
-    messageCount = 0;
-    document.getElementById('messages-container').innerHTML =
-      `<div class="empty-state" id="empty-state">
-        <div class="empty-icon">⚕</div>
-        <div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div>
-        <div class="empty-desc">Sağlık mevzuatı hakkında herhangi bir sorunuzu sorabilirsiniz.</div>
-        <div class="suggestions">
-          <div class="suggestion" onclick="askSuggestion(this)">Hemşirenin aylık nöbet süresi kaç saattir?</div>
-          <div class="suggestion" onclick="askSuggestion(this)">Uzman hekim muayene ücreti nasıl belirlenir?</div>
-          <div class="suggestion" onclick="askSuggestion(this)">Sağlık çalışanlarının izin hakları nelerdir?</div>
-          <div class="suggestion" onclick="askSuggestion(this)">İlaç ruhsatlandırma süreci nasıl işler?</div>
-        </div>
-      </div>`;
-
-    loadSidebarSessions();
-    updateQuota();
-
-    // Ödeme bekliyorsa login sonrası devam et
+    // Eğer bekleyen bir plan varsa → ödeme sayfasına git
     if (pendingPlan) {
-      const planToBuy = pendingPlan;
+      const plan = pendingPlan;
       pendingPlan = null;
-      buyPlan(planToBuy);
+      await goToCheckout(plan);
+      return;
     }
+
+    // Yoksa → chat ekranına git
+    openApp();
+
   } catch(e) {
-    alert("Bağlantı hatası: Sunucuya ulaşılamıyor.");
+    alert('Bağlantı hatası: Sunucuya ulaşılamıyor.');
     console.error(e);
   }
 }
 
-// ── SEND MESSAGE ──
+// ══════════════════════════════
+//  APP EKRANI AÇ
+// ══════════════════════════════
+function openApp() {
+  document.getElementById('landing-page').style.display = 'none';
+  document.getElementById('app-page').style.display = 'block';
+  messageCount = 0;
+  resetMessages();
+  loadSidebarSessions();
+  updateQuota();
+}
+
+function resetMessages() {
+  document.getElementById('messages-container').innerHTML =
+    `<div class="empty-state" id="empty-state">
+      <div class="empty-icon">⚕</div>
+      <div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div>
+      <div class="empty-desc">Sağlık mevzuatı hakkında herhangi bir sorunuzu sorabilirsiniz.</div>
+      <div class="suggestions">
+        <div class="suggestion" onclick="askSuggestion(this)">Hemşirenin aylık nöbet süresi kaç saattir?</div>
+        <div class="suggestion" onclick="askSuggestion(this)">Uzman hekim muayene ücreti nasıl belirlenir?</div>
+        <div class="suggestion" onclick="askSuggestion(this)">Sağlık çalışanlarının izin hakları nelerdir?</div>
+        <div class="suggestion" onclick="askSuggestion(this)">İlaç ruhsatlandırma süreci nasıl işler?</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════
+//  ÖDEME
+// ══════════════════════════════
+function buyPlan(plan) {
+  // Giriş yapılmamışsa önce kayıt/giriş yaptır
+  if (!currentUser || !currentTenantId) {
+    pendingPlan = plan;
+    showLogin('register');
+    return;
+  }
+  goToCheckout(plan);
+}
+
+async function goToCheckout(plan) {
+  try {
+    const res  = await fetch(
+      `${BACKEND_URL}/billing/checkout?tenant_id=${currentTenantId}&plan=${plan}`,
+      { method: 'POST', headers: HEADERS }
+    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || res.status));
+      openApp();   // hata olsa bile chat'e git
+      return;
+    }
+
+    if (data.checkout_url) {
+      window.open(data.checkout_url, '_blank');  // yeni sekmede aç
+    } else {
+      alert('Stripe ödeme linki alınamadı.');
+    }
+
+    // Ödeme sekmesi açıldıktan sonra kullanıcıyı chat'e de al
+    openApp();
+
+  } catch(e) {
+    alert('Sunucuya bağlanılamadı: ' + e.message);
+    console.error(e);
+  }
+}
+
+// ══════════════════════════════
+//  MESAJLAŞMA
+// ══════════════════════════════
 async function sendMessage() {
   const input = document.getElementById('chat-input');
-  const text = input.value.trim();
+  const text  = input.value.trim();
   if (!text) return;
 
   const emptyState = document.getElementById('empty-state');
@@ -733,53 +699,40 @@ async function sendMessage() {
   input.value = '';
   input.style.height = 'auto';
   messageCount++;
-
   appendMessage('user', text);
-
-  if (messageCount === 1) {
-    setTimeout(loadSidebarSessions, 2000);
-  }
+  if (messageCount === 1) setTimeout(loadSidebarSessions, 2000);
 
   const typingId = appendTyping();
-
   try {
     const res = await fetch(`${BACKEND_URL}/search/ask`, {
-      method: 'POST',
-      headers: HEADERS,
+      method: 'POST', headers: HEADERS,
       body: JSON.stringify({query: text, user_name: currentUser, session_uuid: currentSessionUUID})
     });
-
     removeTyping(typingId);
-
     if (res.status === 429) {
       appendMessage('ai', '⚠️ Günlük kullanım limitinize ulaştınız. Planınızı yükseltmek için iletişime geçin.', []);
       return;
     }
-
     const data = await res.json();
     appendMessage('ai', data.answer, data.sources || []);
     updateQuota();
-
   } catch(e) {
     removeTyping(typingId);
-    appendMessage('ai', 'Şu anda backend bağlantısı kurulamadı. Lütfen tekrar deneyin.', []);
+    appendMessage('ai', 'Şu anda bağlantı kurulamadı. Lütfen tekrar deneyin.', []);
   }
 }
 
 function appendMessage(role, text, sources=[]) {
-  const container = document.getElementById('messages-container');
-  const now = new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+  const container  = document.getElementById('messages-container');
+  const now        = new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
   const avatarText = role === 'user' ? (currentUser[0]?.toUpperCase() || 'K') : '⚕';
-
-  const div = document.createElement('div');
-  div.className = `message ${role}`;
-
-  let sourcesHTML = '';
+  const div        = document.createElement('div');
+  div.className    = `message ${role}`;
+  let sourcesHTML  = '';
   if (sources.length > 0) {
     sourcesHTML = `<div class="message-sources">${sources.map(s =>
       `<div class="source-chip">📚 ${s}</div>`).join('')}</div>`;
   }
-
   div.innerHTML = `
     <div class="message-avatar">${avatarText}</div>
     <div class="message-content">
@@ -787,7 +740,6 @@ function appendMessage(role, text, sources=[]) {
       ${sourcesHTML}
       <div class="message-time">${now}</div>
     </div>`;
-
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
   return div;
@@ -795,168 +747,81 @@ function appendMessage(role, text, sources=[]) {
 
 function appendTyping() {
   const container = document.getElementById('messages-container');
-  const id = 'typing-' + Date.now();
+  const id  = 'typing-' + Date.now();
   const div = document.createElement('div');
   div.className = 'message ai';
   div.id = id;
-  div.innerHTML = `
-    <div class="message-avatar">⚕</div>
-    <div class="message-content">
-      <div class="typing"><span></span><span></span><span></span></div>
-    </div>`;
+  div.innerHTML = `<div class="message-avatar">⚕</div><div class="message-content"><div class="typing"><span></span><span></span><span></span></div></div>`;
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
   return id;
 }
-
-function removeTyping(id) {
-  const el = document.getElementById(id);
-  if (el) el.remove();
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function askSuggestion(el) {
-  document.getElementById('chat-input').value = el.textContent;
-  sendMessage();
-}
+function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+function askSuggestion(el) { document.getElementById('chat-input').value = el.textContent; sendMessage(); }
 
 async function newChat() {
   try {
-    const res = await fetch(`${BACKEND_URL}/session/create_session`, {
-      method: 'POST',
-      headers: HEADERS,
+    const res  = await fetch(`${BACKEND_URL}/session/create_session`, {
+      method: 'POST', headers: HEADERS,
       body: JSON.stringify({user_name: currentUser})
     });
     const data = await res.json();
     currentSessionUUID = data.session_uuid;
     messageCount = 0;
-    document.getElementById('messages-container').innerHTML =
-      `<div class="empty-state" id="empty-state">
-        <div class="empty-icon">⚕</div>
-        <div class="empty-title">Yeni sohbet başladı</div>
-        <div class="empty-desc">Sağlık mevzuatı hakkında bir soru sorun.</div>
-      </div>`;
-  } catch(e) {
-    console.error("Yeni oturum oluşturulamadı.", e);
-  }
-}
-
-// ── BUY PLAN — DÜZELTİLDİ ──
-async function buyPlan(plan) {
-  // Giriş yapılmamışsa önce login yaptır, sonra devam et
-  if (!currentUser || !currentTenantId) {
-    pendingPlan = plan;
-    showLogin('register');
-    return;
-  }
-
-  try {
-    const res = await fetch(
-      `${BACKEND_URL}/billing/checkout?tenant_id=${currentTenantId}&plan=${plan}`,
-      { method: 'POST', headers: HEADERS }
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || `Hata kodu: ${res.status}`));
-      return;
-    }
-
-    if (data.checkout_url) {
-      window.open(data.checkout_url, '_blank');
-    } else {
-      alert('Stripe ödeme linki alınamadı. Lütfen tekrar deneyin.');
-      console.error('Beklenmeyen yanıt:', data);
-    }
-  } catch(e) {
-    alert('Sunucuya bağlanılamadı: ' + e.message);
-    console.error('buyPlan hatası:', e);
-  }
+    resetMessages();
+  } catch(e) { console.error('Yeni oturum oluşturulamadı.', e); }
 }
 
 async function loadSidebarSessions() {
   if (!currentUser) return;
   try {
-    const res = await fetch(`${BACKEND_URL}/session/sessions/${currentUser}`, {
-      headers: HEADERS
-    });
+    const res = await fetch(`${BACKEND_URL}/session/sessions/${currentUser}`, { headers: HEADERS });
     if (!res.ok) return;
     const sessions = await res.json();
-
     const list = document.getElementById('chat-history-list');
     list.innerHTML = '';
-
     sessions.forEach(s => {
-      const isActive = s.session_uuid === currentSessionUUID ? 'active' : '';
       const div = document.createElement('div');
-      div.className = `chat-item ${isActive}`;
+      div.className = `chat-item ${s.session_uuid === currentSessionUUID ? 'active' : ''}`;
       div.onclick = () => loadChat(s.session_uuid);
       div.innerHTML = `<span class="chat-item-icon">💬</span>${s.title}`;
       list.appendChild(div);
     });
-  } catch(e) {
-    console.error("Sohbet geçmişi yüklenemedi", e);
-  }
+  } catch(e) { console.error('Sohbet geçmişi yüklenemedi', e); }
 }
 
 async function loadChat(session_uuid) {
   try {
     currentSessionUUID = session_uuid;
-    const res = await fetch(`${BACKEND_URL}/history/${session_uuid}`, {
-      headers: HEADERS
-    });
+    const res  = await fetch(`${BACKEND_URL}/history/${session_uuid}`, { headers: HEADERS });
     if (!res.ok) return;
     const data = await res.json();
-
     const container = document.getElementById('messages-container');
     container.innerHTML = '';
     messageCount = 0;
-
-    if (data.length > 0 && data[0].messages && data[0].messages.length > 0) {
+    if (data.length > 0 && data[0].messages?.length > 0) {
       data[0].messages.forEach(msg => {
-        const role = msg.sender === 'human' ? 'user' : 'ai';
-        appendMessage(role, msg.content, []);
+        appendMessage(msg.sender === 'human' ? 'user' : 'ai', msg.content, []);
         messageCount++;
       });
     } else {
-      container.innerHTML =
-        `<div class="empty-state" id="empty-state">
-          <div class="empty-icon">⚕</div>
-          <div class="empty-title">Önceki Sohbet</div>
-          <div class="empty-desc">Bu sohbet boş görünüyor.</div>
-        </div>`;
+      container.innerHTML = `<div class="empty-state" id="empty-state"><div class="empty-icon">⚕</div><div class="empty-title">Önceki Sohbet</div><div class="empty-desc">Bu sohbet boş görünüyor.</div></div>`;
     }
-  } catch(e) {
-    console.error("Sohbet yüklenemedi", e);
-  }
+  } catch(e) { console.error('Sohbet yüklenemedi', e); }
 }
 
 async function updateQuota() {
   if (!currentUser) return;
   try {
-    const res = await fetch(`${BACKEND_URL}/session/user_quota/${currentUser}`, {
-      headers: HEADERS
-    });
+    const res  = await fetch(`${BACKEND_URL}/session/user_quota/${currentUser}`, { headers: HEADERS });
     if (!res.ok) return;
     const data = await res.json();
-    document.getElementById('quota-used').textContent = data.used;
+    document.getElementById('quota-used').textContent  = data.used;
     document.getElementById('quota-total').textContent = data.total;
-    document.getElementById('quota-fill').style.width = (data.used / data.total * 100) + '%';
-  } catch(e) {
-    console.error("Kota bilgisi alınamadı", e);
-  }
+    document.getElementById('quota-fill').style.width  = (data.used / data.total * 100) + '%';
+  } catch(e) { console.error('Kota bilgisi alınamadı', e); }
 }
 
 async function handleUpload(input) {
@@ -967,25 +832,20 @@ async function handleUpload(input) {
   const form = new FormData();
   for (const f of files) form.append('files', f);
   try {
-    const res = await fetch(`${BACKEND_URL}/add_documents/add`, {method:'POST', body: form});
+    const res  = await fetch(`${BACKEND_URL}/add_documents/add`, {method:'POST', body: form});
     const data = await res.json();
     status.textContent = '✅ ' + data.message;
-  } catch(e) {
-    status.textContent = '❌ Yükleme başarısız';
-  }
+  } catch(e) { status.textContent = '❌ Yükleme başarısız'; }
 }
 
 function doLogout() {
-  document.getElementById('app-page').style.display = 'none';
+  document.getElementById('app-page').style.display   = 'none';
   document.getElementById('landing-page').style.display = 'block';
-  currentUser = '';
-  currentSessionUUID = '';
-  currentTenantId = null;
-  messageCount = 0;
+  currentUser = ''; currentSessionUUID = ''; currentTenantId = null; messageCount = 0;
   document.getElementById('chat-history-list').innerHTML = '';
 }
 
-// ── SCROLL ANIMATIONS ──
+// Scroll animasyonları
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
 }, {threshold: 0.1});
