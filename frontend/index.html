@@ -105,9 +105,7 @@ section{padding:100px 40px;position:relative}
 .demo-header{background:var(--navy3);padding:16px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
 .demo-dots{display:flex;gap:6px}
 .demo-dots span{width:10px;height:10px;border-radius:50%}
-.demo-dots .r{background:#ff5f57}
-.demo-dots .y{background:#febc2e}
-.demo-dots .g{background:#28c840}
+.demo-dots .r{background:#ff5f57}.demo-dots .y{background:#febc2e}.demo-dots .g{background:#28c840}
 .demo-title{font-size:13px;color:var(--muted);font-weight:500;margin-left:8px}
 .demo-body{padding:24px;display:flex;flex-direction:column;gap:16px;min-height:280px}
 .msg{max-width:80%;display:flex;flex-direction:column;gap:4px}
@@ -198,7 +196,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .send-btn svg{width:16px;height:16px;fill:white}
 .input-hint{font-size:11px;color:var(--muted);margin-top:8px;text-align:center}
 
-/* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
 .modal{background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:100%;max-width:420px;animation:modalIn .3s ease}
@@ -213,13 +210,10 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .form-input::placeholder{color:var(--muted)}
 .modal-btn{width:100%;padding:13px;background:var(--teal);border:none;border-radius:8px;color:#fff;font-family:var(--ff-body);font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;margin-top:8px}
 .modal-btn:hover{background:var(--teal2)}
-
-/* Başarı mesajı kutusu */
 .success-box{background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.3);border-radius:10px;padding:20px;text-align:center;margin-bottom:20px}
 .success-box .success-icon{font-size:36px;margin-bottom:8px}
 .success-box p{color:var(--teal3);font-size:14px}
 .success-box strong{color:var(--white);display:block;font-size:16px;margin-bottom:6px}
-
 .modal-footer{text-align:center;font-size:13px;color:var(--muted);margin-top:20px}
 .modal-footer a{color:var(--teal2);text-decoration:none;font-weight:500}
 
@@ -241,13 +235,10 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 @keyframes typing{0%,80%,100%{transform:scale(.8);opacity:.4}40%{transform:scale(1.1);opacity:1}}
 
 @media(max-width:768px){
-  nav{padding:16px 20px}
-  .nav-links{display:none}
-  section{padding:60px 20px}
-  .hero{padding:100px 20px 60px}
+  nav{padding:16px 20px}.nav-links{display:none}
+  section{padding:60px 20px}.hero{padding:100px 20px 60px}
   .footer-grid{grid-template-columns:1fr 1fr}
-  .sidebar{display:none}
-  .chat-main{width:100%}
+  .sidebar{display:none}.chat-main{width:100%}
 }
 </style>
 </head>
@@ -269,8 +260,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </nav>
 
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
+  <div class="hero-glow"></div><div class="hero-glow2"></div>
   <div class="hero-badge"><span class="hero-badge-dot"></span>Yapay Zeka Destekli Mevzuat Araştırması</div>
   <h1 class="hero-title">Sağlık Mevzuatına<br/><span class="accent">Anında</span> ve <span class="gold">Doğru</span><br/>Cevaplar</h1>
   <p class="hero-sub">Binlerce sayfalık sağlık mevzuatını saniyeler içinde tarayın. Doğru kaynaktan, doğru yanıtı alın.</p>
@@ -308,8 +298,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 <section id="ozellikler">
   <div class="container">
     <div class="fade-up">
-      <p class="section-label">Özellikler</p>
-      <div class="section-divider"></div>
+      <p class="section-label">Özellikler</p><div class="section-divider"></div>
       <h2 class="section-title">Neden MevzuSağlık?</h2>
       <p class="section-sub">Sağlık profesyonelleri için tasarlanmış, en güncel mevzuatla eğitilmiş yapay zeka.</p>
     </div>
@@ -319,7 +308,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
       <div class="feature-card fade-up"><div class="feature-icon">🏥</div><div class="feature-title">Sağlık Odaklı</div><div class="feature-desc">Yalnızca sağlık mevzuatına odaklanmış, özelleşmiş bir yapay zeka modeli.</div></div>
       <div class="feature-card fade-up"><div class="feature-icon">💬</div><div class="feature-title">Sohbet Geçmişi</div><div class="feature-desc">Önceki sorularınıza ve yanıtlarına istediğiniz zaman geri dönebilirsiniz.</div></div>
       <div class="feature-card fade-up"><div class="feature-icon">📄</div><div class="feature-title">Belge Yükleme</div><div class="feature-desc">Kendi kurumunuzun iç yönetmeliklerini yükleyin, sisteme ekleyin.</div></div>
-      <div class="feature-card fade-up"><div class="feature-icon">🔒</div><div class="feature-title">Güvenli Altyapı</div><div class="feature-desc">Verileriniz şifrelenir, kurumsal izolasyon sağlanır. KVKK uyumlu altyapı.</div></div>
+      <div class="feature-card fade-up"><div class="feature-icon">🔒</div><div class="feature-title">Güvenli Altyapı</div><div class="feature-desc">Verileriniz şifrelenir, kurumsal izolasyon sağlanır. KVKK uyumlu.</div></div>
     </div>
   </div>
 </section>
@@ -327,8 +316,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 <section id="nasil-calisir" style="background:rgba(255,255,255,0.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="container">
     <div class="fade-up">
-      <p class="section-label">Nasıl Çalışır</p>
-      <div class="section-divider"></div>
+      <p class="section-label">Nasıl Çalışır</p><div class="section-divider"></div>
       <h2 class="section-title">3 Adımda Yanıtınızı Alın</h2>
     </div>
     <div class="steps">
@@ -398,9 +386,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </footer>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     LOGIN / REGISTER MODAL
-══════════════════════════════════════════════ -->
+<!-- AUTH MODAL -->
 <div class="modal-overlay" id="authModal">
   <div class="modal">
     <div class="modal-logo"><div class="modal-logo-icon">⚕</div>MevzuSağlık</div>
@@ -427,7 +413,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
         <input class="form-input" id="password-input" type="password" placeholder="Parolanızı giriniz"
           onkeydown="if(event.key==='Enter') doSubmitAuth()"/>
       </div>
-      <button class="modal-btn" onclick="doSubmitAuth()" id="submit-btn">Devam Et →</button>
+      <button class="modal-btn" onclick="doSubmitAuth()" id="submit-btn">Giriş Yap →</button>
       <p class="modal-footer" id="modal-toggle-text">
         Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>
       </p>
@@ -508,20 +494,55 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </div>
 
 <script>
-const BACKEND_URL = window.location.origin;
+const BACKEND_URL   = window.location.origin;
 const TENANT_API_KEY = 'ecea57ae955f01e1c22000559d761a8d4cb8df0c7ed7fc2d7659e536bcb75317';
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
 // ── GLOBAL STATE ──
-let currentUser      = '';
+let currentUser        = '';
 let currentSessionUUID = '';
-let currentTenantId  = null;
-let messageCount     = 0;
-let pendingPlan      = null;      // kayıt/giriş öncesi seçilen plan
-let currentAuthMode  = 'login';   // 'login' | 'register'
+let currentTenantId    = null;
+let messageCount       = 0;
+let pendingPlan        = null;
+let currentAuthMode    = 'login';
+
+// ── SESSION KALICI TUTMA (sayfa yenilenince kaybolmasın) ──
+function saveSession() {
+  try {
+    sessionStorage.setItem('ms_user',      currentUser);
+    sessionStorage.setItem('ms_session',   currentSessionUUID);
+    sessionStorage.setItem('ms_tenant',    currentTenantId);
+  } catch(e) {}
+}
+function loadSession() {
+  try {
+    const u = sessionStorage.getItem('ms_user');
+    const s = sessionStorage.getItem('ms_session');
+    const t = sessionStorage.getItem('ms_tenant');
+    if (u && s && t) {
+      currentUser        = u;
+      currentSessionUUID = s;
+      currentTenantId    = parseInt(t);
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+function clearSession() {
+  try { sessionStorage.removeItem('ms_user'); sessionStorage.removeItem('ms_session'); sessionStorage.removeItem('ms_tenant'); } catch(e) {}
+}
+
+// Sayfa açılışında önceki oturum varsa direkt chat'e git
+window.addEventListener('DOMContentLoaded', () => {
+  if (loadSession() && currentTenantId) {
+    document.getElementById('sidebar-username').textContent  = currentUser;
+    document.getElementById('user-avatar-text').textContent  = currentUser[0].toUpperCase();
+    openApp();
+  }
+});
 
 // ══════════════════════════════
-//  MODAL HELPERS
+//  MODAL
 // ══════════════════════════════
 function showLogin(mode) {
   currentAuthMode = mode;
@@ -532,29 +553,25 @@ function showLogin(mode) {
   document.getElementById('username-input').value = '';
 
   if (mode === 'register') {
-    document.getElementById('modal-sub').textContent = 'Ücretsiz hesap oluşturun';
-    document.getElementById('submit-btn').textContent = 'Kayıt Ol →';
+    document.getElementById('modal-sub').textContent      = 'Ücretsiz hesap oluşturun';
+    document.getElementById('submit-btn').textContent     = 'Kayıt Ol →';
     document.getElementById('modal-toggle-text').innerHTML =
       `Zaten hesabınız var mı? <a href="#" onclick="showLogin('login')">Giriş yapın</a>`;
   } else {
-    document.getElementById('modal-sub').textContent = 'Hesabınıza giriş yapın';
-    document.getElementById('submit-btn').textContent = 'Giriş Yap →';
+    document.getElementById('modal-sub').textContent      = 'Hesabınıza giriş yapın';
+    document.getElementById('submit-btn').textContent     = 'Giriş Yap →';
     document.getElementById('modal-toggle-text').innerHTML =
       `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
   }
 }
+function hideModal() { document.getElementById('authModal').classList.remove('show'); }
 
-function hideModal() {
-  document.getElementById('authModal').classList.remove('show');
-}
-
-// Kayıt başarılı → login formuna geç
 function switchToLogin() {
   document.getElementById('register-success').style.display = 'none';
-  document.getElementById('auth-form').style.display = 'block';
+  document.getElementById('auth-form').style.display        = 'block';
   currentAuthMode = 'login';
-  document.getElementById('modal-sub').textContent = 'Hesabınıza giriş yapın';
-  document.getElementById('submit-btn').textContent = 'Giriş Yap →';
+  document.getElementById('modal-sub').textContent      = 'Hesabınıza giriş yapın';
+  document.getElementById('submit-btn').textContent     = 'Giriş Yap →';
   document.getElementById('modal-toggle-text').innerHTML =
     `Hesabınız yok mu? <a href="#" onclick="showLogin('register')">Ücretsiz kayıt olun</a>`;
   document.getElementById('password-input').value = '';
@@ -569,45 +586,40 @@ async function doSubmitAuth() {
   if (!name || !password) { alert('Kullanıcı adı ve parola zorunludur.'); return; }
 
   const endpoint = currentAuthMode === 'register' ? '/auth/register' : '/auth/login';
-
   try {
     const res  = await fetch(`${BACKEND_URL}${endpoint}`, {
-      method: 'POST', headers: HEADERS,
+      method:'POST', headers:HEADERS,
       body: JSON.stringify({user_name: name, password})
     });
     const data = await res.json();
-
     if (!res.ok) { alert(data.detail || 'Bir hata oluştu.'); return; }
 
-    // ── KAYIT BAŞARILI → başarı ekranı göster, login'e yönlendir ──
+    // KAYIT → başarı ekranı göster, login'e yönlendir
     if (currentAuthMode === 'register') {
-      document.getElementById('auth-form').style.display = 'none';
+      document.getElementById('auth-form').style.display        = 'none';
       document.getElementById('register-success').style.display = 'block';
-      document.getElementById('modal-sub').textContent = 'Hesap oluşturuldu!';
-      // Kullanıcı adını login inputuna yaz ki tekrar yazmasın
-      document.getElementById('username-input').value = name;
+      document.getElementById('modal-sub').textContent          = 'Hesap oluşturuldu!';
+      document.getElementById('username-input').value           = name;
       return;
     }
 
-    // ── GİRİŞ BAŞARILI ──
+    // GİRİŞ BAŞARILI
     currentUser        = data.user_name || name;
     currentSessionUUID = data.session_uuid;
     currentTenantId    = data.tenant_id;
+    saveSession();   // ← sessionStorage'a yaz
 
     document.getElementById('sidebar-username').textContent = currentUser;
     document.getElementById('user-avatar-text').textContent = currentUser[0].toUpperCase();
-
     hideModal();
 
-    // Eğer bekleyen bir plan varsa → ödeme sayfasına git
+    // Bekleyen plan varsa → ödemeye git
     if (pendingPlan) {
       const plan = pendingPlan;
       pendingPlan = null;
       await goToCheckout(plan);
       return;
     }
-
-    // Yoksa → chat ekranına git
     openApp();
 
   } catch(e) {
@@ -617,17 +629,16 @@ async function doSubmitAuth() {
 }
 
 // ══════════════════════════════
-//  APP EKRANI AÇ
+//  APP EKRANI
 // ══════════════════════════════
 function openApp() {
   document.getElementById('landing-page').style.display = 'none';
-  document.getElementById('app-page').style.display = 'block';
+  document.getElementById('app-page').style.display     = 'block';
   messageCount = 0;
   resetMessages();
   loadSidebarSessions();
   updateQuota();
 }
-
 function resetMessages() {
   document.getElementById('messages-container').innerHTML =
     `<div class="empty-state" id="empty-state">
@@ -644,44 +655,52 @@ function resetMessages() {
 }
 
 // ══════════════════════════════
-//  ÖDEME
+//  ÖDEME — DÜZELTİLDİ
 // ══════════════════════════════
 function buyPlan(plan) {
-  // Giriş yapılmamışsa önce kayıt/giriş yaptır
+  // Giriş yapılmamış → önce login yaptır
   if (!currentUser || !currentTenantId) {
     pendingPlan = plan;
-    showLogin('register');
+    showLogin('login');   // login ekranı aç (hesabı varsa direkt giriş yapsın)
     return;
   }
   goToCheckout(plan);
 }
 
 async function goToCheckout(plan) {
+  // tenant_id hâlâ yoksa güvenli kontrol
+  if (!currentTenantId) {
+    alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+    pendingPlan = plan;
+    showLogin('login');
+    return;
+  }
+
   try {
     const res  = await fetch(
       `${BACKEND_URL}/billing/checkout?tenant_id=${currentTenantId}&plan=${plan}`,
-      { method: 'POST', headers: HEADERS }
+      { method:'POST', headers:HEADERS }
     );
     const data = await res.json();
 
     if (!res.ok) {
-      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || res.status));
-      openApp();   // hata olsa bile chat'e git
+      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || `Hata kodu: ${res.status}`));
+      openApp();
       return;
     }
 
     if (data.checkout_url) {
-      window.open(data.checkout_url, '_blank');  // yeni sekmede aç
+      window.open(data.checkout_url, '_blank');  // yeni sekmede aç (iframe sorunu yok)
     } else {
-      alert('Stripe ödeme linki alınamadı.');
+      alert('Stripe ödeme linki alınamadı. Lütfen tekrar deneyin.');
     }
 
-    // Ödeme sekmesi açıldıktan sonra kullanıcıyı chat'e de al
-    openApp();
+    openApp();   // ödeme sekmesi açıldıktan sonra chat ekranına da geç
 
   } catch(e) {
     alert('Sunucuya bağlanılamadı: ' + e.message);
     console.error(e);
+    openApp();
   }
 }
 
@@ -692,164 +711,134 @@ async function sendMessage() {
   const input = document.getElementById('chat-input');
   const text  = input.value.trim();
   if (!text) return;
-
-  const emptyState = document.getElementById('empty-state');
-  if (emptyState) emptyState.style.display = 'none';
-
-  input.value = '';
-  input.style.height = 'auto';
+  const es = document.getElementById('empty-state');
+  if (es) es.style.display = 'none';
+  input.value = ''; input.style.height = 'auto';
   messageCount++;
   appendMessage('user', text);
   if (messageCount === 1) setTimeout(loadSidebarSessions, 2000);
-
-  const typingId = appendTyping();
+  const tid = appendTyping();
   try {
     const res = await fetch(`${BACKEND_URL}/search/ask`, {
-      method: 'POST', headers: HEADERS,
-      body: JSON.stringify({query: text, user_name: currentUser, session_uuid: currentSessionUUID})
+      method:'POST', headers:HEADERS,
+      body: JSON.stringify({query:text, user_name:currentUser, session_uuid:currentSessionUUID})
     });
-    removeTyping(typingId);
-    if (res.status === 429) {
-      appendMessage('ai', '⚠️ Günlük kullanım limitinize ulaştınız. Planınızı yükseltmek için iletişime geçin.', []);
-      return;
-    }
+    removeTyping(tid);
+    if (res.status === 429) { appendMessage('ai','⚠️ Günlük kullanım limitinize ulaştınız.',[]);return; }
     const data = await res.json();
-    appendMessage('ai', data.answer, data.sources || []);
+    appendMessage('ai', data.answer, data.sources||[]);
     updateQuota();
-  } catch(e) {
-    removeTyping(typingId);
-    appendMessage('ai', 'Şu anda bağlantı kurulamadı. Lütfen tekrar deneyin.', []);
-  }
+  } catch(e) { removeTyping(tid); appendMessage('ai','Bağlantı kurulamadı. Lütfen tekrar deneyin.',[]);}
 }
 
 function appendMessage(role, text, sources=[]) {
   const container  = document.getElementById('messages-container');
-  const now        = new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
-  const avatarText = role === 'user' ? (currentUser[0]?.toUpperCase() || 'K') : '⚕';
+  const now        = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  const avatarText = role==='user'?(currentUser[0]?.toUpperCase()||'K'):'⚕';
   const div        = document.createElement('div');
   div.className    = `message ${role}`;
-  let sourcesHTML  = '';
-  if (sources.length > 0) {
-    sourcesHTML = `<div class="message-sources">${sources.map(s =>
-      `<div class="source-chip">📚 ${s}</div>`).join('')}</div>`;
-  }
-  div.innerHTML = `
-    <div class="message-avatar">${avatarText}</div>
+  let sh = '';
+  if (sources.length>0) sh=`<div class="message-sources">${sources.map(s=>`<div class="source-chip">📚 ${s}</div>`).join('')}</div>`;
+  div.innerHTML = `<div class="message-avatar">${avatarText}</div>
     <div class="message-content">
-      <div class="message-bubble">${text.replace(/\n/g,'<br/>')}</div>
-      ${sourcesHTML}
+      <div class="message-bubble">${text.replace(/\n/g,'<br/>')}</div>${sh}
       <div class="message-time">${now}</div>
     </div>`;
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
   return div;
 }
-
 function appendTyping() {
-  const container = document.getElementById('messages-container');
-  const id  = 'typing-' + Date.now();
-  const div = document.createElement('div');
-  div.className = 'message ai';
-  div.id = id;
-  div.innerHTML = `<div class="message-avatar">⚕</div><div class="message-content"><div class="typing"><span></span><span></span><span></span></div></div>`;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  return id;
+  const c=document.getElementById('messages-container');
+  const id='t'+Date.now(); const d=document.createElement('div');
+  d.className='message ai'; d.id=id;
+  d.innerHTML=`<div class="message-avatar">⚕</div><div class="message-content"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  c.appendChild(d); c.scrollTop=c.scrollHeight; return id;
 }
-function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
-function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
-function askSuggestion(el) { document.getElementById('chat-input').value = el.textContent; sendMessage(); }
+function removeTyping(id){const e=document.getElementById(id);if(e)e.remove();}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+function askSuggestion(el){document.getElementById('chat-input').value=el.textContent;sendMessage();}
 
 async function newChat() {
   try {
-    const res  = await fetch(`${BACKEND_URL}/session/create_session`, {
-      method: 'POST', headers: HEADERS,
-      body: JSON.stringify({user_name: currentUser})
-    });
-    const data = await res.json();
-    currentSessionUUID = data.session_uuid;
-    messageCount = 0;
-    resetMessages();
-  } catch(e) { console.error('Yeni oturum oluşturulamadı.', e); }
+    const res=await fetch(`${BACKEND_URL}/session/create_session`,{method:'POST',headers:HEADERS,body:JSON.stringify({user_name:currentUser})});
+    const data=await res.json();
+    currentSessionUUID=data.session_uuid; saveSession();
+    messageCount=0; resetMessages();
+  } catch(e){console.error(e);}
 }
 
 async function loadSidebarSessions() {
   if (!currentUser) return;
   try {
-    const res = await fetch(`${BACKEND_URL}/session/sessions/${currentUser}`, { headers: HEADERS });
-    if (!res.ok) return;
-    const sessions = await res.json();
-    const list = document.getElementById('chat-history-list');
-    list.innerHTML = '';
-    sessions.forEach(s => {
-      const div = document.createElement('div');
-      div.className = `chat-item ${s.session_uuid === currentSessionUUID ? 'active' : ''}`;
-      div.onclick = () => loadChat(s.session_uuid);
-      div.innerHTML = `<span class="chat-item-icon">💬</span>${s.title}`;
-      list.appendChild(div);
+    const res=await fetch(`${BACKEND_URL}/session/sessions/${currentUser}`,{headers:HEADERS});
+    if(!res.ok)return;
+    const sessions=await res.json();
+    const list=document.getElementById('chat-history-list');
+    list.innerHTML='';
+    sessions.forEach(s=>{
+      const d=document.createElement('div');
+      d.className=`chat-item ${s.session_uuid===currentSessionUUID?'active':''}`;
+      d.onclick=()=>loadChat(s.session_uuid);
+      d.innerHTML=`<span class="chat-item-icon">💬</span>${s.title}`;
+      list.appendChild(d);
     });
-  } catch(e) { console.error('Sohbet geçmişi yüklenemedi', e); }
+  } catch(e){console.error(e);}
 }
 
-async function loadChat(session_uuid) {
+async function loadChat(uuid) {
   try {
-    currentSessionUUID = session_uuid;
-    const res  = await fetch(`${BACKEND_URL}/history/${session_uuid}`, { headers: HEADERS });
-    if (!res.ok) return;
-    const data = await res.json();
-    const container = document.getElementById('messages-container');
-    container.innerHTML = '';
-    messageCount = 0;
-    if (data.length > 0 && data[0].messages?.length > 0) {
-      data[0].messages.forEach(msg => {
-        appendMessage(msg.sender === 'human' ? 'user' : 'ai', msg.content, []);
-        messageCount++;
-      });
+    currentSessionUUID=uuid; saveSession();
+    const res=await fetch(`${BACKEND_URL}/history/${uuid}`,{headers:HEADERS});
+    if(!res.ok)return;
+    const data=await res.json();
+    const c=document.getElementById('messages-container');
+    c.innerHTML=''; messageCount=0;
+    if(data.length>0&&data[0].messages?.length>0){
+      data[0].messages.forEach(m=>{appendMessage(m.sender==='human'?'user':'ai',m.content,[]);messageCount++;});
     } else {
-      container.innerHTML = `<div class="empty-state" id="empty-state"><div class="empty-icon">⚕</div><div class="empty-title">Önceki Sohbet</div><div class="empty-desc">Bu sohbet boş görünüyor.</div></div>`;
+      c.innerHTML=`<div class="empty-state" id="empty-state"><div class="empty-icon">⚕</div><div class="empty-title">Önceki Sohbet</div><div class="empty-desc">Bu sohbet boş görünüyor.</div></div>`;
     }
-  } catch(e) { console.error('Sohbet yüklenemedi', e); }
+  } catch(e){console.error(e);}
 }
 
 async function updateQuota() {
-  if (!currentUser) return;
+  if(!currentUser)return;
   try {
-    const res  = await fetch(`${BACKEND_URL}/session/user_quota/${currentUser}`, { headers: HEADERS });
-    if (!res.ok) return;
-    const data = await res.json();
-    document.getElementById('quota-used').textContent  = data.used;
-    document.getElementById('quota-total').textContent = data.total;
-    document.getElementById('quota-fill').style.width  = (data.used / data.total * 100) + '%';
-  } catch(e) { console.error('Kota bilgisi alınamadı', e); }
+    const res=await fetch(`${BACKEND_URL}/session/user_quota/${currentUser}`,{headers:HEADERS});
+    if(!res.ok)return;
+    const d=await res.json();
+    document.getElementById('quota-used').textContent=d.used;
+    document.getElementById('quota-total').textContent=d.total;
+    document.getElementById('quota-fill').style.width=(d.used/d.total*100)+'%';
+  } catch(e){}
 }
 
 async function handleUpload(input) {
-  const files = input.files;
-  if (!files.length) return;
-  const status = document.getElementById('upload-status');
-  status.textContent = '⏳ Yükleniyor...';
-  const form = new FormData();
-  for (const f of files) form.append('files', f);
-  try {
-    const res  = await fetch(`${BACKEND_URL}/add_documents/add`, {method:'POST', body: form});
-    const data = await res.json();
-    status.textContent = '✅ ' + data.message;
-  } catch(e) { status.textContent = '❌ Yükleme başarısız'; }
+  if(!input.files.length)return;
+  const status=document.getElementById('upload-status');
+  status.textContent='⏳ Yükleniyor...';
+  const form=new FormData();
+  for(const f of input.files) form.append('files',f);
+  try{
+    const res=await fetch(`${BACKEND_URL}/add_documents/add`,{method:'POST',body:form});
+    const d=await res.json(); status.textContent='✅ '+d.message;
+  }catch(e){status.textContent='❌ Yükleme başarısız';}
 }
 
 function doLogout() {
-  document.getElementById('app-page').style.display   = 'none';
-  document.getElementById('landing-page').style.display = 'block';
-  currentUser = ''; currentSessionUUID = ''; currentTenantId = null; messageCount = 0;
-  document.getElementById('chat-history-list').innerHTML = '';
+  clearSession();
+  currentUser=''; currentSessionUUID=''; currentTenantId=null; messageCount=0;
+  document.getElementById('app-page').style.display   ='none';
+  document.getElementById('landing-page').style.display='block';
+  document.getElementById('chat-history-list').innerHTML='';
 }
 
-// Scroll animasyonları
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1});
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
 </script>
 </body>
 </html>
