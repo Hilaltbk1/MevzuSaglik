@@ -668,42 +668,46 @@ function buyPlan(plan) {
 }
 
 async function goToCheckout(plan) {
-  // tenant_id hâlâ yoksa güvenli kontrol
+  // tenant_id yoksa — sessionStorage'dan tekrar almayı dene
   if (!currentTenantId) {
-    alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+    try {
+      const t = sessionStorage.getItem('ms_tenant');
+      if (t && t !== 'null') currentTenantId = parseInt(t);
+    } catch(e) {}
+  }
+
+  // Hâlâ yoksa — kullanıcıyı tekrar login'e gönder
+  if (!currentTenantId) {
     pendingPlan = plan;
     showLogin('login');
     return;
   }
 
   try {
-    const res  = await fetch(
+    const res = await fetch(
       `${BACKEND_URL}/billing/checkout?tenant_id=${currentTenantId}&plan=${plan}`,
       { method:'POST', headers:HEADERS }
     );
     const data = await res.json();
 
     if (!res.ok) {
-      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || `Hata kodu: ${res.status}`));
+      alert('Ödeme sayfası oluşturulamadı: ' + (data.detail || res.status));
       openApp();
       return;
     }
 
     if (data.checkout_url) {
-      window.open(data.checkout_url, '_blank');  // yeni sekmede aç (iframe sorunu yok)
+      window.open(data.checkout_url, '_blank');
     } else {
-      alert('Stripe ödeme linki alınamadı. Lütfen tekrar deneyin.');
+      alert('Stripe ödeme linki alınamadı.');
     }
-
-    openApp();   // ödeme sekmesi açıldıktan sonra chat ekranına da geç
+    openApp();
 
   } catch(e) {
     alert('Sunucuya bağlanılamadı: ' + e.message);
-    console.error(e);
     openApp();
   }
 }
-
 // ══════════════════════════════
 //  MESAJLAŞMA
 // ══════════════════════════════
