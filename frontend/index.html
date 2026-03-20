@@ -623,8 +623,8 @@ hideModal();
 if (pendingPlan && currentTenantId) {
   const plan = pendingPlan;
   pendingPlan = null;
-  openApp();
-  await goToCheckout(plan);
+  await goToCheckout(plan);  // önce ödeme sayfasını aç
+  // goToCheckout içinde zaten openApp() çağrılıyor
 } else {
   pendingPlan = null;
   openApp();
