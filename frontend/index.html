@@ -604,23 +604,31 @@ async function doSubmitAuth() {
     }
 
     // GİRİŞ BAŞARILI
-    currentUser        = data.user_name || name;
-    currentSessionUUID = data.session_uuid;
-    currentTenantId    = data.tenant_id;
-    saveSession();   // ← sessionStorage'a yaz
+// GİRİŞ BAŞARILI
+currentUser        = data.user_name || name;
+currentSessionUUID = data.session_uuid;
+currentTenantId    = data.tenant_id || null;
 
-    document.getElementById('sidebar-username').textContent = currentUser;
-    document.getElementById('user-avatar-text').textContent = currentUser[0].toUpperCase();
-    hideModal();
+try {
+  sessionStorage.setItem('ms_user',    currentUser);
+  sessionStorage.setItem('ms_session', currentSessionUUID);
+  sessionStorage.setItem('ms_tenant',  currentTenantId);
+} catch(e) { console.warn('sessionStorage hatası:', e); }
 
-    // Bekleyen plan varsa → ödemeye git
-    if (pendingPlan) {
-      const plan = pendingPlan;
-      pendingPlan = null;
-      await goToCheckout(plan);
-      return;
-    }
-    openApp();
+document.getElementById('sidebar-username').textContent = currentUser;
+document.getElementById('user-avatar-text').textContent = currentUser[0]?.toUpperCase() || 'K';
+
+hideModal();
+
+if (pendingPlan && currentTenantId) {
+  const plan = pendingPlan;
+  pendingPlan = null;
+  openApp();
+  await goToCheckout(plan);
+} else {
+  pendingPlan = null;
+  openApp();
+}
 
   } catch(e) {
     alert('Bağlantı hatası: Sunucuya ulaşılamıyor.');
