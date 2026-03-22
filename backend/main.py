@@ -73,4 +73,13 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 @app.get("/")
 def home():
-    return FileResponse("frontend/index.html")
+    api_key = os.getenv("TENANT_API_KEY", "")
+    try:
+        with open("frontend/index.html", "r", encoding="utf-8") as f:
+            html = f.read()
+        inject = f'<script>window.__TENANT_API_KEY__ = "{api_key}";</script>'
+        html = html.replace("<head>", "<head>\n" + inject, 1)
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(content=html)
+    except Exception:
+        return FileResponse("frontend/index.html")

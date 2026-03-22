@@ -529,7 +529,11 @@ window.addEventListener('DOMContentLoaded', () => {
     if (loadSession() && currentTenantId) {
       updateSidebarPlan(plan);
       openApp();
+      // Quota'yı hemen plan bazlı göster (webhook bekleme)
+      applyQuotaForPlan(plan);
       setTimeout(() => appendMessage('ai', planSuccessMsg(plan), []), 800);
+      // 3 sn sonra API'den teyit et (webhook işlenmiş olur)
+      setTimeout(() => updateQuota(), 3000);
     } else { showLogin('login'); }
     return;
   }
@@ -556,6 +560,23 @@ function updateSidebarPlan(plan) {
   document.getElementById('sidebar-username').textContent = currentUser;
   document.getElementById('user-avatar-text').textContent = currentUser[0]?.toUpperCase() || 'K';
   document.getElementById('sidebar-plan').textContent = labels[plan] || labels.free;
+}
+
+// Ödeme sonrası API beklemeden quota'yı anında güncelle
+function applyQuotaForPlan(plan) {
+  const limits = { free: 20, pro: 500, enterprise: -1 };
+  const total  = limits[plan] ?? 20;
+  if (total === -1) {
+    document.getElementById('quota-section').style.display           = 'none';
+    document.getElementById('quota-unlimited-section').style.display = 'block';
+  } else {
+    document.getElementById('quota-section').style.display           = 'block';
+    document.getElementById('quota-unlimited-section').style.display = 'none';
+    document.getElementById('quota-total').textContent = total;
+    // used sayısını sıfırlamıyoruz, sadece total'i güncelliyoruz
+    const used = parseInt(document.getElementById('quota-used').textContent) || 0;
+    document.getElementById('quota-fill').style.width = Math.min(used / total * 100, 100) + '%';
+  }
 }
 
 // ── AUTH MODAL ────────────────────────────────────────────
@@ -633,7 +654,7 @@ async function doSubmitAuth() {
 
     try {
       const p = localStorage.getItem('ms_paid_plan');
-      if (p) { localStorage.removeItem('ms_paid_plan'); updateSidebarPlan(p); openApp(); setTimeout(() => appendMessage('ai', planSuccessMsg(p), []), 800); return; }
+      if (p) { localStorage.removeItem('ms_paid_plan'); updateSidebarPlan(p); applyQuotaForPlan(p); openApp(); setTimeout(() => appendMessage('ai', planSuccessMsg(p), []), 800); setTimeout(() => updateQuota(), 3000); return; }
     } catch(e) {}
 
     if (pendingPlan && currentTenantId) { const pl = pendingPlan; pendingPlan = null; await goToCheckout(pl); }

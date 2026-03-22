@@ -42,6 +42,10 @@ def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db
     except stripe.error.StripeError as e:
         raise HTTPException(status_code=502, detail=f"Stripe hatasi: {str(e)}")
 
+    # Planı hemen DB'ye yaz (webhook gecikmesine karşı)
+    tenant.plan = plan
+    db.commit()
+
     return {"checkout_url": session.url}
 
 
