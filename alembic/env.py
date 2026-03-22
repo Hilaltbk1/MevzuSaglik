@@ -7,7 +7,11 @@ from alembic import context
 
 from backend.config.configuration import Settings
 from backend.database.base import Base
-from backend.schemas.tenant_model import TenantModel # Bunu ekle!
+from backend.schemas.tenant_model import TenantModel
+from backend.schemas.user_model import UserModel
+from backend.schemas.session_model import SessionModel
+from backend.schemas.message_model import MessageModel
+from backend.schemas.log_model import LogModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

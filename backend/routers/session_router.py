@@ -43,9 +43,14 @@ async def get_user_session_api(user_name:str,db:Session = Depends(get_db)):
 from sqlalchemy import func
 from backend.schemas.message_model import MessageModel
 from backend.schemas.session_model import SessionModel
+from backend.dependencies.auth import PLAN_LIMITS
 
 @router.get("/user_quota/{user_name}")
-async def get_user_quota_api(user_name: str, db: Session = Depends(get_db)):
+async def get_user_quota_api(
+    user_name: str,
+    db: Session = Depends(get_db),
+    tenant=Depends(get_current_tenant),
+):
     kullanici_toplam_sayi = (
         db.query(func.count(MessageModel.id))
         .join(MessageModel.session)
@@ -54,5 +59,6 @@ async def get_user_quota_api(user_name: str, db: Session = Depends(get_db)):
             MessageModel.sender_type == "human"
         ).scalar()
     )
-    return {"used": kullanici_toplam_sayi, "total": 20}
+    limit = PLAN_LIMITS[tenant.plan]["requests_per_day"]
+    return {"used": kullanici_toplam_sayi, "total": limit}
 
