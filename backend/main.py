@@ -33,7 +33,6 @@ import csv
 from datetime import datetime
 from fastapi import Request
 from fastapi.staticfiles import StaticFiles
-
 from fastapi.responses import FileResponse
 from backend.services.Retrievers import retrieval_chain
 
