@@ -20,6 +20,91 @@ from backend.schemas.tenant_model import TenantModel
 # Embedding modelini bir kez oluştur
 
 
+async def upload_files_background(file_data: list):
+    """
+    Arka planda çalışır. file_data = [{"filename": str, "content": bytes}, ...]
+    Embedding'leri batch'ler halinde gönderir (timeout önleme).
+    """
+    from backend.llm_client import llm_client
+    BATCH_SIZE = 50  # Her seferinde Qdrant'a gönderilecek chunk sayısı
+
+    embedding = GoogleGenerativeAIEmbeddings(
+        model="models/gemini-embedding-001",
+        output_dimensionality=3072
+    )
+    QDRANT_HOST    = os.getenv("QDRANT_HOST")
+    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+    COLLECTION_NAME = "mevzu_saglik_docs"
+
+    client = QdrantClient(url=QDRANT_HOST, api_key=QDRANT_API_KEY, prefer_grpc=False, timeout=300)
+
+    # Mevcut dosyaları kontrol et
+    existing_files = set()
+    try:
+        if client.collection_exists(COLLECTION_NAME):
+            scroll_res, _ = client.scroll(collection_name=COLLECTION_NAME, limit=10000, with_payload=["Mevzuat_Adi"])
+            for point in scroll_res:
+                if point.payload and "Mevzuat_Adi" in point.payload:
+                    existing_files.add(point.payload["Mevzuat_Adi"])
+    except Exception as e:
+        print("Mevcut dosyalar kontrol edilirken hata:", e)
+
+    doc_list = []
+    skipped  = []
+
+    for fd in file_data:
+        filename = fd["filename"]
+        content  = fd["content"]
+
+        if filename in existing_files:
+            skipped.append(filename)
+            continue
+
+        try:
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
+            full_text  = ""
+            for page in pdf_reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    full_text += page_text + "\n"
+
+            data_for_preprocessing = {
+                "Mevzuat Adı": filename,
+                "Mevzuat Türü": "Sağlık Mevzuatı",
+                "Mevzuat İçeriği": [full_text],
+                "Tablolar": []
+            }
+            page_content = flatten_mevzuat_object(data_for_preprocessing, llm_client)
+            doc_list.append(Document(
+                page_content=str(page_content),
+                metadata={"Mevzuat_Adi": filename, "Mevzuat_Türü": "Sağlık Mevzuatı", "Dosya_Adi": filename},
+            ))
+        except Exception as e:
+            print(f"❌ Dosya işleme hatası ({filename}): {e}")
+            continue
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500, chunk_overlap=150, length_function=len,
+        separators=["\n\n", "\n", ". ", " ", ""]
+    )
+    chunks = text_splitter.split_documents(doc_list)
+
+    vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
+
+    # Batch'ler halinde ekle (timeout önleme)
+    total_added = 0
+    for i in range(0, len(chunks), BATCH_SIZE):
+        batch = chunks[i:i + BATCH_SIZE]
+        vector_store.add_documents(documents=batch)
+        total_added += len(batch)
+        print(f"✅ Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk eklendi.")
+
+    msg = f"{len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
+    if skipped:
+        msg += f" (Atlanan: {', '.join(skipped)})"
+    return msg
+
+
 async def upload_files(files: List[UploadFile]):
     from backend.llm_client import llm_client
     from fastapi import HTTPException

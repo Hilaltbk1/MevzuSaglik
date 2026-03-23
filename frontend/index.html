@@ -414,6 +414,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
           <div class="upload-area" onclick="document.getElementById('file-input').click()">
             <div class="upload-icon">&#128196;</div>
             <div class="upload-text"><strong>PDF seçin</strong> veya sürükleyin</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Maks. 50 MB / dosya</div>
             <input type="file" id="file-input" style="display:none" accept=".pdf" multiple onchange="handleUpload(this)"/>
           </div>
           <div id="upload-status" style="font-size:12px;color:var(--teal2);margin-top:8px;text-align:center"></div>
@@ -857,14 +858,55 @@ async function updateQuota() {
 async function handleUpload(input) {
   if (!input.files.length) return;
   const status = document.getElementById('upload-status');
-  status.textContent = 'Yükleniyor...';
+  const MAX_MB = 50;
+  const MAX_BYTES = MAX_MB * 1024 * 1024;
+  for (const f of input.files) {
+    if (f.size > MAX_BYTES) {
+      status.style.color = '#ff6b6b';
+      status.textContent = `"${f.name}" çok büyük. Maks. ${MAX_MB} MB yükleyebilirsiniz.`;
+      input.value = '';
+      return;
+    }
+  }
+  status.style.color = 'var(--teal2)';
+  status.textContent = '⏳ Dosya(lar) yükleniyor...';
   const form = new FormData();
   for (const f of input.files) form.append('files', f);
+  input.value = '';
   try {
     const res  = await fetch(BACKEND_URL + '/add_documents/add', {method: 'POST', body: form});
     const d    = await res.json();
-    status.textContent = d.message;
-  } catch(e) { status.textContent = 'Yükleme başarısız'; }
+    if (!res.ok) { status.style.color = '#ff6b6b'; status.textContent = d.detail || 'Yükleme başarısız'; return; }
+    const taskId = d.task_id;
+    status.textContent = '⏳ İşleniyor, lütfen bekleyin...';
+    // Arka plan görevini polling ile takip et
+    pollUploadStatus(taskId, status);
+  } catch(e) { status.style.color = '#ff6b6b'; status.textContent = 'Yükleme başarısız'; }
+}
+
+function pollUploadStatus(taskId, statusEl) {
+  let attempts = 0;
+  const maxAttempts = 120; // 2 dakika (her 1 sn)
+  const interval = setInterval(async () => {
+    attempts++;
+    try {
+      const res = await fetch(BACKEND_URL + '/add_documents/status/' + taskId, {headers: HEADERS});
+      const d   = await res.json();
+      if (d.status === 'done') {
+        clearInterval(interval);
+        statusEl.style.color = 'var(--teal2)';
+        statusEl.textContent = '✅ ' + d.message;
+      } else if (d.status === 'error') {
+        clearInterval(interval);
+        statusEl.style.color = '#ff6b6b';
+        statusEl.textContent = '❌ Hata: ' + d.message;
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+        statusEl.style.color = 'var(--muted)';
+        statusEl.textContent = 'İşlem devam ediyor, sayfayı yenileyin.';
+      }
+    } catch(e) { clearInterval(interval); }
+  }, 1000);
 }
 
 function doLogout() {
