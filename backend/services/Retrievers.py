@@ -14,10 +14,15 @@ settings = Settings()
 
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import CrossEncoderReranker
-from sentence_transformers.cross_encoder import CrossEncoder
+
+# Lazy loading — model uygulama başlarken değil, ilk istek gelince yüklenir
+_chain_instance = None
 
 
 def retrieval_chain():
+    global _chain_instance
+    if _chain_instance is not None:
+        return _chain_instance
     """
     LangChain'ev `langchain.chains.*` yardımcılarını kullanmadan,
     kendi basit RAG zincirimizi kuruyoruz. Böylece
@@ -85,9 +90,10 @@ def retrieval_chain():
 
     hybrid_retriever = HybridRetriever(v_retriever=vector_retriever, b_retriever=bm25_retriever)
 
-    # 4. Re-Ranker Modeli Hazırlığı
+    # 4. Re-Ranker Modeli Hazırlığı — lazy import
     print("✨ Re-Ranker modeli yükleniyor (ilk seferde biraz sürebilir)...")
     try:
+        from sentence_transformers.cross_encoder import CrossEncoder
         rerank_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
     except Exception as e:
         print(f"⚠️ Re-Ranker modeli yüklenemedi, sadece Hybrid Search kullanılacak: {e}")
@@ -181,4 +187,5 @@ def retrieval_chain():
         doc_prompt=document_prompt,
     )
 
-    return ChainContainer(full_chain)
+    _chain_instance = ChainContainer(full_chain)
+    return _chain_instance

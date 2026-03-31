@@ -34,7 +34,6 @@ from datetime import datetime
 from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from backend.services.Retrievers import retrieval_chain
 
 # =========================
 # USAGE LOGGING (TÜBİTAK H2.3)
@@ -55,6 +54,7 @@ def log_usage(user_id="Anonymous"):
 
 @app.post("/chat")
 async def chat(request: Request):
+    from backend.services.Retrievers import retrieval_chain
     data = await request.json()
     user_input = data.get("message")
     user_id = data.get("user_id", "Anonymous") # Kullanıcı kodunu al
