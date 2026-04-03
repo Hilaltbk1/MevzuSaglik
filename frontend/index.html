@@ -464,7 +464,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 
 <script>
 const BACKEND_URL    = window.location.origin;
-const TENANT_API_KEY = window.__TENANT_API_KEY__ || '';
+const TENANT_API_KEY = (window.__TENANT_API_KEY__ || '').trim();
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
 let currentUser = '', currentSessionUUID = '', currentTenantId = null;

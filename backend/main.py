@@ -72,7 +72,7 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 @app.get("/")
 def home():
-    api_key = os.getenv("TENANT_API_KEY", "")
+    api_key = os.getenv("TENANT_API_KEY", "").strip()
     try:
         with open("frontend/index.html", "r", encoding="utf-8") as f:
             html = f.read()
