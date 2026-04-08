@@ -10,6 +10,13 @@ from backend.utils import create_app
 from backend.database.base import Base
 from backend.database.db_setup import engine
 
+# Tüm modelleri import et ki Base.metadata.create_all çalışsın
+from backend.schemas.tenant_model import TenantModel
+from backend.schemas.user_model import UserModel
+from backend.schemas.session_model import SessionModel
+from backend.schemas.message_model import MessageModel
+from backend.schemas.log_model import LogModel
+
 # Qdrant/gRPC patch
 def patch_grpc_type_error():
     try:
