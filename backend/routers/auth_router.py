@@ -106,6 +106,7 @@ def register_user(request: dict, db: Session = Depends(get_db)):
         "user_name": new_user.username,
         "session_uuid": new_session.session_uuid,
         "tenant_id": new_tenant.id,
+        "api_key": new_tenant.api_key,
     }
 
 
@@ -122,12 +123,15 @@ def login_user(request: dict, db: Session = Depends(get_db)):
     if not user or not verify_password(password, user.password_hash):
         raise HTTPException(status_code=401, detail="Gecersiz kullanici adi veya parola.")
 
+    from backend.schemas.tenant_model import TenantModel
+    tenant = db.query(TenantModel).filter_by(id=user.tenant_id).first()
     new_session = crud.create_session(db, user_name, user.tenant_id)
     return {
         "message": "Giris basarili",
         "user_name": user.username,
         "session_uuid": new_session.session_uuid,
         "tenant_id": user.tenant_id,
+        "api_key": tenant.api_key if tenant else "",
     }
 
 

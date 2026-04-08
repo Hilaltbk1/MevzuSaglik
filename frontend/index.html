@@ -490,8 +490,10 @@ function loadSession() {
     const u = localStorage.getItem('ms_user');
     const s = localStorage.getItem('ms_session');
     const t = localStorage.getItem('ms_tenant');
+    const k = localStorage.getItem('ms_api_key');
     if (u && s && t && t !== 'null') {
       currentUser = u; currentSessionUUID = s; currentTenantId = parseInt(t);
+      if (k) HEADERS['X-API-Key'] = k;
       return true;
     }
   } catch(e) {}
@@ -499,7 +501,7 @@ function loadSession() {
 }
 function clearSession() {
   try {
-    ['ms_user','ms_session','ms_tenant','ms_paid_plan'].forEach(k => localStorage.removeItem(k));
+    ['ms_user','ms_session','ms_tenant','ms_paid_plan','ms_api_key'].forEach(k => localStorage.removeItem(k));
   } catch(e) {}
 }
 
@@ -643,6 +645,7 @@ async function doSubmitAuth() {
     currentUser        = data.user_name || name;
     currentSessionUUID = data.session_uuid;
     currentTenantId    = data.tenant_id || null;
+    if (data.api_key) { HEADERS['X-API-Key'] = data.api_key; try { localStorage.setItem('ms_api_key', data.api_key); } catch(e) {} }
     saveSession();
     updateSidebarPlan('free');
     hideModal();

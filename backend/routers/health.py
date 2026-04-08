@@ -8,7 +8,8 @@ router = APIRouter(tags=["Sistem"])
 def health_check():
     try:
         db = SessionLocal()
-        db.execute("SELECT 1")
+        from sqlalchemy import text
+        db.execute(text("SELECT 1"))
         db.close()
         return {"status": "ok", "db": "ok"}
     except Exception as e:
