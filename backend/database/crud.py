@@ -32,8 +32,8 @@ async def upload_files_background(file_data: list):
         model="models/gemini-embedding-001",
         output_dimensionality=3072
     )
-    QDRANT_HOST    = os.getenv("QDRANT_HOST", "").strip()
-    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip()
+    QDRANT_HOST    = os.getenv("QDRANT_HOST", "").strip().strip('\n').strip('\r')
+    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip().strip('\n').strip('\r')
     COLLECTION_NAME = "mevzu_saglik_docs"
 
     client = QdrantClient(url=QDRANT_HOST, api_key=QDRANT_API_KEY, prefer_grpc=False, timeout=300)

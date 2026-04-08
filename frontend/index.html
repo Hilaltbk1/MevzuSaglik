@@ -463,7 +463,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </div>
 
 <script>
-const BACKEND_URL    = window.location.origin;
+const BACKEND_URL    = (window.__BACKEND_URL__ || window.location.origin).replace(/\/$/, '');
 const TENANT_API_KEY = (window.__TENANT_API_KEY__ || '').trim();
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
