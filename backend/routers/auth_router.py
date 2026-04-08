@@ -88,7 +88,7 @@ def register_user(request: dict, db: Session = Depends(get_db)):
     if email and db.query(UserModel).filter(UserModel.email == email).first():
         raise HTTPException(status_code=400, detail="Bu e-posta adresi zaten kayitli.")
 
-    new_tenant = crud.create_tenant(db, name=user_name, plan=PlanType.free, api_key=f"sk_{user_name}_demo")
+    new_tenant = crud.create_tenant(db, name=user_name, plan=PlanType.free, api_key=secrets.token_hex(32))
 
     new_user = UserModel(
         username=user_name,
