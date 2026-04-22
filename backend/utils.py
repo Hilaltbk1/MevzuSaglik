@@ -23,10 +23,12 @@ def create_app() -> FastAPI:
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
     ALLOWED_ORIGINS = [
-        "https://hilal1-mevzusaglik.hf.space",
         "https://mevzusaglik.com.tr",
+        "https://www.mevzusaglik.com.tr",
+        "https://mevzusaglik.pages.dev",  # Cloudflare Pages önizleme adresi
+        "https://mevzusaglik.mevzusaglik.workers.dev",  # Backend'in kendi adresi
         "http://localhost:8000",
-        "http://localhost:7860",
+        "http://localhost:3000",  # Genelde React/Vite kullanırsan lazım olur
     ]
 
     app.add_middleware(
