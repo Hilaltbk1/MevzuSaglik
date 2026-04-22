@@ -8,9 +8,11 @@ from backend.schemas.tenant_model import TenantModel,PlanType
 from backend.database import crud
 
 router=APIRouter(prefix="/admin",tags=["admin"])
-ADMIN_SECRET = os.getenv("ADMIN_SECRET","")
+ADMIN_SECRET = os.getenv("ADMIN_SECRET")
 
-def check_admin(x_admin_secret: str = Header(...)) -> None:  # ← dönüş tipi eklendi
+def check_admin(x_admin_secret: str = Header(...)) -> None:
+    if not ADMIN_SECRET:
+        raise HTTPException(status_code=500, detail="Admin secret yapilandirilmamis")
     if x_admin_secret != ADMIN_SECRET:
         raise HTTPException(status_code=403, detail="Yetkisiz")
 

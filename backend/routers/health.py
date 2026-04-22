@@ -9,6 +9,7 @@ def health_check():
     try:
         db = SessionLocal()
         from sqlalchemy import text
+        from sqlalchemy import text
         db.execute(text("SELECT 1"))
         db.close()
         return {"status": "ok", "db": "ok"}

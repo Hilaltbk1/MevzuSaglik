@@ -32,6 +32,12 @@ patch_grpc_type_error()
 print("Tablolar kontrol ediliyor/oluşturuluyor...")
 Base.metadata.create_all(bind=engine)
 
+# Environment variable kontrolü
+REQUIRED_VARS = ["DATABASE_URL", "GOOGLE_API_KEY", "QDRANT_HOST", "QDRANT_API_KEY", "TENANT_API_KEY"]
+missing = [v for v in REQUIRED_VARS if not os.getenv(v)]
+if missing:
+    print(f"⚠️  Eksik environment variable'lar: {', '.join(missing)}")
+
 app = create_app()
 
 # Gradio integration removed - This is a pure FastAPI HTML application.

@@ -14,10 +14,15 @@ PLAN_PRICE_IDS = {
 }
 
 
+from backend.dependencies.auth import get_current_tenant
+
 @router.post("/checkout")
-def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db)):
+def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db), tenant=Depends(get_current_tenant)):
     if not stripe.api_key:
         raise HTTPException(status_code=500, detail="Stripe yapilandirilmamis.")
+
+    if tenant.id != tenant_id:
+        raise HTTPException(status_code=403, detail="Bu işlem için yetkiniz yok.")
 
     if plan not in PLAN_PRICE_IDS:
         raise HTTPException(status_code=400, detail=f"Gecersiz plan: {plan}")

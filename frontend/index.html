@@ -180,7 +180,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .fade-up.visible{opacity:1;transform:none}
 /* quota sinirsiz */
 .quota-unlimited{font-size:11px;color:var(--teal2);text-align:center;padding:4px 0}
-@media(max-width:768px){nav{padding:16px 20px}.nav-links{display:none}section{padding:60px 20px}.hero{padding:100px 20px 60px}.footer-grid{grid-template-columns:1fr 1fr}.sidebar{display:none}.chat-main{width:100%}}
+@media(max-width:768px){nav{padding:16px 20px}.nav-links{display:none}section{padding:60px 20px}.hero{padding:100px 20px 60px}.footer-grid{grid-template-columns:1fr 1fr}.sidebar{position:fixed;left:-280px;top:0;height:100vh;z-index:300;transition:left .3s}.sidebar.open{left:0}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:299}.sidebar-overlay.show{display:block}.mobile-menu-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:18px;color:var(--white)}.chat-main{width:100%}}
 </style>
 </head>
 <body>
@@ -393,6 +393,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 
 <!-- ══ APP SAYFASI ══ -->
 <div id="app-page">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <div class="app-layout">
     <div class="sidebar">
       <div class="sidebar-header">
@@ -433,7 +434,10 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
     </div>
     <div class="chat-main">
       <div class="chat-topbar">
-        <div class="chat-topbar-title">Sağlık Mevzuatı Asistanı</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="mobile-menu-btn" onclick="toggleSidebar()" id="mobile-menu-btn" style="display:none">☰</button>
+          <div class="chat-topbar-title">Sağlık Mevzuatı Asistanı</div>
+        </div>
         <div class="chat-topbar-status"><div class="status-dot"></div>Sistem aktif</div>
       </div>
       <div class="messages" id="messages-container">
@@ -636,6 +640,11 @@ async function doSubmitAuth() {
     if (!res.ok) { alert(data.detail || 'Bir hata oluştu.'); return; }
 
     if (currentAuthMode === 'register') {
+      currentUser        = data.user_name || name;
+      currentSessionUUID = data.session_uuid;
+      currentTenantId    = data.tenant_id || null;
+      if (data.api_key) { HEADERS['X-API-Key'] = data.api_key; try { localStorage.setItem('ms_api_key', data.api_key); } catch(e) {} }
+      saveSession();
       document.getElementById('auth-form').style.display        = 'none';
       document.getElementById('register-success').style.display = 'block';
       document.getElementById('modal-sub').textContent          = 'Hesap olusturuldu!';
@@ -923,6 +932,26 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, {threshold: 0.1});
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Mobil sidebar toggle
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+
+// Mobil menü butonunu göster
+if (window.innerWidth <= 768) {
+  document.getElementById('mobile-menu-btn').style.display = 'flex';
+}
+window.addEventListener('resize', () => {
+  if (window.innerWidth <= 768) {
+    document.getElementById('mobile-menu-btn').style.display = 'flex';
+  } else {
+    document.getElementById('mobile-menu-btn').style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
