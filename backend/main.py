@@ -1,0 +1,105 @@
+from __future__ import annotations
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+sys.path.append(os.path.dirname(current_dir))
+
+from backend.utils import create_app
+from backend.database.base import Base
+from backend.database.db_setup import engine
+
+# Tüm modelleri import et ki Base.metadata.create_all çalışsın
+from backend.schemas.tenant_model import TenantModel
+from backend.schemas.user_model import UserModel
+from backend.schemas.session_model import SessionModel
+from backend.schemas.message_model import MessageModel
+from backend.schemas.log_model import LogModel
+
+# Qdrant/gRPC patch
+def patch_grpc_type_error():
+    try:
+        import grpc
+        if not hasattr(grpc, 'UpdateMode'):
+            class MockUpdateMode: pass
+            grpc.UpdateMode = MockUpdateMode
+    except ImportError:
+        pass
+
+patch_grpc_type_error()
+
+print("Tablolar kontrol ediliyor/oluşturuluyor...")
+Base.metadata.create_all(bind=engine)
+
+from backend.logger import logger
+
+# Environment variable kontrolü
+REQUIRED_VARS = ["DATABASE_URL", "GOOGLE_API_KEY", "QDRANT_HOST", "QDRANT_API_KEY", "TENANT_API_KEY"]
+missing = [v for v in REQUIRED_VARS if not os.getenv(v)]
+if missing:
+    logger.warning(f"Eksik environment variable'lar: {', '.join(missing)}")
+
+app = create_app()
+
+# Gradio integration removed - This is a pure FastAPI HTML application.
+
+import csv
+from datetime import datetime
+from fastapi import Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# =========================
+# USAGE LOGGING (TÜBİTAK H2.3)
+# =========================
+LOG_FILE = "usage_logs.csv"
+
+def log_usage(user_id="Anonymous"):
+    """Kullanım istatistiklerini KVKK'ya uygun şekilde kaydeder."""
+    file_exists = os.path.isfile(LOG_FILE)
+    try:
+        with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(["timestamp", "user_id"])
+            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id])
+    except Exception as e:
+        print(f"Loglama hatası: {e}")
+
+@app.post("/chat")
+async def chat(request: Request):
+    from backend.services.Retrievers import retrieval_chain
+    data = await request.json()
+    user_input = data.get("message")
+    user_id = data.get("user_id", "Anonymous") # Kullanıcı kodunu al
+    
+    # Kullanımı logla (H2.3 için)
+    log_usage(user_id)
+    
+    # RAG zincirini çalıştır
+    container = retrieval_chain()
+    response = container.full_chain.invoke({"input": user_input, "chat_history": []})
+    
+    return {"response": response["answer"]}
+
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+@app.get("/")
+def home():
+    api_key    = os.getenv("TENANT_API_KEY", "").strip()
+    backend_url = os.getenv("BACKEND_URL", "").strip()  # boşsa frontend kendi origin'ini kullanır
+    try:
+        with open("frontend/index.html", "r", encoding="utf-8") as f:
+            html = f.read()
+        inject = (
+            f'<script>'
+            f'window.__TENANT_API_KEY__ = "{api_key}";'
+            + (f'window.__BACKEND_URL__ = "{backend_url}";' if backend_url else '')
+            + f'</script>'
+        )
+        html = html.replace("<head>", "<head>\n" + inject, 1)
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(content=html)
+    except Exception:
+        return FileResponse("frontend/index.html")

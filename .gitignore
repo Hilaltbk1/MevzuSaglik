@@ -1,0 +1,38 @@
+# Sanal Ortamlar (En önemlisi)
+venv/
+.venv/
+**/venv/
+**/ .venv/
+
+# Python Önbelleği
+__pycache__/
+**/*.pyc
+**/*.pyd
+**/*.pyo
+
+# Veri ve İndeks Dosyaları (Hata verenler)
+**/*.json
+**/*.pkl
+**/*.map
+db_data/
+qdrant_storage/
+chroma_data/
+
+# Binary ve Kütüphane Dosyaları (Hugging Face'in istemediği .exe/.dll)
+**/*.exe
+**/*.dll
+**/*.so
+**/*.dylib
+
+# IDE ve Gizli Dosyalar
+.idea/
+.vscode/
+.env
+*.pem
+*.key
+*.log
+
+# Gereksiz kütüphane kalıntıları
+node_modules/
+dist/
+build/
