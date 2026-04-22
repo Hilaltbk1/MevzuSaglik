@@ -53,7 +53,7 @@ section{padding:100px 40px;position:relative}.container{max-width:1100px;margin:
 .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:56px;max-width:900px;margin-left:auto;margin-right:auto}
 .price-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 32px;position:relative;transition:all .3s}
 .price-card.featured{background:linear-gradient(135deg,rgba(13,148,136,0.12),rgba(13,148,136,0.06));border-color:rgba(13,148,136,0.4)}
-.price-card.featured::before{content:'En Populer';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;font-size:12px;font-weight:600;padding:4px 16px;border-radius:100px}
+.price-card.featured::before{content:'En Popüler';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;font-size:12px;font-weight:600;padding:4px 16px;border-radius:100px}
 .price-plan{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
 .price-amount{font-family:var(--ff-display);font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
 .price-amount sup{font-size:22px;vertical-align:super;margin-right:2px}
@@ -313,7 +313,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </footer>
 </div>
 
-<!-- ══ AUTH MODAL ══ -->
 <div class="modal-overlay" id="authModal">
   <div class="modal">
     <div class="modal-logo"><div class="modal-logo-icon">&#9877;</div>MevzuSağlık</div>
@@ -354,7 +353,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
   </div>
 </div>
 
-<!-- ══ FORGOT PASSWORD MODAL ══ -->
 <div class="modal-overlay" id="forgotModal">
   <div class="modal">
     <div class="modal-logo"><div class="modal-logo-icon">&#128274;</div>MevzuSağlık</div>
@@ -391,7 +389,6 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
   </div>
 </div>
 
-<!-- ══ APP SAYFASI ══ -->
 <div id="app-page">
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <div class="app-layout">
@@ -530,10 +527,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (loadSession() && currentTenantId) {
       updateSidebarPlan(plan);
       openApp();
-      // Quota'yı hemen plan bazlı göster (webhook bekleme)
       applyQuotaForPlan(plan);
       setTimeout(() => appendMessage('ai', planSuccessMsg(plan), []), 800);
-      // 3 sn sonra API'den teyit et (webhook işlenmiş olur)
       setTimeout(() => updateQuota(), 3000);
     } else { showLogin('login'); }
     return;
@@ -563,7 +558,6 @@ function updateSidebarPlan(plan) {
   document.getElementById('sidebar-plan').textContent = labels[plan] || labels.free;
 }
 
-// Ödeme sonrası API beklemeden quota'yı anında güncelle
 function applyQuotaForPlan(plan) {
   const limits = { free: 20, pro: 500, enterprise: -1 };
   const total  = limits[plan] ?? 20;
@@ -574,13 +568,11 @@ function applyQuotaForPlan(plan) {
     document.getElementById('quota-section').style.display           = 'block';
     document.getElementById('quota-unlimited-section').style.display = 'none';
     document.getElementById('quota-total').textContent = total;
-    // used sayısını sıfırlamıyoruz, sadece total'i güncelliyoruz
     const used = parseInt(document.getElementById('quota-used').textContent) || 0;
     document.getElementById('quota-fill').style.width = Math.min(used / total * 100, 100) + '%';
   }
 }
 
-// ── AUTH MODAL ────────────────────────────────────────────
 function showLogin(mode) {
   currentAuthMode = mode;
   document.getElementById('authModal').classList.add('show');
@@ -670,7 +662,6 @@ async function doSubmitAuth() {
   } catch(e) { alert('Bağlantı hatası.'); console.error(e); }
 }
 
-// ── FORGOT PASSWORD ───────────────────────────────────────
 function showForgotPassword() {
   hideModal();
   document.getElementById('forgotModal').classList.add('show');
@@ -721,7 +712,6 @@ async function doResetPassword() {
   } catch(e) { alert('Bağlantı hatası.'); }
 }
 
-// ── APP ───────────────────────────────────────────────────
 function openApp() {
   document.getElementById('landing-page').style.display = 'none';
   document.getElementById('app-page').style.display     = 'block';
@@ -733,7 +723,6 @@ function resetMessages() {
     '<div class="empty-state" id="empty-state"><div class="empty-icon">&#9877;</div><div class="empty-title">Merhaba, nasıl yardımcı olabilirim?</div><div class="empty-desc">Sağlık mevzuatı hakkında sorularınızı sorabilirsiniz.</div><div class="suggestions"><div class="suggestion" onclick="askSuggestion(this)">Hemşire nöbet süresi kaç saattir?</div><div class="suggestion" onclick="askSuggestion(this)">Hekim çalışma hakları nelerdir?</div><div class="suggestion" onclick="askSuggestion(this)">SGK bildirimleri hakkında bilgi verin</div><div class="suggestion" onclick="askSuggestion(this)">İlaç ruhsatlandırma süreci nasıl işler?</div></div></div>';
 }
 
-// ── ÖDEME ─────────────────────────────────────────────────
 function buyPlan(plan) {
   if (!currentUser || !currentTenantId) { pendingPlan = plan; showLogin('login'); return; }
   goToCheckout(plan);
@@ -754,7 +743,6 @@ async function goToCheckout(plan) {
   } catch(e) { alert('Sunucuya baglaниlamadi: ' + e.message); openApp(); }
 }
 
-// ── MESAJLAŞMA ────────────────────────────────────────────
 async function sendMessage() {
   const input = document.getElementById('chat-input');
   const text  = input.value.trim();
@@ -845,7 +833,6 @@ async function loadChat(uuid) {
   } catch(e) { console.error(e); }
 }
 
-// ── QUOTA (plan bazlı) ────────────────────────────────────
 async function updateQuota() {
   if (!currentUser) return;
   try {
@@ -854,7 +841,6 @@ async function updateQuota() {
     const d = await res.json();
 
     if (d.total === -1) {
-      // Sınırsız plan (enterprise)
       document.getElementById('quota-section').style.display           = 'none';
       document.getElementById('quota-unlimited-section').style.display = 'block';
     } else {
@@ -891,14 +877,13 @@ async function handleUpload(input) {
     if (!res.ok) { status.style.color = '#ff6b6b'; status.textContent = d.detail || 'Yükleme başarısız'; return; }
     const taskId = d.task_id;
     status.textContent = '⏳ İşleniyor, lütfen bekleyin...';
-    // Arka plan görevini polling ile takip et
     pollUploadStatus(taskId, status);
   } catch(e) { status.style.color = '#ff6b6b'; status.textContent = 'Yükleme başarısız'; }
 }
 
 function pollUploadStatus(taskId, statusEl) {
   let attempts = 0;
-  const maxAttempts = 120; // 2 dakika (her 1 sn)
+  const maxAttempts = 120;
   const interval = setInterval(async () => {
     attempts++;
     try {
@@ -933,7 +918,6 @@ const observer = new IntersectionObserver(entries => {
 }, {threshold: 0.1});
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-// Mobil sidebar toggle
 function toggleSidebar() {
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.getElementById('sidebar-overlay');
@@ -941,7 +925,6 @@ function toggleSidebar() {
   overlay.classList.toggle('show');
 }
 
-// Mobil menü butonunu göster
 if (window.innerWidth <= 768) {
   document.getElementById('mobile-menu-btn').style.display = 'flex';
 }
