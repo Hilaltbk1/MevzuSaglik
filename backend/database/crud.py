@@ -2,10 +2,7 @@ from __future__ import annotations
 import PyPDF2
 import os
 import uuid
-from typing import List
 import io
-from fastapi import UploadFile
-from google.generativeai import embedding
 from langchain_core.documents import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
@@ -13,91 +10,99 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from qdrant_client import QdrantClient
 from sqlalchemy.orm import Session
 
+from backend.logger import logger
 from backend.preprocessing.preprocessing import flatten_mevzuat_object
 from backend.schemas import SessionModel, LogModel, PlanType
-from backend.schemas.message_model import  MessageModel
+from backend.schemas.message_model import MessageModel
 from backend.schemas.tenant_model import TenantModel
-# Embedding modelini bir kez oluştur
+
+COLLECTION_NAME = "mevzu_saglik_docs"
+BATCH_SIZE      = 50
 
 
-async def upload_files_background(file_data: list):
-    """
-    Arka planda çalışır. file_data = [{"filename": str, "content": bytes}, ...]
-    Embedding'leri batch'ler halinde gönderir (timeout önleme).
-    """
+def _get_qdrant_client() -> QdrantClient:
+    host    = os.getenv("QDRANT_HOST", "").strip().strip('\n').strip('\r')
+    api_key = os.getenv("QDRANT_API_KEY", "").strip().strip('\n').strip('\r')
+    return QdrantClient(url=host, api_key=api_key, prefer_grpc=False, timeout=300)
+
+
+def _get_existing_files(client: QdrantClient) -> set:
+    existing = set()
+    try:
+        if client.collection_exists(COLLECTION_NAME):
+            scroll_res, _ = client.scroll(
+                collection_name=COLLECTION_NAME,
+                limit=10000,
+                with_payload=["Mevzuat_Adi"],
+            )
+            for point in scroll_res:
+                if point.payload and "Mevzuat_Adi" in point.payload:
+                    existing.add(point.payload["Mevzuat_Adi"])
+    except Exception as e:
+        logger.warning(f"Mevcut dosyalar kontrol edilirken hata: {e}")
+    return existing
+
+
+def _pdf_to_doc(filename: str, content: bytes, llm_client) -> Document | None:
+    try:
+        pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
+        full_text  = "".join(
+            page.extract_text() + "\n"
+            for page in pdf_reader.pages
+            if page.extract_text()
+        )
+        data = {
+            "Mevzuat Adı":    filename,
+            "Mevzuat Türü":   "Sağlık Mevzuatı",
+            "Mevzuat İçeriği": [full_text],
+            "Tablolar":       [],
+        }
+        page_content = flatten_mevzuat_object(data, llm_client)
+        return Document(
+            page_content=str(page_content),
+            metadata={"Mevzuat_Adi": filename, "Mevzuat_Türü": "Sağlık Mevzuatı", "Dosya_Adi": filename},
+        )
+    except Exception as e:
+        logger.error(f"Dosya işleme hatası ({filename}): {e}")
+        return None
+
+
+async def upload_files_background(file_data: list) -> str:
+    """Arka planda çalışır. file_data = [{"filename": str, "content": bytes}, ...]"""
     from backend.llm_client import llm_client
-    BATCH_SIZE = 50  # Her seferinde Qdrant'a gönderilecek chunk sayısı
 
     embedding = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001",
-        output_dimensionality=3072
+        output_dimensionality=3072,
     )
-    QDRANT_HOST    = os.getenv("QDRANT_HOST", "").strip().strip('\n').strip('\r')
-    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip().strip('\n').strip('\r')
-    COLLECTION_NAME = "mevzu_saglik_docs"
-
-    client = QdrantClient(url=QDRANT_HOST, api_key=QDRANT_API_KEY, prefer_grpc=False, timeout=300)
-
-    # Mevcut dosyaları kontrol et
-    existing_files = set()
-    try:
-        if client.collection_exists(COLLECTION_NAME):
-            scroll_res, _ = client.scroll(collection_name=COLLECTION_NAME, limit=10000, with_payload=["Mevzuat_Adi"])
-            for point in scroll_res:
-                if point.payload and "Mevzuat_Adi" in point.payload:
-                    existing_files.add(point.payload["Mevzuat_Adi"])
-    except Exception as e:
-        print("Mevcut dosyalar kontrol edilirken hata:", e)
+    client         = _get_qdrant_client()
+    existing_files = _get_existing_files(client)
 
     doc_list = []
     skipped  = []
 
     for fd in file_data:
         filename = fd["filename"]
-        content  = fd["content"]
-
         if filename in existing_files:
             skipped.append(filename)
             continue
-
-        try:
-            pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
-            full_text  = ""
-            for page in pdf_reader.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    full_text += page_text + "\n"
-
-            data_for_preprocessing = {
-                "Mevzuat Adı": filename,
-                "Mevzuat Türü": "Sağlık Mevzuatı",
-                "Mevzuat İçeriği": [full_text],
-                "Tablolar": []
-            }
-            page_content = flatten_mevzuat_object(data_for_preprocessing, llm_client)
-            doc_list.append(Document(
-                page_content=str(page_content),
-                metadata={"Mevzuat_Adi": filename, "Mevzuat_Türü": "Sağlık Mevzuatı", "Dosya_Adi": filename},
-            ))
-        except Exception as e:
-            print(f"❌ Dosya işleme hatası ({filename}): {e}")
-            continue
+        doc = _pdf_to_doc(filename, fd["content"], llm_client)
+        if doc:
+            doc_list.append(doc)
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=500, chunk_overlap=150, length_function=len,
-        separators=["\n\n", "\n", ". ", " ", ""]
+        separators=["\n\n", "\n", ". ", " ", ""],
     )
-    chunks = text_splitter.split_documents(doc_list)
-
+    chunks      = text_splitter.split_documents(doc_list)
     vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
 
-    # Batch'ler halinde ekle (timeout önleme)
     total_added = 0
     for i in range(0, len(chunks), BATCH_SIZE):
         batch = chunks[i:i + BATCH_SIZE]
         vector_store.add_documents(documents=batch)
         total_added += len(batch)
-        print(f"✅ Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk eklendi.")
+        logger.info(f"Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk eklendi.")
 
     msg = f"{len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
     if skipped:
@@ -105,135 +110,18 @@ async def upload_files_background(file_data: list):
     return msg
 
 
-async def upload_files(files: List[UploadFile]):
-    from backend.llm_client import llm_client
-    from fastapi import HTTPException
-    embedding = GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-001",
-        output_dimensionality=3072
-    )
+# ── CREATE ────────────────────────────────────────────────
 
-    QDRANT_HOST = os.getenv("QDRANT_HOST")
-    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-    client = QdrantClient(
-        url=QDRANT_HOST,
-        api_key=QDRANT_API_KEY,
-        prefer_grpc=False,
-        timeout=300
-    )
-    COLLECTION_NAME = "mevzu_saglik_docs"
-    
-    # Mevcut dosyaları almak için basit bir scroll/search
-    existing_files = set()
-    try:
-        if client.collection_exists(COLLECTION_NAME):
-            scroll_res, _ = client.scroll(
-                collection_name=COLLECTION_NAME,
-                limit=10000,
-                with_payload=["Mevzuat_Adi"]
-            )
-            for point in scroll_res:
-                if point.payload and "Mevzuat_Adi" in point.payload:
-                    existing_files.add(point.payload["Mevzuat_Adi"])
-    except Exception as e:
-        print("Mevcut dosyalar kontrol edilirken hata:", e)
-
-    doc_list=[]
-    processed_count = 0
-    skipped_files = []
-    
-    for file in files:
-        if file.filename in existing_files:
-            skipped_files.append(file.filename)
-            continue
-
-    doc_list=[]
-    for file in files:
-        try:
-            # 1. Dosyayı oku
-            content = await file.read()
-            pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
-
-            # 2. PDF metnini çıkar
-            full_text = ""
-            for page in pdf_reader.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    full_text += page_text + "\n"
-
-            # 3. KRİTİK NOKTA: Sözlüğü burada biz oluşturuyoruz
-            # flatten_mevzuat_object fonksiyonu bu anahtarları (key) bekliyor
-            data_for_preprocessing = {
-                "Mevzuat Adı": str(file.filename),
-                "Mevzuat Türü": "Sağlık Mevzuatı",
-                "Mevzuat İçeriği": [full_text],
-                "Tablolar": []
-            }
-
-            # 4. HATA BURADAYDI: Fonksiyona artık BytesIO değil, DICT gönderiyoruz
-            page_content = flatten_mevzuat_object(data_for_preprocessing, llm_client)
-
-            doc_list.append(Document(
-                page_content=str(page_content),
-                metadata={
-                    "Mevzuat_Adi": str(file.filename),
-                    "Mevzuat_Türü": "Sağlık Mevzuatı",
-                    "Dosya_Adi": str(file.filename)
-                },
-            ))
-        except Exception as e:
-            print(f"❌ Dosya işleme hatası ({file.filename}): {str(e)}")
-            continue
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500, chunk_overlap=150, length_function=len,
-        separators=["\n\n", "\n", ". ", " ", ""]
-    )
-    chunks = text_splitter.split_documents(doc_list)
-
-    QDRANT_HOST = os.getenv("QDRANT_HOST")
-    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-    client = QdrantClient(
-            url=QDRANT_HOST,
-            api_key=QDRANT_API_KEY,
-            prefer_grpc=False,
-            timeout=300
-        )
-    COLLECTION_NAME = "mevzu_saglik_docs"
-
-    vector_store = QdrantVectorStore(
-        client=client,
-        collection_name=COLLECTION_NAME,
-        embedding=embedding  # 'embedding' objesinin dışarıda tanımlı olduğundan emin ol
-    )
-
-    if chunks:
-        vector_store.add_documents(documents=chunks)
-        print(f"✅ {len(chunks)} parça Qdrant'a başarıyla eklendi.")
-
-    msg = f"{processed_count} dosya işlendi ve {len(chunks)} parça kaydedildi."
-    if skipped_files:
-        msg += f" (Atlanan var olan dosyalar: {', '.join(skipped_files)})"
-
-    return {"message": msg}
-
-
-
-#----------------------CREATE İŞLEMLERİ----------------------------------
-#MESSAGE -create
-def create_message(db: Session, session_id: int, content: str, sender_type: str):
-    new_message = MessageModel(
-        session_id=session_id,
-        sender_type=sender_type,
-        content=content
-    )
+def create_message(db: Session, session_id: int, content: str, sender_type: str) -> MessageModel:
+    new_message = MessageModel(session_id=session_id, sender_type=sender_type, content=content)
     db.add(new_message)
     db.commit()
     db.refresh(new_message)
     return new_message
 
-#SESSİON-craete
-def create_session(db: Session, user_name: str,tenant_id:int):
-    new_session=SessionModel(
+
+def create_session(db: Session, user_name: str, tenant_id: int) -> SessionModel:
+    new_session = SessionModel(
         user_name=user_name,
         tenant_id=tenant_id,
         session_uuid=str(uuid.uuid4()),
@@ -243,9 +131,9 @@ def create_session(db: Session, user_name: str,tenant_id:int):
     db.refresh(new_session)
     return new_session
 
-#LOG-create
-def create_log(db:Session,status_code:int,request_data:str,response_data:str,error_message:str,message_id:int):
-    new_log=LogModel(
+
+def create_log(db: Session, status_code: int, request_data: str, response_data: str, error_message: str, message_id: int) -> LogModel:
+    new_log = LogModel(
         status_code=status_code,
         request=request_data,
         response=response_data,
@@ -256,58 +144,61 @@ def create_log(db:Session,status_code:int,request_data:str,response_data:str,err
     db.commit()
     db.refresh(new_log)
     return new_log
-#----------------------İSTENENİLEN KULLANICIYA GÖRE READ İŞLEMLERİ---------------------------
-
-#sessiona ait tüm mesajları mesaj tablosu  uuid ile bulma
-def get_session_by_uuid(db: Session, session_uuid: str):
-    return db.query(SessionModel).filter(SessionModel.session_uuid == session_uuid).first()
 
 
-
-def get_messages_by_uuid(db: Session, session_uuid: str):
-    return db.query(MessageModel).join(SessionModel).filter(SessionModel.session_uuid == session_uuid).order_by(MessageModel.created_at.asc()).all()
-
-#---------------------TÜM READ İŞLEMLERİ--------------------
-#istenilen session id ye göre listelio
-def read_messages_by_session(db: Session, session_id: int):
-    """Sadece seçilen oturuma ait mesajları tarihe göre sıralı getirir."""
-    return db.query(MessageModel).filter_by(session_id=session_id).order_by(MessageModel.created_at.asc()).all()
-
-#READ-LOG
-# idye gore istenilen mesajin logu
-def read_log(db: Session, message_id: int):
-    return db.query(LogModel).filter_by(message_id=message_id).all()
-
-#tüm sessionsları listeler
-def read_user_sessions(db: Session, user_name: str):
-    # Kullanıcının tüm oturumlarını, en yeniden eskiye doğru getirir
-    return db.query(SessionModel).filter(SessionModel.user_name == user_name).order_by(SessionModel.created_at.desc()).all()
-
-
-def read_all_messages(db:Session):
-    return db.query(MessageModel).all()
-
-def read_all_sessions(db:Session):
-    return db.query(SessionModel).all()
-
-def read_all_logs(db:Session):
-    return db.query(LogModel).all()
-
-
-def create_tenant(db:Session,name:str,plan:PlanType,api_key:str):
-    tenant= TenantModel(name=name,api_key=api_key,plan=plan)
+def create_tenant(db: Session, name: str, plan: PlanType, api_key: str) -> TenantModel:
+    tenant = TenantModel(name=name, api_key=api_key, plan=plan)
     db.add(tenant)
     db.commit()
     db.refresh(tenant)
     return tenant
 
 
+# ── READ ──────────────────────────────────────────────────
+
+def get_session_by_uuid(db: Session, session_uuid: str) -> SessionModel | None:
+    return db.query(SessionModel).filter(SessionModel.session_uuid == session_uuid).first()
 
 
+def get_messages_by_uuid(db: Session, session_uuid: str):
+    return (
+        db.query(MessageModel)
+        .join(SessionModel)
+        .filter(SessionModel.session_uuid == session_uuid)
+        .order_by(MessageModel.created_at.asc())
+        .all()
+    )
 
 
+def read_messages_by_session(db: Session, session_id: int):
+    return (
+        db.query(MessageModel)
+        .filter_by(session_id=session_id)
+        .order_by(MessageModel.created_at.asc())
+        .all()
+    )
 
 
+def read_log(db: Session, message_id: int):
+    return db.query(LogModel).filter_by(message_id=message_id).all()
 
 
+def read_user_sessions(db: Session, user_name: str):
+    return (
+        db.query(SessionModel)
+        .filter(SessionModel.user_name == user_name)
+        .order_by(SessionModel.created_at.desc())
+        .all()
+    )
 
+
+def read_all_messages(db: Session):
+    return db.query(MessageModel).all()
+
+
+def read_all_sessions(db: Session):
+    return db.query(SessionModel).all()
+
+
+def read_all_logs(db: Session):
+    return db.query(LogModel).all()

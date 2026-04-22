@@ -14,7 +14,7 @@ from backend.llm_client import llm_client
 from backend.routers import search, history, session_router, admin, add_documents, billing, health, auth_router
 import google.generativeai as genai
 
-limiter = Limiter(key_func=get_remote_address)
+from backend.logger import logger
 
 def create_app() -> FastAPI:
     app = FastAPI(title="MevzuSaglik")
