@@ -20,8 +20,8 @@ QDRANT_HOST = os.getenv("QDRANT_HOST", "").strip()
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip()
 
 # Collection adları
-MAIN_COLLECTION = "mevzuat_collection"  # Ana collection (silinmeyecek)
-OLD_COLLECTION = "mevzu_saglik_docs"    # Eski collection (silinecek)
+MAIN_COLLECTION = "mevzu_saglik_docs"  # Ana collection (korunacak)
+OLD_COLLECTION = "mevzuat_collection"   # Eski collection (varsa silinecek)
 
 def main():
     print("=" * 70)

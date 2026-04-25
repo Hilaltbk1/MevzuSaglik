@@ -18,7 +18,7 @@ from qdrant_client import QdrantClient
 
 QDRANT_HOST = os.getenv("QDRANT_HOST", "").strip()
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip()
-COLLECTION_NAME = "mevzuat_collection"
+COLLECTION_NAME = "mevzu_saglik_docs"  # Qdrant'taki gerçek collection adı
 
 def main():
     print("=" * 70)
