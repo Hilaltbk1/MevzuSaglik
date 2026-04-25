@@ -7,14 +7,13 @@ class Settings:
 
     print(f"Sistemdeki Mevcut Değişkenler: {list(os.environ.keys())}")
     GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-
-
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+    
     # Dosya Yolları
     DOCUMENT_PATH = os.getenv("DOCUMENT_PATH", "./data/Json/mevzuat_verileri.json")
     DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
     LLM_MODEL_NAME = os.getenv(
-        "LLM_MODEL_NAME","gemini-2.5-flash"
+        "LLM_MODEL_NAME","mixtral-8x7b-32768"
     )
     EMBEDDING_MODEL_NAME = os.getenv(
         "EMBEDDING_MODEL_NAME","gemini-embedding-001"

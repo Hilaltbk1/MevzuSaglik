@@ -83,14 +83,14 @@ async def chat(request: Request):
     
     return {"response": response["answer"]}
 
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/static", StaticFiles(directory="../frontend"), name="static")
 
 @app.get("/")
 def home():
     api_key    = os.getenv("TENANT_API_KEY", "").strip()
     backend_url = os.getenv("BACKEND_URL", "").strip()  # boşsa frontend kendi origin'ini kullanır
     try:
-        with open("frontend/index.html", "r", encoding="utf-8") as f:
+        with open("../frontend/index.html", "r", encoding="utf-8") as f:
             html = f.read()
         inject = (
             f'<script>'

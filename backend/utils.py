@@ -16,6 +16,9 @@ import google.generativeai as genai
 
 from backend.logger import logger
 
+# Limiter nesnesi oluştur
+limiter = Limiter(key_func=get_remote_address)
+
 def create_app() -> FastAPI:
     app = FastAPI(title="MevzuSaglik")
 

@@ -9,6 +9,7 @@ from langchain_qdrant import QdrantVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from qdrant_client import QdrantClient
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from backend.logger import logger
 from backend.preprocessing.preprocessing import flatten_mevzuat_object
@@ -71,12 +72,27 @@ async def upload_files_background(file_data: list) -> str:
     """Arka planda çalışır. file_data = [{"filename": str, "content": bytes}, ...]"""
     from backend.llm_client import llm_client
 
-    embedding = GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-001",
-        output_dimensionality=3072,
-    )
-    client         = _get_qdrant_client()
-    existing_files = _get_existing_files(client)
+    logger.info(f"upload_files_background başladı: {len(file_data)} dosya")
+    
+    try:
+        logger.info("GoogleGenerativeAIEmbeddings oluşturuluyor...")
+        embedding = GoogleGenerativeAIEmbeddings(
+            model="models/gemini-embedding-001",
+            output_dimensionality=3072,
+        )
+        logger.info("Embedding başarıyla oluşturuldu")
+    except Exception as e:
+        logger.error(f"Embedding oluşturma hatası: {e}")
+        raise HTTPException(status_code=500, detail=f"Embedding API hatası: {str(e)}")
+
+    try:
+        client = _get_qdrant_client()
+        logger.info("Qdrant client başarıyla oluşturuldu")
+        existing_files = _get_existing_files(client)
+        logger.info(f"Mevcut dosyalar: {len(existing_files)} adet")
+    except Exception as e:
+        logger.error(f"Qdrant bağlantı hatası: {e}")
+        raise HTTPException(status_code=500, detail=f"Qdrant bağlantı hatası: {str(e)}")
 
     doc_list = []
     skipped  = []
@@ -90,23 +106,37 @@ async def upload_files_background(file_data: list) -> str:
         if doc:
             doc_list.append(doc)
 
+    logger.info(f"{len(doc_list)} doküman oluşturuldu, {len(skipped)} dosya atlandı")
+
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=500, chunk_overlap=150, length_function=len,
         separators=["\n\n", "\n", ". ", " ", ""],
     )
-    chunks      = text_splitter.split_documents(doc_list)
-    vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
+    chunks = text_splitter.split_documents(doc_list)
+    logger.info(f"{len(chunks)} chunk oluşturuldu")
+    
+    try:
+        vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
+    except Exception as e:
+        logger.error(f"Vector store oluşturma hatası: {e}")
+        raise HTTPException(status_code=500, detail=f"Vector store hatası: {str(e)}")
 
     total_added = 0
     for i in range(0, len(chunks), BATCH_SIZE):
         batch = chunks[i:i + BATCH_SIZE]
-        vector_store.add_documents(documents=batch)
-        total_added += len(batch)
-        logger.info(f"Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk eklendi.")
+        try:
+            vector_store.add_documents(documents=batch)
+            total_added += len(batch)
+            logger.info(f"Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk eklendi.")
+        except Exception as e:
+            logger.error(f"Batch {i // BATCH_SIZE + 1} eklenirken hata: {e}")
+            raise HTTPException(status_code=500, detail=f"Doküman ekleme hatası: {str(e)}")
 
     msg = f"{len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
     if skipped:
         msg += f" (Atlanan: {', '.join(skipped)})"
+    
+    logger.info(f"upload_files_background tamamlandı: {msg}")
     return msg
 
 
