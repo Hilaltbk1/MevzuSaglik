@@ -105,13 +105,17 @@ def initialize_vector_store(rebuild_db=False):
             # Collection yok, boş oluştur
             logger.warning(f"⚠️  Collection '{COLLECTION_NAME}' bulunamadı!")
             logger.info("📦 Boş collection oluşturuluyor...")
-            client.create_collection(
-                collection_name=COLLECTION_NAME,
-                vectors_config=VectorParams(size=3072, distance=Distance.COSINE)
-            )
-            logger.info(f"✅ Boş collection '{COLLECTION_NAME}' oluşturuldu.")
-            logger.info("💡 PDF yükleyerek veri ekleyebilirsiniz.")
-            vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
+            try:
+                client.create_collection(
+                    collection_name=COLLECTION_NAME,
+                    vectors_config=VectorParams(size=3072, distance=Distance.COSINE)
+                )
+                logger.info(f"✅ Boş collection '{COLLECTION_NAME}' oluşturuldu.")
+                logger.info("💡 PDF yükleyerek veri ekleyebilirsiniz.")
+                vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
+            except Exception as create_error:
+                logger.error(f"❌ Collection oluşturma hatası: {create_error}")
+                raise ValueError(f"Collection oluşturulamadı: {create_error}")
             
         else:
             # Collection mevcut, bağlan

@@ -86,7 +86,9 @@ def test_endpoint():
     return {
         "status": "ok",
         "message": "Backend çalışıyor",
-        "cors_test": "Bu endpoint CORS için test edilebilir"
+        "cors_test": "Bu endpoint CORS için test edilebilir",
+        "collection_name": "mevzu_saglik_docs",  # Yeni kod kontrolü
+        "version": "2.0"  # Version kontrolü
     }
 
 # API key test endpoint'i (geçici olarak comment out)

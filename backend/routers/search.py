@@ -76,5 +76,7 @@ async def chat(
         response = container.full_chain.invoke({"input": user_input, "chat_history": []})
         return {"response": response["answer"]}
     except Exception as e:
+        error_detail = str(e)
         logger.error(f"Chat hatası: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail="Sunucu hatası oluştu.")
+        # Kullanıcıya daha detaylı hata mesajı gönder
+        raise HTTPException(status_code=500, detail=f"Sunucu hatası: {error_detail}")

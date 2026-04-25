@@ -831,10 +831,22 @@ async function sendMessage() {
     const res = await fetch(BACKEND_URL + '/search/ask', { method: 'POST', headers: HEADERS, body: JSON.stringify({query: text, user_name: currentUser, session_uuid: currentSessionUUID}) });
     removeTyping(tid);
     if (res.status === 429) { appendMessage('ai', 'Günlük kullanım limitinize ulaştınız. Planı yükseltmek için Pro\'ya geçin.', []); return; }
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      const errorMsg = errorData.detail || 'Sunucu hatası oluştu';
+      console.error('Backend hatası:', errorMsg);
+      appendMessage('ai', '❌ Hata: ' + res.status + ': ' + errorMsg, []);
+      return;
+    }
     const data = await res.json();
     appendMessage('ai', data.answer, data.sources || []);
     updateQuota();
-  } catch(e) { removeTyping(tid); appendMessage('ai', 'Bağlantı kurulamadı.', []); }
+  } catch(e) { 
+    console.error('Bağlantı hatası:', e);
+    removeTyping(tid); 
+    appendMessage('ai', '❌ Bağlantı hatası: ' + e.message, []); 
+  }
+}
 }
 
 function appendMessage(role, text, sources=[]) {
