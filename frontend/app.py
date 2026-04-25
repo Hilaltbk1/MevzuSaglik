@@ -137,6 +137,7 @@ custom_css = """
 with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red"), css=custom_css) as demo:
     u_name = gr.State("Misafir")
     u_code = gr.State("Anonymous")
+    u_plan = gr.State("pro")  # Plan'ı sakla
     s_uuid = gr.State(None)
     
     # Plan API keys - .env'den oku
@@ -213,6 +214,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
             main_box: gr.update(visible=True),
             u_name: name,
             u_code: code,
+            u_plan: plan,  # Plan'ı sakla
             s_uuid: sid,
             u_info: f"**Kullanıcı:** {name}",
             u_code_info: f"**Plan:** {plan}",
@@ -229,6 +231,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
             main_box: gr.update(visible=False),
             u_name: "Misafir",
             u_code: "Anonymous",
+            u_plan: "pro",
             s_uuid: None,
             chatbot: [],
             name_in: "",
@@ -263,7 +266,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     send_btn.click(do_chat, [txt_in, chatbot, s_uuid, u_name, u_code], [chatbot, txt_in])
     txt_in.submit(do_chat, [txt_in, chatbot, s_uuid, u_name, u_code], [chatbot, txt_in])
     
-    logout_btn.click(do_logout, None, [login_box, main_box, u_name, u_code, s_uuid, chatbot, name_in, code_in])
+    logout_btn.click(do_logout, None, [login_box, main_box, u_name, u_code, u_plan, s_uuid, chatbot, name_in, code_in])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
