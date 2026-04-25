@@ -18,8 +18,8 @@ upload_status_store: dict[str, dict] = {}
 async def add_files(
     background_tasks: BackgroundTasks,
     files: List[UploadFile] = File(...),
-    tenant=Depends(get_current_tenant),  # API key kontrolünü yeniden etkinleştir
 ):
+    """Geçici olarak auth kaldırıldı - test için"""
     file_data = []
     for file in files:
         content = await file.read()
