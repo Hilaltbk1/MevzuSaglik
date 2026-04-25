@@ -28,46 +28,50 @@ def _get_qdrant_client() -> QdrantClient:
 
 
 def _get_existing_files(client: QdrantClient) -> set:
-    """Qdrant'ta var olan dosyaları al - RAG için işlenmiş dokümanları kontrol eder"""
+    """Qdrant Cloud'daki mevcut dosyaları al - RAG için işlenmiş dokümanları kontrol eder"""
     existing = set()
     try:
-        if client.collection_exists(COLLECTION_NAME):
-            logger.info(f"Qdrant collection '{COLLECTION_NAME}' kontrol ediliyor...")
-            scroll_res, _ = client.scroll(
-                collection_name=COLLECTION_NAME,
-                limit=10000,
-                with_payload=True,  # Tüm payload'ları al
-            )
-            logger.info(f"Qdrant'tan {len(scroll_res)} point alındı")
+        if not client.collection_exists(COLLECTION_NAME):
+            logger.warning(f"⚠️ Collection '{COLLECTION_NAME}' bulunamadı, yeni collection oluşturulacak")
+            return existing
             
-            for point in scroll_res:
-                if point.payload:
-                    # Dosya adını farklı field'lardan ara
-                    filename = (
-                        point.payload.get("Mevzuat_Adi") or
-                        point.payload.get("Dosya_Adi") or
-                        point.payload.get("filename") or
-                        point.payload.get("file_name")
-                    )
-                    if filename:
-                        # Hem .pdf'li hem .pdf'siz versiyonları ekle
-                        existing.add(filename)
-                        # .pdf uzantısını kaldır ve ekle
-                        base_name = filename.replace('.pdf', '').replace('.PDF', '')
-                        existing.add(base_name)
-                        existing.add(base_name + '.pdf')
-                        existing.add(base_name + '.PDF')
-                        logger.debug(f"Mevcut dosya bulundu: {filename}")
-            
-            # Benzersiz dosya adlarını logla
-            unique_files = set()
-            for f in existing:
-                base = f.replace('.pdf', '').replace('.PDF', '')
-                unique_files.add(base)
-            logger.info(f"Qdrant'ta toplam {len(unique_files)} benzersiz dosya mevcut")
-            
+        logger.info(f"📚 Qdrant collection '{COLLECTION_NAME}' taranıyor...")
+        scroll_res, _ = client.scroll(
+            collection_name=COLLECTION_NAME,
+            limit=10000,
+            with_payload=True,
+        )
+        logger.info(f"📦 Qdrant'tan {len(scroll_res)} point alındı")
+        
+        unique_files = set()
+        for point in scroll_res:
+            if point.payload:
+                # Dosya adını farklı field'lardan ara
+                filename = (
+                    point.payload.get("Mevzuat_Adi") or
+                    point.payload.get("Dosya_Adi") or
+                    point.payload.get("filename") or
+                    point.payload.get("file_name")
+                )
+                if filename:
+                    unique_files.add(filename)
+                    # Tüm varyasyonları ekle
+                    existing.add(filename)
+                    existing.add(filename.lower())
+                    # .pdf uzantısını kaldır ve ekle
+                    base_name = filename.replace('.pdf', '').replace('.PDF', '').strip()
+                    existing.add(base_name)
+                    existing.add(base_name.lower())
+                    existing.add(base_name + '.pdf')
+                    existing.add(base_name + '.PDF')
+                    existing.add((base_name + '.pdf').lower())
+        
+        logger.info(f"✅ Qdrant'ta {len(unique_files)} benzersiz dosya bulundu")
+        if unique_files:
+            logger.info(f"📋 Mevcut dosyalar: {', '.join(sorted(list(unique_files)[:5]))}{'...' if len(unique_files) > 5 else ''}")
+        
     except Exception as e:
-        logger.warning(f"Mevcut dosyalar kontrol edilirken hata: {e}")
+        logger.error(f"❌ Mevcut dosyalar kontrol edilirken hata: {e}")
     
     return existing
 
@@ -115,9 +119,9 @@ async def upload_files_background(file_data: list) -> str:
 
     try:
         client = _get_qdrant_client()
-        logger.info("Qdrant client başarıyla oluşturuldu")
+        logger.info("Qdrant Cloud'a bağlanıldı")
         existing_files = _get_existing_files(client)
-        logger.info(f"Mevcut dosyalar kontrol ediliyor: {len(existing_files)} benzersiz dosya adı bulundu")
+        logger.info(f"Qdrant'ta {len(existing_files)} dosya adı varyasyonu bulundu")
     except Exception as e:
         logger.error(f"Qdrant bağlantı hatası: {e}")
         raise HTTPException(status_code=500, detail=f"Qdrant bağlantı hatası: {str(e)}")
@@ -125,51 +129,59 @@ async def upload_files_background(file_data: list) -> str:
     doc_list = []
     skipped  = []
 
+    # Her dosyayı kontrol et
     for fd in file_data:
         filename = fd["filename"]
         
-        # Dosya adı kontrolü - farklı varyasyonları kontrol et
-        filename_base = filename.replace('.pdf', '').replace('.PDF', '')
+        # Dosya adının farklı varyasyonlarını oluştur
+        filename_base = filename.replace('.pdf', '').replace('.PDF', '').strip()
+        filename_lower = filename.lower()
+        filename_base_lower = filename_base.lower()
+        
         is_duplicate = False
         
-        # Dosya adının farklı varyasyonlarını kontrol et
-        if (filename in existing_files or 
-            filename_base in existing_files or
-            f"{filename_base}.pdf" in existing_files or
-            f"{filename_base}.PDF" in existing_files):
-            is_duplicate = True
-            logger.warning(f"⚠️ Dosya zaten Qdrant'ta mevcut: {filename}")
+        # Tüm varyasyonları kontrol et (case-insensitive)
+        for existing in existing_files:
+            existing_lower = existing.lower()
+            if (existing_lower == filename_lower or 
+                existing_lower == filename_base_lower or
+                existing_lower == f"{filename_base_lower}.pdf"):
+                is_duplicate = True
+                logger.warning(f"🚫 DUPLICATE BULUNDU: '{filename}' zaten Qdrant'ta mevcut ('{existing}' olarak)")
+                break
         
         if is_duplicate:
             skipped.append(filename)
             continue
-            
+        
+        # Dosya yeni, işle
+        logger.info(f"✅ Yeni dosya: {filename}")
         doc = _pdf_to_doc(filename, fd["content"], llm_client)
         if doc:
             doc_list.append(doc)
         else:
-            logger.warning(f"⚠️ Dosya işlenemedi: {filename}")
+            logger.error(f"❌ Dosya işlenemedi: {filename}")
 
-    # Eğer tüm dosyalar zaten yüklüyse, uyarı döndür
+    # Eğer tüm dosyalar duplicate ise
     if len(skipped) > 0 and len(doc_list) == 0:
-        msg = f"⚠️ Tüm dosyalar zaten Qdrant veritabanında mevcut: {', '.join(skipped)}"
-        logger.warning(msg)
+        msg = f"🚫 Tüm dosyalar zaten Qdrant Cloud'da mevcut!\n\nAtlanan dosyalar: {', '.join(skipped)}\n\n💡 Bu dosyalar daha önce yüklenmiş ve RAG sisteminde kullanılıyor."
+        logger.warning(f"Tüm dosyalar duplicate: {skipped}")
         return msg
     
-    # Eğer bazı dosyalar atlandıysa bilgi ver
-    if len(skipped) > 0:
-        logger.info(f"{len(skipped)} dosya zaten mevcut olduğu için atlandı: {', '.join(skipped)}")
-        logger.warning(msg)
+    # Eğer hiç dosya işlenemezse
+    if len(doc_list) == 0:
+        msg = "❌ Hiçbir dosya işlenemedi. Lütfen geçerli PDF dosyaları yükleyin."
+        logger.error(msg)
         return msg
 
-    logger.info(f"{len(doc_list)} doküman oluşturuldu, {len(skipped)} dosya atlandı")
+    logger.info(f"✅ {len(doc_list)} doküman işlenecek, {len(skipped)} dosya atlandı")
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=500, chunk_overlap=150, length_function=len,
         separators=["\n\n", "\n", ". ", " ", ""],
     )
     chunks = text_splitter.split_documents(doc_list)
-    logger.info(f"{len(chunks)} chunk oluşturuldu")
+    logger.info(f"📦 {len(chunks)} chunk oluşturuldu")
     
     try:
         vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
@@ -183,16 +195,16 @@ async def upload_files_background(file_data: list) -> str:
         try:
             vector_store.add_documents(documents=batch)
             total_added += len(batch)
-            logger.info(f"Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk eklendi.")
+            logger.info(f"📤 Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk Qdrant'a eklendi")
         except Exception as e:
             logger.error(f"Batch {i // BATCH_SIZE + 1} eklenirken hata: {e}")
             raise HTTPException(status_code=500, detail=f"Doküman ekleme hatası: {str(e)}")
 
-    msg = f"✅ {len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
+    msg = f"✅ {len(doc_list)} dosya başarıyla işlendi!\n\n📊 {total_added} parça Qdrant Cloud'a kaydedildi."
     if skipped:
-        msg += f"\n⚠️ Atlanan dosyalar (zaten Qdrant'ta mevcut): {', '.join(skipped)}"
+        msg += f"\n\n🚫 Atlanan dosyalar (zaten Qdrant'ta mevcut):\n• {chr(10).join(['• ' + f for f in skipped])}"
     
-    logger.info(f"upload_files_background tamamlandı: {msg}")
+    logger.info(f"✅ Upload tamamlandı: {len(doc_list)} dosya, {total_added} chunk, {len(skipped)} atlandı")
     return msg
 
 

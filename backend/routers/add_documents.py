@@ -56,6 +56,30 @@ def get_upload_status(task_id: str, tenant=Depends(get_current_tenant)):
     return upload_status_store[task_id]
 
 
+@router.get("/list_existing")
+async def list_existing_files(tenant=Depends(get_current_tenant)):
+    """Qdrant'taki mevcut dosyaları listele (debug için)"""
+    try:
+        from backend.database.crud import _get_qdrant_client, _get_existing_files
+        client = _get_qdrant_client()
+        existing = _get_existing_files(client)
+        
+        # Benzersiz dosya adlarını al
+        unique_files = set()
+        for f in existing:
+            base = f.replace('.pdf', '').replace('.PDF', '').strip().lower()
+            if base:
+                unique_files.add(base)
+        
+        return {
+            "total_variations": len(existing),
+            "unique_files": len(unique_files),
+            "files": sorted(list(unique_files))
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 async def _process_upload(task_id: str, file_data: list):
     try:
         result = await upload_files_background(file_data)
