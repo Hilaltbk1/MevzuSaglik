@@ -172,15 +172,20 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         with gr.Column(scale=1, min_width=300):
             gr.Markdown("### 👤 Profil")
             u_info = gr.Markdown("**Kullanıcı:** -")
-            u_code_info = gr.Markdown("**Kod:** -")
+            u_code_info = gr.Markdown("**Plan:** pro")  # Default: pro
             new_btn = gr.Button("➕ Yeni Sohbet Başlat", variant="primary")
             gr.Markdown("---")
             gr.Markdown("### 🕒 Eski Sohbetleriniz")
             # Dropdown yerine Radio (List) kullanarak alt alta dizilmesini sağladık
             session_list = gr.Radio(label="Seçili Oturum", choices=[], interactive=True, elem_classes="session-list")
             gr.Markdown("---")
-            up_btn = gr.UploadButton("📤 Mevzuat Yükle", file_count="multiple")
-            up_status = gr.Textbox(label="Yükleme Durumu", interactive=False)
+            
+            # Belge yükleme - plan kontrolü ile
+            with gr.Column() as upload_section:
+                up_btn = gr.UploadButton("📤 Mevzuat Yükle", file_count="multiple", visible=True)
+                upgrade_msg = gr.Markdown("", visible=False)
+                up_status = gr.Textbox(label="Yükleme Durumu", interactive=False)
+            gr.Markdown("---")
             logout_btn = gr.Button("🚪 Güvenli Çıkış", size="sm", variant="stop")
 
         # SAĞ PANEL
@@ -193,6 +198,22 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
 
     # --- ETKİLEŞİM ---
 
+    def check_upload_permission(plan):
+        """Ücretsiz planda belge yükleme izni kontrolü"""
+        if plan == "free":
+            return {
+                up_btn: gr.update(visible=False),
+                upgrade_msg: gr.update(
+                    value="⚠️ **Ücretsiz planda belge yükleyemezsiniz.**\n\n[Pro plana yükselt](https://mevzusaglik.com.tr/billing/checkout?plan=pro) veya devam edin.",
+                    visible=True
+                )
+            }
+        else:
+            return {
+                up_btn: gr.update(visible=True),
+                upgrade_msg: gr.update(visible=False)
+            }
+    
     def do_login(name, plan, code):
         global current_api_key, HEADERS
         
@@ -219,6 +240,11 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         
         # API key ayarlandıktan SONRA oturum oluştur
         sid, hist, session_update = start_new_session(name)
+        
+        # Plan kontrolü - ücretsiz planda belge yükleme engelle
+        upload_visible = plan != "free"
+        upgrade_visible = plan == "free"
+        upgrade_text = "⚠️ **Ücretsiz planda belge yükleyemezsiniz.**\n\n[Pro plana yükselt](https://mevzusaglik.com.tr/billing/checkout?plan=pro)" if plan == "free" else ""
         
         # JavaScript ile URL'ye plan'ı ekle (sayfa yenilenince korunacak)
         js_update_url = f"""
@@ -247,7 +273,9 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
             u_info: f"**Kullanıcı:** {name}",
             u_code_info: f"**Plan:** {plan}",
             session_list: session_update,
-            chatbot: hist
+            chatbot: hist,
+            up_btn: gr.update(visible=upload_visible),
+            upgrade_msg: gr.update(value=upgrade_text, visible=upgrade_visible)
         }
 
     def do_logout():
@@ -281,7 +309,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         return sid, get_session_history(sid)
 
 
-    login_btn.click(do_login, [name_in, plan_in, code_in], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, session_list, chatbot])
+    login_btn.click(do_login, [name_in, plan_in, code_in], [login_box, main_box, u_name, u_code, u_plan, s_uuid, u_info, u_code_info, session_list, chatbot, up_btn, upgrade_msg])
     
     # Oturum listesinden birine tıklandığında
     session_list.change(do_session_change, session_list, [s_uuid, chatbot])
