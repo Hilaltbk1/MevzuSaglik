@@ -18,8 +18,17 @@ upload_status_store: dict[str, dict] = {}
 async def add_files(
     background_tasks: BackgroundTasks,
     files: List[UploadFile] = File(...),
+    tenant=Depends(get_current_tenant),
 ):
-    """Geçici olarak auth kaldırıldı - test için"""
+    """Belge yükleme endpoint'i - plan kontrolü ile"""
+    
+    # Plan kontrolü
+    if tenant.plan.value == "free":
+        raise HTTPException(
+            status_code=403,
+            detail="❌ Ücretsiz planda belge yükleyemezsiniz. Lütfen Pro veya Unlimited plana yükseltin."
+        )
+    
     file_data = []
     for file in files:
         content = await file.read()
