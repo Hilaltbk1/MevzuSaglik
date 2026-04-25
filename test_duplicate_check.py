@@ -65,12 +65,29 @@ def main():
         files = {}
         for point in scroll_res:
             if point.payload:
+                filename = None
+                
+                # Önce root level'da ara
                 filename = (
                     point.payload.get("Mevzuat_Adi") or
                     point.payload.get("Dosya_Adi") or
                     point.payload.get("filename") or
                     point.payload.get("file_name")
                 )
+                
+                # Bulamazsa metadata object'inin içinde ara
+                if not filename and "metadata" in point.payload:
+                    metadata_obj = point.payload["metadata"]
+                    if isinstance(metadata_obj, dict):
+                        filename = (
+                            metadata_obj.get("Mevzuat_Adi") or
+                            metadata_obj.get("Dosya_Adi") or
+                            metadata_obj.get("filename") or
+                            metadata_obj.get("file_name") or
+                            metadata_obj.get("Mevzuat Adı") or
+                            metadata_obj.get("Dosya Adı")
+                        )
+                
                 if filename:
                     if filename not in files:
                         files[filename] = 0

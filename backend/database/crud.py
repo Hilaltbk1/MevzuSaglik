@@ -50,13 +50,29 @@ def _get_existing_files(client: QdrantClient) -> set:
         unique_files = set()
         for point in scroll_res:
             if point.payload:
-                # Dosya adını farklı field'lardan ara
+                filename = None
+                
+                # Önce root level'da ara
                 filename = (
                     point.payload.get("Mevzuat_Adi") or
                     point.payload.get("Dosya_Adi") or
                     point.payload.get("filename") or
                     point.payload.get("file_name")
                 )
+                
+                # Bulamazsa metadata object'inin içinde ara
+                if not filename and "metadata" in point.payload:
+                    metadata_obj = point.payload["metadata"]
+                    if isinstance(metadata_obj, dict):
+                        filename = (
+                            metadata_obj.get("Mevzuat_Adi") or
+                            metadata_obj.get("Dosya_Adi") or
+                            metadata_obj.get("filename") or
+                            metadata_obj.get("file_name") or
+                            metadata_obj.get("Mevzuat Adı") or
+                            metadata_obj.get("Dosya Adı")
+                        )
+                
                 if filename:
                     unique_files.add(filename)
                     # Tüm varyasyonları ekle
@@ -71,7 +87,7 @@ def _get_existing_files(client: QdrantClient) -> set:
                     existing.add((base_name + '.pdf').lower())
         
         if len(unique_files) == 0:
-            logger.warning(f"⚠️ Qdrant'ta dosya adı bulunamadı! Metadata eksik olabilir.")
+            logger.warning(f"⚠️ Qdrant'ta dosya adı bulunamadı! Metadata yapısı farklı olabilir.")
         else:
             logger.info(f"✅ Qdrant'ta {len(unique_files)} benzersiz dosya bulundu")
             logger.info(f"📋 İlk 5 dosya: {', '.join(sorted(list(unique_files)[:5]))}")
