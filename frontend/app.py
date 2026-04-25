@@ -3,11 +3,12 @@ import requests
 import os
 from typing import List
 
-# API key backend'de tekrar etkinleştirildi
-API_KEY = os.environ.get("TENANT_API_KEY", "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af")
-HEADERS = {"X-API-Key": API_KEY}
 # Backend URL - Cloudflare Worker üzerinden domain'imizde
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://mevzusaglik.com.tr")
+
+# Global state for API key
+current_api_key = None
+HEADERS = {}
 
 
 # --- YARDIMCI FONKSİYONLAR ---
@@ -171,9 +172,39 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     # --- ETKİLEŞİM ---
 
     def do_login(name, code):
+        global current_api_key, HEADERS
+        
         name = name.strip() or "Misafir"
         code = code.strip() or "Anonymous"
-        # Giriş yapınca yeni bir temiz oturum oluştur
+        
+        # Eğer şifre girilmişse, backend'den API key'i al
+        if code and code != "Anonymous":
+            try:
+                res = requests.post(f"{BACKEND_URL}/auth/login", 
+                                  json={"user_name": name, "password": code},
+                                  timeout=10)
+                if res.status_code == 200:
+                    data = res.json()
+                    current_api_key = data.get("api_key", "")
+                    HEADERS = {"X-API-Key": current_api_key}
+                else:
+                    return {
+                        login_box: gr.update(visible=True),
+                        main_box: gr.update(visible=False),
+                    }
+            except Exception as e:
+                print(f"Login hatası: {e}")
+                return {
+                    login_box: gr.update(visible=True),
+                    main_box: gr.update(visible=False),
+                }
+        
+        # Eğer API key yoksa, .env'den al (fallback)
+        if not current_api_key:
+            current_api_key = os.environ.get("TENANT_API_KEY", "")
+            HEADERS = {"X-API-Key": current_api_key}
+        
+        # API key ayarlandıktan SONRA oturum oluştur
         sid, hist, session_update = start_new_session(name)
         return {
             login_box: gr.update(visible=False),
@@ -188,6 +219,9 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         }
 
     def do_logout():
+        global current_api_key, HEADERS
+        current_api_key = None
+        HEADERS = {}
         return {
             login_box: gr.update(visible=True),
             main_box: gr.update(visible=False),
