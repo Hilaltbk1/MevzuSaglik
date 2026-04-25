@@ -549,17 +549,21 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('user-avatar-text').textContent = currentUser[0]?.toUpperCase() || 'K';
     
     // Önce localStorage'dan plan bilgisini al ve göster
-    updateSidebarPlan(currentUserPlan);
-    applyQuotaForPlan(currentUserPlan);
+    if (currentUserPlan && currentUserPlan !== 'free') {
+      updateSidebarPlan(currentUserPlan);
+      applyQuotaForPlan(currentUserPlan);
+    }
     
-    // Sonra backend'den güncel plan bilgisini çek ve güncelle
-    fetchAndUpdateUserPlan();
+    // Uygulamayı aç
+    openApp();
+    
+    // Sonra arka planda backend'den güncel plan bilgisini çek ve güncelle
+    fetchAndUpdateUserPlan().catch(e => console.error('Plan bilgisi alınamadı:', e));
     
     try {
       const p = localStorage.getItem('ms_paid_plan');
       if (p) { localStorage.removeItem('ms_paid_plan'); }
     } catch(e) {}
-    openApp();
   }
 });
 
@@ -578,7 +582,10 @@ function updateSidebarPlan(plan) {
 }
 
 async function fetchAndUpdateUserPlan() {
-  if (!currentUser) return;
+  if (!currentUser) {
+    console.warn('fetchAndUpdateUserPlan: currentUser boş');
+    return;
+  }
   try {
     const planRes = await fetch(BACKEND_URL + '/session/user_plan/' + currentUser, {headers: HEADERS});
     if (planRes.ok) {
@@ -586,9 +593,22 @@ async function fetchAndUpdateUserPlan() {
       const userPlan = planData.plan || 'free';
       updateSidebarPlan(userPlan);
       applyQuotaForPlan(userPlan);
+      console.log('Plan bilgisi güncellendi:', userPlan);
+    } else {
+      console.warn('Plan bilgisi alınamadı, status:', planRes.status);
+      // Hata durumunda default plan kullan
+      if (!currentUserPlan) {
+        updateSidebarPlan('free');
+        applyQuotaForPlan('free');
+      }
     }
   } catch(e) {
-    console.error('Plan bilgisi alınamadı:', e);
+    console.error('Plan bilgisi alınırken hata:', e);
+    // Hata durumunda default plan kullan
+    if (!currentUserPlan) {
+      updateSidebarPlan('free');
+      applyQuotaForPlan('free');
+    }
   }
 }
 
@@ -684,16 +704,31 @@ async function doSubmitAuth() {
     saveSession();
     hideModal();
 
-    // Kullanıcının gerçek planını database'den al
-    await fetchAndUpdateUserPlan();
+    // Önce uygulamayı aç
+    openApp();
+    
+    // Sonra arka planda plan bilgisini güncelle
+    fetchAndUpdateUserPlan().catch(e => console.error('Plan bilgisi alınamadı:', e));
 
     try {
       const p = localStorage.getItem('ms_paid_plan');
-      if (p) { localStorage.removeItem('ms_paid_plan'); updateSidebarPlan(p); applyQuotaForPlan(p); openApp(); setTimeout(() => appendMessage('ai', planSuccessMsg(p), []), 800); setTimeout(() => updateQuota(), 3000); return; }
+      if (p) { 
+        localStorage.removeItem('ms_paid_plan'); 
+        updateSidebarPlan(p); 
+        applyQuotaForPlan(p); 
+        setTimeout(() => appendMessage('ai', planSuccessMsg(p), []), 800); 
+        setTimeout(() => updateQuota(), 3000); 
+        return; 
+      }
     } catch(e) {}
 
-    if (pendingPlan && currentTenantId) { const pl = pendingPlan; pendingPlan = null; await goToCheckout(pl); }
-    else { pendingPlan = null; openApp(); }
+    if (pendingPlan && currentTenantId) { 
+      const pl = pendingPlan; 
+      pendingPlan = null; 
+      await goToCheckout(pl); 
+    } else { 
+      pendingPlan = null; 
+    }
 
   } catch(e) { alert('Bağlantı hatası.'); console.error(e); }
 }
