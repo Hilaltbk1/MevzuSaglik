@@ -1,41 +1,43 @@
+#!/usr/bin/env python3
+"""Database'de tenant'ı kontrol etmek için script"""
 import os
+import sys
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from backend.schemas.tenant_model import TenantModel
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-print(f"Database URL: {DATABASE_URL[:50]}...")
+# Backend path'ini ekle
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+from backend.database.db_setup import get_db, engine
+from backend.database.base import Base
+from backend.schemas.tenant_model import TenantModel
 
-db = SessionLocal()
+# Tabloları oluştur
+Base.metadata.create_all(bind=engine)
 
-# Tüm tenant'ları listele
-tenants = db.query(TenantModel).all()
-print(f"\nToplam tenant sayısı: {len(tenants)}")
+# Database session'ı al
+db = next(get_db())
 
-for tenant in tenants:
-    print(f"\nTenant ID: {tenant.id}")
+# Mevcut tenant'ları kontrol et
+api_key = os.getenv("TENANT_API_KEY", "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af")
+tenant = db.query(TenantModel).filter_by(api_key=api_key).first()
+
+if tenant:
+    print(f"✓ Tenant bulundu:")
+    print(f"  ID: {tenant.id}")
     print(f"  Name: {tenant.name}")
+    print(f"  API Key: {tenant.api_key}")
     print(f"  Plan: {tenant.plan}")
-    print(f"  API Key: {tenant.api_key[:20]}...")
     print(f"  Is Active: {tenant.is_active}")
-    print(f"  Created: {tenant.created_at}")
-
-# .env dosyasındaki API key'i kontrol et
-env_api_key = os.getenv("TENANT_API_KEY")
-print(f"\n.env dosyasındaki API Key: {env_api_key[:20]}...")
-
-# Bu API key'e sahip tenant var mı?
-tenant_with_key = db.query(TenantModel).filter_by(api_key=env_api_key).first()
-if tenant_with_key:
-    print(f"✓ Database'de bu API key'e sahip tenant bulundu: {tenant_with_key.name}")
+    
+    if not tenant.is_active:
+        print("\n⚠️ Tenant INACTIVE! Aktif hale getiriliyor...")
+        tenant.is_active = True
+        db.commit()
+        print("✓ Tenant aktif hale getirildi")
 else:
-    print("✗ Database'de bu API key'e sahip tenant BULUNAMADI!")
-    print("  Bu API key ile bir tenant oluşturmanız gerekiyor.")
+    print("✗ Tenant bulunamadı!")
+    print(f"  API Key: {api_key}")
 
 db.close()

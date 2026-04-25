@@ -9,6 +9,8 @@ sys.path.append(os.path.dirname(current_dir))
 from backend.utils import create_app
 from backend.database.base import Base
 from backend.database.db_setup import engine
+from backend.dependencies.auth import get_current_tenant
+from fastapi import Depends
 
 # Tüm modelleri import et ki Base.metadata.create_all çalışsın
 from backend.schemas.tenant_model import TenantModel
@@ -67,21 +69,7 @@ def log_usage(user_id="Anonymous"):
     except Exception as e:
         print(f"Loglama hatası: {e}")
 
-@app.post("/chat")
-async def chat(request: Request):
-    from backend.services.Retrievers import retrieval_chain
-    data = await request.json()
-    user_input = data.get("message")
-    user_id = data.get("user_id", "Anonymous") # Kullanıcı kodunu al
-    
-    # Kullanımı logla (H2.3 için)
-    log_usage(user_id)
-    
-    # RAG zincirini çalıştır
-    container = retrieval_chain()
-    response = container.full_chain.invoke({"input": user_input, "chat_history": []})
-    
-    return {"response": response["answer"]}
+
 
 # Static files için birden fazla path deneyelim
 try:
@@ -91,6 +79,24 @@ except:
         app.mount("/static", StaticFiles(directory="../frontend"), name="static")
     except:
         print("Static files dizini bulunamadı")
+
+# Test endpoint'i - API key gerektirmez
+@app.get("/test")
+def test_endpoint():
+    return {
+        "status": "ok",
+        "message": "Backend çalışıyor",
+        "cors_test": "Bu endpoint CORS için test edilebilir"
+    }
+
+# API key test endpoint'i (geçici olarak comment out)
+# @app.get("/test-auth")
+# def test_auth_endpoint(tenant=Depends(get_current_tenant)):
+#     return {
+#         "status": "ok",
+#         "message": "Authentication başarılı",
+#         "tenant": tenant.name if hasattr(tenant, 'name') else "Tenant bilgisi"
+#     }
 
 @app.get("/")
 def home():
@@ -126,3 +132,16 @@ def home():
     except Exception as e:
         print(f"HTML inject hatası: {e}")
         return FileResponse("index.html")
+
+# ASGI uygulamasını export et
+__all__ = ["app"]
+
+
+# Basit test endpoint'i (API key gerekmez)
+@app.post("/test-upload")
+async def test_upload():
+    return {
+        "status": "ok", 
+        "message": "Upload endpoint çalışıyor",
+        "timestamp": datetime.now().isoformat()
+    }

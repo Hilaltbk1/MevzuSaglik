@@ -2,7 +2,7 @@ from __future__ import annotations
 import uuid
 from typing import List
 
-from fastapi import APIRouter, Depends, File, HTTPException, BackgroundTasks, UploadFile
+from fastapi import APIRouter, File, HTTPException, BackgroundTasks, UploadFile, Depends
 from fastapi.responses import JSONResponse
 
 from backend.database.crud import upload_files_background
@@ -18,7 +18,7 @@ upload_status_store: dict[str, dict] = {}
 async def add_files(
     background_tasks: BackgroundTasks,
     files: List[UploadFile] = File(...),
-    tenant=Depends(get_current_tenant),
+    tenant=Depends(get_current_tenant),  # API key kontrolünü yeniden etkinleştir
 ):
     file_data = []
     for file in files:

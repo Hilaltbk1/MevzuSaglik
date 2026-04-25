@@ -30,8 +30,13 @@ def create_app() -> FastAPI:
         "https://www.mevzusaglik.com.tr",
         "https://mevzusaglik.pages.dev",  # Cloudflare Pages önizleme adresi
         "https://mevzusaglik.mevzusaglik.workers.dev",  # Backend'in kendi adresi
+        "https://mevzusaglik.workers.dev",  # Cloudflare Worker domain'iniz
         "http://localhost:8000",
+        "http://localhost:8001",
         "http://localhost:3000",  # Genelde React/Vite kullanırsan lazım olur
+        "http://localhost:7860",  # Gradio frontend portu
+        "https://hilal1-mevzusaglik.hf.space",  # Hugging Face Spaces URL'niz
+        "*",  # Tüm origin'lere izin ver (development için)
     ]
 
     app.add_middleware(

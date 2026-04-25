@@ -3,10 +3,11 @@ import requests
 import os
 from typing import List
 
-TENANT_API_KEY = os.environ.get("TENANT_API_KEY", "")
-HEADERS = {"X-API-Key": TENANT_API_KEY}
-# Backend URL
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
+# API key backend'de tekrar etkinleştirildi
+API_KEY = os.environ.get("TENANT_API_KEY", "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af")
+HEADERS = {"X-API-Key": API_KEY}
+# Backend URL - Cloudflare Worker üzerinden domain'imizde
+BACKEND_URL = os.environ.get("BACKEND_URL", "https://mevzusaglik.com.tr")
 
 
 # --- YARDIMCI FONKSİYONLAR ---
@@ -42,7 +43,7 @@ def format_to_messages(messages_list):
 
 def create_new_session(user_name):
     try:
-        res = requests.post(f"{BACKEND_URL}/session/create_session", json={"user_name": user_name}, timeout=15)
+        res = requests.post(f"{BACKEND_URL}/session/create_session", json={"user_name": user_name}, headers=HEADERS, timeout=15)
         return res.json() if res.status_code == 200 else None
     except:
         return None
@@ -50,7 +51,7 @@ def create_new_session(user_name):
 
 def get_user_sessions(user_name):
     try:
-        res = requests.get(f"{BACKEND_URL}/session/sessions/{user_name}", timeout=10)
+        res = requests.get(f"{BACKEND_URL}/session/sessions/{user_name}", headers=HEADERS, timeout=10)
         if res.status_code == 200:
             sessions = res.json()
             # Oturumları (Görünen İsim, UUID) formatına çevir
@@ -71,7 +72,7 @@ def start_new_session(uname):
 def get_session_history(session_uuid):
     if not session_uuid: return []
     try:
-        res = requests.get(f"{BACKEND_URL}/history/{session_uuid}", timeout=10)
+        res = requests.get(f"{BACKEND_URL}/history/{session_uuid}", headers=HEADERS, timeout=10)
         if res.status_code == 200:
             data = res.json()
             if not data or not isinstance(data, list):
@@ -89,7 +90,7 @@ def get_session_history(session_uuid):
 def process_question(message, user_name, session_uuid, user_code="Anonymous"):
     if not session_uuid: return "⚠️ Önce bir sohbet seçin."
     try:
-        res = requests.post(f"{BACKEND_URL}/chat",
+        res = requests.post(f"{BACKEND_URL}/search/chat",
                             json={"message": message, "user_name": user_name, "session_uuid": session_uuid, "user_id": user_code},
                             headers=HEADERS, timeout=120)
         
@@ -114,7 +115,7 @@ def upload_documents(files: List):
             with open(f.name, "rb") as file_obj:
                 content = file_obj.read()
             prepared.append(("files", (os.path.basename(f.name), content, "application/octet-stream")))
-        res = requests.post(f"{BACKEND_URL}/add_documents/add", files=prepared)
+        res = requests.post(f"{BACKEND_URL}/add_documents/add", files=prepared, headers=HEADERS)
         return "✅ " + res.json().get("message", "Başarılı") if res.status_code == 200 else f"❌ Hata: {res.text}"
     except Exception as e:
         return f"❌ Hata: {str(e)}"

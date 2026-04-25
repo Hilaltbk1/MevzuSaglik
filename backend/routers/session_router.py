@@ -33,7 +33,11 @@ async def create_new_session_api(
 
 
 @router.get("/sessions/{user_name}")
-async def get_user_session_api(user_name: str, db: Session = Depends(get_db)):
+async def get_user_session_api(
+    user_name: str,
+    db: Session = Depends(get_db),
+    tenant=Depends(get_current_tenant),
+):
     sessions = crud.read_user_sessions(db, user_name)
     result = []
     for s in sessions:
