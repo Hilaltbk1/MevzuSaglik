@@ -140,13 +140,27 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     u_plan = gr.State("pro")  # Plan'ı sakla
     s_uuid = gr.State(None)
     
-    # Plan API keys - .env'den oku
-    default_api_key = os.environ.get("TENANT_API_KEY", "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af")
+    # Plan API keys
     PLAN_KEYS = {
-        "free": default_api_key,
+        "free": "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af",
         "pro": "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d",
         "unlimited": "01fdd7b2dc26de0c5c9db75081a6ca04699444d72595d2829098882e546cb921"
     }
+    
+    # JavaScript ile localStorage'dan plan'ı oku
+    js_load_plan = """
+    <script>
+    function loadPlanFromStorage() {
+        const savedPlan = localStorage.getItem('selected_plan') || 'pro';
+        const planDropdown = document.querySelector('[label="Plan Seçin"]');
+        if (planDropdown) {
+            planDropdown.value = savedPlan;
+        }
+        return savedPlan;
+    }
+    window.addEventListener('load', loadPlanFromStorage);
+    </script>
+    """
 
     # GİRİŞ EKRANI
     with gr.Column(visible=True, elem_classes="login-card") as login_box:
@@ -209,6 +223,17 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         
         # API key ayarlandıktan SONRA oturum oluştur
         sid, hist, session_update = start_new_session(name)
+        
+        # JavaScript ile localStorage'a plan'ı sakla
+        js_save = f"""
+        <script>
+        localStorage.setItem('selected_plan', '{plan}');
+        localStorage.setItem('user_name', '{name}');
+        localStorage.setItem('api_key', '{current_api_key}');
+        console.log('Plan kaydedildi:', '{plan}');
+        </script>
+        """
+        
         return {
             login_box: gr.update(visible=False),
             main_box: gr.update(visible=True),
