@@ -8,6 +8,7 @@ from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import PromptTemplate
 from backend.config.configuration import Settings
 from backend.prompt.My_Prompt import create_prompt
+from backend.logger import logger
 load_dotenv()
 settings = Settings()
 
