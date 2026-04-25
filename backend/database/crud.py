@@ -18,7 +18,7 @@ from backend.schemas.message_model import MessageModel
 from backend.schemas.tenant_model import TenantModel
 
 COLLECTION_NAME = "mevzu_saglik_docs"
-BATCH_SIZE      = 50
+BATCH_SIZE      = 20  # Rate limit için küçültüldü (önceden 50)
 
 
 def _get_qdrant_client() -> QdrantClient:
@@ -190,15 +190,57 @@ async def upload_files_background(file_data: list) -> str:
         raise HTTPException(status_code=500, detail=f"Vector store hatası: {str(e)}")
 
     total_added = 0
+    failed_batches = []
+    
     for i in range(0, len(chunks), BATCH_SIZE):
         batch = chunks[i:i + BATCH_SIZE]
-        try:
-            vector_store.add_documents(documents=batch)
-            total_added += len(batch)
-            logger.info(f"📤 Batch {i // BATCH_SIZE + 1}: {total_added}/{len(chunks)} chunk Qdrant'a eklendi")
-        except Exception as e:
-            logger.error(f"Batch {i // BATCH_SIZE + 1} eklenirken hata: {e}")
-            raise HTTPException(status_code=500, detail=f"Doküman ekleme hatası: {str(e)}")
+        batch_num = i // BATCH_SIZE + 1
+        
+        # Retry mekanizması: 3 deneme, artan bekleme süresi
+        max_retries = 3
+        retry_delay = 2  # saniye
+        
+        for attempt in range(max_retries):
+            try:
+                vector_store.add_documents(documents=batch)
+                total_added += len(batch)
+                logger.info(f"📤 Batch {batch_num}: {total_added}/{len(chunks)} chunk Qdrant'a eklendi")
+                
+                # Batch'ler arası kısa bekleme (rate limit için)
+                if i + BATCH_SIZE < len(chunks):  # Son batch değilse
+                    import time
+                    time.sleep(0.5)  # 500ms bekleme
+                
+                break  # Başarılı, döngüden çık
+                
+            except Exception as e:
+                error_msg = str(e)
+                
+                # Rate limit hatası mı?
+                if "429" in error_msg or "Resource exhausted" in error_msg or "quota" in error_msg.lower():
+                    if attempt < max_retries - 1:
+                        wait_time = retry_delay * (2 ** attempt)  # Exponential backoff: 2s, 4s, 8s
+                        logger.warning(f"⚠️ Rate limit! Batch {batch_num}, deneme {attempt + 1}/{max_retries}. {wait_time}s bekleniyor...")
+                        import time
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        logger.error(f"❌ Batch {batch_num} başarısız (rate limit): {error_msg}")
+                        failed_batches.append(batch_num)
+                        break
+                else:
+                    # Başka bir hata
+                    logger.error(f"❌ Batch {batch_num} eklenirken hata: {error_msg}")
+                    failed_batches.append(batch_num)
+                    break
+    
+    # Sonuç mesajı
+    if failed_batches:
+        msg = f"⚠️ Kısmi başarı: {total_added}/{len(chunks)} chunk eklendi.\n\n"
+        msg += f"❌ Başarısız batch'ler: {', '.join(map(str, failed_batches))}\n\n"
+        msg += "💡 Google Gemini API rate limit'ine ulaşıldı. Lütfen 5-10 dakika bekleyip tekrar deneyin."
+        logger.warning(msg)
+        return msg
 
     msg = f"✅ {len(doc_list)} dosya başarıyla işlendi!\n\n📊 {total_added} parça Qdrant Cloud'a kaydedildi."
     if skipped:
