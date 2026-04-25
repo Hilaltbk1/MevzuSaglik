@@ -121,6 +121,30 @@ def initialize_vector_store(rebuild_db=False):
             # Collection mevcut, bağlan
             logger.info(f"✅ Mevcut collection '{COLLECTION_NAME}' kullanılıyor.")
             vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
+            
+            # Chunks'ları Qdrant'tan çek (BM25 için gerekli)
+            try:
+                logger.info("📦 Mevcut dokümanlar Qdrant'tan alınıyor...")
+                scroll_result, _ = client.scroll(
+                    collection_name=COLLECTION_NAME,
+                    limit=10000,
+                    with_payload=True,
+                )
+                
+                # Point'leri Document'lere dönüştür
+                from langchain_core.documents import Document
+                chunks = []
+                for point in scroll_result:
+                    if point.payload:
+                        page_content = point.payload.get("page_content", "")
+                        metadata = point.payload.get("metadata", {})
+                        if page_content:
+                            chunks.append(Document(page_content=page_content, metadata=metadata))
+                
+                logger.info(f"✅ {len(chunks)} chunk Qdrant'tan yüklendi (BM25 için)")
+            except Exception as e:
+                logger.error(f"⚠️ Chunks yüklenemedi, BM25 devre dışı kalacak: {e}")
+                chunks = []
 
         return vector_store, chunks
     except Exception as e:

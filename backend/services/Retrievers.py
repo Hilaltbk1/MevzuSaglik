@@ -40,8 +40,17 @@ def retrieval_chain():
     v_db, split_text = initialize_vector_store(rebuild_db=False)
     if v_db is None:
         raise ValueError("Hata: Vektör veritabanı başlatılamadı! Qdrant bağlantısını kontrol et.")
+    
+    if split_text is None or len(split_text) == 0:
+        logger.warning("⚠️ Chunks bulunamadı, BM25 devre dışı kalacak")
+        split_text = []
 
     def get_bm25_retriever(split_text):
+        # Eğer chunks yoksa, BM25'i atla
+        if not split_text or len(split_text) == 0:
+            logger.warning("⚠️ BM25 için chunks yok, sadece vector search kullanılacak")
+            return None
+        
         # Proje kök dizinindeki pkl dosyasını bulmak için:
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         picke_path = os.path.join(BASE_DIR, "bm25_index.pkl")
@@ -62,7 +71,13 @@ def retrieval_chain():
         search_kwargs={"k": 15}, # Re-ranker'a daha fazla seçenek sunmak için k'yı artırdık
     )
     bm25_retriever = get_bm25_retriever(split_text)
-    bm25_retriever.k = 15 # Re-ranker'a daha fazla seçenek sunmak için k'yı artırdık
+    
+    # BM25 varsa hybrid, yoksa sadece vector
+    if bm25_retriever:
+        bm25_retriever.k = 15 # Re-ranker'a daha fazla seçenek sunmak için k'yı artırdık
+        logger.info("✅ Hybrid Search (Vector + BM25) aktif")
+    else:
+        logger.warning("⚠️ Sadece Vector Search kullanılacak (BM25 yok)")
 
     # 3. Hybrid Search (RRF) Retriever
     from langchain_core.retrievers import BaseRetriever
@@ -70,11 +85,16 @@ def retrieval_chain():
     
     class HybridRetriever(BaseRetriever):
         v_retriever: Any
-        b_retriever: Any
+        b_retriever: Any = None  # BM25 opsiyonel
         
         def _get_relevant_documents(self, query: str, *, run_manager=None) -> List[Document]:
             k = 60
             v_docs = self.v_retriever.invoke(query)
+            
+            # BM25 yoksa sadece vector sonuçlarını döndür
+            if not self.b_retriever:
+                return v_docs
+            
             b_docs = self.b_retriever.invoke(query)
             
             scores = {}
