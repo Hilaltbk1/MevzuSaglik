@@ -101,10 +101,17 @@ async def upload_files_background(file_data: list) -> str:
         filename = fd["filename"]
         if filename in existing_files:
             skipped.append(filename)
+            logger.warning(f"⚠️ Dosya zaten yüklü: {filename}")
             continue
         doc = _pdf_to_doc(filename, fd["content"], llm_client)
         if doc:
             doc_list.append(doc)
+
+    # Eğer tüm dosyalar zaten yüklüyse, uyarı döndür
+    if len(skipped) > 0 and len(doc_list) == 0:
+        msg = f"⚠️ Tüm dosyalar zaten yüklü: {', '.join(skipped)}"
+        logger.warning(msg)
+        return msg
 
     logger.info(f"{len(doc_list)} doküman oluşturuldu, {len(skipped)} dosya atlandı")
 
@@ -132,9 +139,9 @@ async def upload_files_background(file_data: list) -> str:
             logger.error(f"Batch {i // BATCH_SIZE + 1} eklenirken hata: {e}")
             raise HTTPException(status_code=500, detail=f"Doküman ekleme hatası: {str(e)}")
 
-    msg = f"{len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
+    msg = f"✅ {len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
     if skipped:
-        msg += f" (Atlanan: {', '.join(skipped)})"
+        msg += f"\n⚠️ Atlanan (zaten yüklü): {', '.join(skipped)}"
     
     logger.info(f"upload_files_background tamamlandı: {msg}")
     return msg
