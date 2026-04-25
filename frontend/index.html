@@ -648,8 +648,22 @@ async function doSubmitAuth() {
     currentTenantId    = data.tenant_id || null;
     if (data.api_key) { HEADERS['X-API-Key'] = data.api_key; try { localStorage.setItem('ms_api_key', data.api_key); } catch(e) {} }
     saveSession();
-    updateSidebarPlan('free');
     hideModal();
+
+    // Kullanıcının gerçek planını database'den al
+    try {
+      const planRes = await fetch(BACKEND_URL + '/session/user_plan/' + currentUser, {headers: HEADERS});
+      if (planRes.ok) {
+        const planData = await planRes.json();
+        const userPlan = planData.plan || 'free';
+        updateSidebarPlan(userPlan);
+        applyQuotaForPlan(userPlan);
+      } else {
+        updateSidebarPlan('free');
+      }
+    } catch(e) {
+      updateSidebarPlan('free');
+    }
 
     try {
       const p = localStorage.getItem('ms_paid_plan');

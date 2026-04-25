@@ -70,3 +70,13 @@ async def get_user_quota_api(
     )
     limit = PLAN_LIMITS[tenant.plan]["requests_per_day"]
     return {"used": bugunun_sorulari, "total": limit}
+
+
+@router.get("/user_plan/{user_name}")
+async def get_user_plan_api(
+    user_name: str,
+    db: Session = Depends(get_db),
+    tenant=Depends(get_current_tenant),
+):
+    """Kullanıcının plan bilgisini döndürür"""
+    return {"plan": tenant.plan.value if hasattr(tenant.plan, 'value') else tenant.plan}

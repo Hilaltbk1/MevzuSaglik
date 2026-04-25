@@ -1,0 +1,127 @@
+[
+    {
+        "chunk_id": 0,
+        "question": "Her gün ölümlerle ilgili verilerin toplanması hangi birim tarafından gerçekleştirilmekte?",
+        "answer": "Bu veriler, İl Sağlık Müdürlüğü ÇEKÜS Çocuk Ergen Kadın ve Üreme Sağlığı Birimi tarafından günlük olarak toplanmaktadır."
+    },
+    {
+        "chunk_id": 0,
+        "question": "Ölüm bildirimleri hangi kuruma iletiliyor ve bu süreç neden önemlidir?",
+        "answer": "Toplanan ölüm bildirimleri, Halk Sağlığı Genel Müdürlüğü Kadın ve Üreme Sağlığı Dairesi Başkanlığına iletilmektedir. Bu süreç, sağlık politikalarının geliştirilmesi ve toplum sağlığının iyileştirilmesi açısından kritik öneme sahiptir."
+    },
+    {
+        "chunk_id": 17,
+        "question": "Bir sağlık çalışanı, viral zoonotik hastalıklarla ilgili hangi bilgiye ulaşmak için referans laboratuvarını aramalı?",
+        "answer": "Sağlık çalışanları, viral zoonotik hastalıklar hakkında güncel tanı yöntemleri ve tedavi protokolleri gibi bilgilere ulaşmak için referans laboratuvarını arayabilir. Bu laboratuvar, hastalıkların teşhisi ve yönetimi konusunda uzmanlaşmış bir kaynaktır."
+    },
+    {
+        "chunk_id": 26,
+        "question": "Ayakta arındırma merkezi kurmak için hangi uzmanlık alanlarına ihtiyaç var?",
+        "answer": "Kurulacak merkez में, uyuşturucu madde testlerini yapabilecek veya yaptırabilecek uzman tabip bulunması gerekmektedir. Bu, sağlık hizmetlerinin etkinliği açısından kritik öneme sahiptir. (Yönetmelik, Madde 20 uyarınca)"
+    },
+    {
+        "chunk_id": 30,
+        "question": "Evde sağlık hizmetlerinden yararlanmak isteyen bir hasta hangi koşullarda bu hizmeti alabilir?",
+        "answer": "Evde sağlık hizmetleri, hastanın sağlık durumu ve ihtiyaçları doğrultusunda belirlenir. Hasta, belirli sağlık sorunları ile başvurduğunda ve evde bakım gereksinimi tespit edildiğinde bu hizmetten faydalanabilir. (Sağlık Bakanlığınca Sunulan Evde Sağlık Hizmetlerinin Uygulama Usul ve Esasları Hakkında Yönerge)"
+    },
+    {
+        "chunk_id": 33,
+        "question": "Bölgedeki güncel nüfus verileri nasıl belirleniyor ve bu veriler formda nasıl kullanılmalı?",
+        "answer": "Bölgedeki mevcut nüfus sayıları, KDS demografi raporu üzerinden güncellenerek belirlenmektedir. Bu veriler, formda KDS nüfusu bölümünü doldurmak için kullanılmalı, böylece doğru ve güncel bilgilerle işlem yapılabilmelidir. (Tıbbi Hizmetler Yönetmeliği, ilgili düzenlemeler uyarınca)"
+    },
+    {
+        "chunk_id": 39,
+        "question": "Hangi uzmanlık alanlarında çalıştığımda sosyal güvenlik ile ilgili sorunlarla karşılaşabilirim?",
+        "answer": "Sosyal güvenlik ile ilgili sorunlar, genellikle çalışma hayatıyla ilgili uzmanlık alanlarında, özellikle Sosyal Güvenlik Uzmanlığı ve Çalışma Uzmanlığı gibi alanlarda ortaya çıkabilir. (Sosyal Güvenlik Mevzuatı uyarınca)"
+    },
+    {
+        "chunk_id": 42,
+        "question": "Yüksek tansiyon tespit edilirse hangi süreçleri izlemeliyiz?",
+        "answer": "Yüksek tansiyon tespit edildiğinde, öncelikle hastaya durumu açıklanmalı ve yaşam tarzı değişiklikleri önerilmelidir. Ardından, gerekli durumlarda ilaç tedavisi planlanmalı ve hastanın düzenli takipleri sağlanmalıdır. (Hiperansiyon Yönetimi Protokolü, Madde 3 uyarınca)"
+    },
+    {
+        "chunk_id": 47,
+        "question": "Kamu kuruluşlarında genel müdürlük pozisyonundaki kişilerin atama süreçleri nasıl işliyor?",
+        "answer": "Kamu kuruluşlarının genel müdürleri, atama yetkisi olan bakanlıklar tarafından atanır. Bu süreç, ilgili bakanlıkların belirlediği kriterler ve prosedürler doğrultusunda gerçekleştirilir. (Kamu Görevlileri Kanunu)"
+    },
+    {
+        "chunk_id": 51,
+        "question": "Bir hastanın işlemi sonrası izleme sürecini nasıl yönetebilirim?",
+        "answer": "Hastanın işlemi sonrası izleme süreci, hastanın belirtilerini dikkatlice izlemek, belirlenen kriterlere göre düzenli olarak değerlendirme yapmak ve gerektiğinde ilgili uzmanlarla iletişim kurmak çok önemlidir. (Hasta Bakım Yönetmeliği, İzleme Süreçleri kısmı uyarınca)"
+    },
+    {
+        "chunk_id": 56,
+        "question": "Kahve ürünlerinde hangi özelliklerin uyumsuz olması durumunda bu ürünler taklit olarak değerlendiriliyor?",
+        "answer": "Kahve, vasıf ve terkipleri uygun değilse taklit sayılır. Örneğin, kafeini az veya tamamen alınmış kahveler bu duruma girer. (Yönetmelik, Madde 555 uyarınca)."
+    },
+    {
+        "chunk_id": 63,
+        "question": "Mahremiyetin korunmaması durumunda ne gibi sonuçlarla karşılaşabilirim?",
+        "answer": "Mahremiyetin ihlali, hastaların güvenini zedeleyebilir ve sağlık hizmetlerinin kalitesini olumsuz etkileyebilir. Ayrıca etik ihlaller ve yasal sorumluluklar doğurabilir. (Kişisel Verilerin Korunması Kanunu)"
+    },
+    {
+        "chunk_id": 68,
+        "question": "Sağlık Meslekleri Kurulu ile ilgili yapılan değişiklikler ne gibi sonuçlar doğurabilir?",
+        "answer": "Sağlık Meslekleri Kurulu'ndaki değişiklikler, sağlık profesyonellerinin yetkilendirilmesi ve mesleki standartların belirlenmesi açısından önemli sonuçlar yaratabilir. (703 sayılı KHK, Madde 25 uyarınca)"
+    },
+    {
+        "chunk_id": 72,
+        "question": "Risk değerlendirme sonuçları ne şekilde ele alınıyor?",
+        "answer": "Risk değerlendirme sonuçları, bilimsel veriler ve tartışmalara dayalı olarak Bakanlık tarafından ele alınır. Bu süreçte ihtiyatlılık ilkesi göz önünde bulundurulur. (Risk Yönetimi ve İletişimi Yönetmeliği)"
+    },
+    {
+        "chunk_id": 77,
+        "question": "Maluliyet nedeniyle emekli olursam, kesenek farkları nasıl ödenecek?",
+        "answer": "Maluliyet, yaş haddi veya ölüm sebebiyle görevden ayrılmanız durumunda, emeklilik keseneğine esas aylık dereceniz ve kademeniz üzerinden işlemleriniz gerçekleştirilecektir. (T.C. Emekli Sandığı Yönetmeliği)"
+    },
+    {
+        "chunk_id": 81,
+        "question": "Yüksek kan basıncının belirtileri nelerdir ve dikkate alınmazsa ne gibi sonuçlar doğurabilir?",
+        "answer": "Yüksek kan basıncı genellikle baş ağrısı, baş dönmesi gibi belirtilerle kendini gösterir. Göz ardı edilirse kalp hastalıkları, inme veya böbrek yetmezliği gibi ciddi sorunlara yol açabilir. (Sağlık Bakanlığı'nın Hipertansiyon Yönetimi Rehberi)"
+    },
+    {
+        "chunk_id": 87,
+        "question": "Lejyoner hastalığı ile ilgili bir vaka tespit edildiğinde hangi önlemler alınmalıdır?",
+        "answer": "Vaka tespit edildiğinde hemen enfeksiyon kontrol prosedürleri devreye girmelidir. Hastanın durumu değerlendirilip izolasyon önlemleri alınmalı ve ilgili bildirimler yapılmalıdır. (Lejyoner Hastalığı Kontrol Programı Rehberi)"
+    },
+    {
+        "chunk_id": 91,
+        "question": "Tıbbi uygulamalarda maksimum fayda sağlamak için hangi stratejiler izlenmelidir?",
+        "answer": "Modern obstetrik uygulamalarda, maksimum fayda sağlamak için riskleri en aza indiren ve güvenli doğum süreçlerini destekleyen stratejiler benimsenmelidir. (Brody ve Thompson, 1981)"
+    },
+    {
+        "chunk_id": 93,
+        "question": "Klinik şok durumunda hastanın hızlı bir şekilde müdahale edilmemesi ne gibi sonuçlar doğurabilir?",
+        "answer": "Hızlı müdahale edilmemesi durumunda, hastanın durumu kötüleşebilir ve hayati tehlike riski artabilir. (Acil Tıp Yönetmeliği, Madde 12 uyarınca)."
+    },
+    {
+        "chunk_id": 95,
+        "question": "Eğitim veya uzmanlık izni alabilmek için hangi şartların yerine getirilmesi gerekir?",
+        "answer": "Eğitim veya uzmanlık izni alabilmek için, ilgili sağlık kurumlarının belirli kriterlere uygun olması ve Başbakanlık Devlet Personel Başkanlığınca onaylanması gerekmektedir. (Devlet Memurları Kanunu, Madde 79 uyarınca)."
+    },
+    {
+        "chunk_id": 99,
+        "question": "Pestisitlerin izlenmesi sırasında hangi adımların izlenmesi gerektiğini biliyor muyum?",
+        "answer": "Pestisitlerin izlenmesi sürecinde, öncelikle ürünlerin uygunluk kontrolü yapılmalı, numuneler alınarak laboratuvar testlerine gönderilmeli ve sonuçlar izleme formuna kaydedilmelidir. (Pestisit İzleme Yönetmeliği)"
+    },
+    {
+        "chunk_id": 43,
+        "question": "Bir salgın durumunda risk seviyesini nasıl belirleyebilirim?",
+        "answer": "Hastalığın yayılma hızını, etkilenen birey sayısını, sağlık çalışanlarının maruz kalma olasılıklarını ve mevcut sağlık altyapısını değerlendirmek gerekir. (Sağlık Bakanlığı'nın Salgın Yönetimi Rehberi uyarınca)."
+    },
+    {
+        "chunk_id": 16,
+        "question": "Numune gönderimi sırasında hangi belgelerin hazırlanması gerektiğini biliyor muyum?",
+        "answer": "İlgili izleme formunun eksiksiz doldurulması ve gerekli onayların alınmış olması gerekir. Numunenin türüne göre ek belgeler de gerekebilir. (İzleme Yönetmeliği)"
+    },
+    {
+        "chunk_id": 13,
+        "question": "Soğutma işlemi hangi durumlarda önerilir ve neden bu kadar önemlidir?",
+        "answer": "Genellikle ateşin yönetiminde ve travma sonrası şişliklerin azaltılmasında önerilir. İnflamasyonu azaltarak iyileşme sürecini hızlandırır. (Tıbbi Uygulamalar Yönetmeliği)"
+    },
+    {
+        "chunk_id": 14,
+        "question": "Acil durumlarda laboratuvar hizmetlerini nasıl önceliklendirmemiz gerekiyor?",
+        "answer": "Gelen örneklerin hızlı işlenmesi ve sonuçların en kısa sürede elde edilmesi kritiktir. Hekim talimatları doğrultusunda acil örnekler iş akışında önceliklendirilir. (Laboratuvar Yönetmeliği)"
+    }
+]
