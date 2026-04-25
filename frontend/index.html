@@ -531,8 +531,14 @@ window.addEventListener('DOMContentLoaded', () => {
       updateSidebarPlan(plan);
       openApp();
       applyQuotaForPlan(plan);
-      setTimeout(() => appendMessage('ai', planSuccessMsg(plan), []), 800);
-      setTimeout(() => updateQuota(), 3000);
+      // Başarı mesajını göster
+      setTimeout(() => {
+        appendMessage('ai', planSuccessMsg(plan), []);
+        // Quota'yı güncelle
+        updateQuota();
+        // Plan bilgisini backend'den çek ve güncelle
+        fetchAndUpdateUserPlan();
+      }, 800);
     } else { showLogin('login'); }
     return;
   }
@@ -558,8 +564,8 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function planSuccessMsg(plan) {
-  if (plan === 'enterprise') return 'Kurumsal plana geçişiniz başarılı! Artık sınırsız soru sorabilirsiniz.';
-  return 'Pro plana geçişiniz başarılı! Artık günde 500 soru sorabilirsiniz.';
+  if (plan === 'enterprise') return '🎉 Kurumsal plana geçişiniz başarılı!\n\nArtık sınırsız soru sorabilir ve sınırsız belge yükleyebilirsiniz.';
+  return '🎉 Pro plana geçişiniz başarılı!\n\nArtık günde 500 soru sorabilir ve 10 belge yükleyebilirsiniz.';
 }
 
 function updateSidebarPlan(plan) {
@@ -767,9 +773,11 @@ async function goToCheckout(plan) {
     const res  = await fetch(BACKEND_URL + '/billing/checkout?tenant_id=' + currentTenantId + '&plan=' + plan, { method: 'POST', headers: HEADERS });
     const data = await res.json();
     if (!res.ok) { alert('Odeme sayfasi olusturulamadi: ' + (data.detail || res.status)); openApp(); return; }
-    if (data.checkout_url) window.open(data.checkout_url, '_blank');
+    if (data.checkout_url) {
+      // Ödeme sayfasını aynı tab'da aç (yeni tab yerine)
+      window.location.href = data.checkout_url;
+    }
     else alert('Stripe odeme linki alinamadi.');
-    openApp();
   } catch(e) { alert('Sunucuya baglaниlamadi: ' + e.message); openApp(); }
 }
 

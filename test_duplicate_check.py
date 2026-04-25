@@ -5,6 +5,16 @@ Qdrant'taki mevcut dosyaları listeler.
 """
 
 import os
+import sys
+
+# .env dosyasını yükle
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    print("✅ .env dosyası yüklendi")
+except ImportError:
+    print("⚠️  python-dotenv yüklü değil, environment variable'lar manuel yüklenecek")
+
 from qdrant_client import QdrantClient
 
 QDRANT_HOST = os.getenv("QDRANT_HOST", "").strip()
@@ -18,7 +28,9 @@ def main():
     
     if not QDRANT_HOST or not QDRANT_API_KEY:
         print("❌ QDRANT_HOST veya QDRANT_API_KEY bulunamadı!")
-        print("   .env dosyasını kontrol edin.")
+        print("   .env dosyasını kontrol edin veya environment variable'ları ayarlayın.")
+        print("\n💡 Kullanım:")
+        print("   QDRANT_HOST=https://... QDRANT_API_KEY=... python test_duplicate_check.py")
         return
     
     print(f"\n📡 Qdrant'a bağlanılıyor: {QDRANT_HOST}")
