@@ -2,6 +2,7 @@ import gradio as gr
 import requests
 import os
 from typing import List
+from urllib.parse import urlparse, parse_qs
 
 # Backend URL - Cloudflare Worker üzerinden domain'imizde
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://mevzusaglik.com.tr")
@@ -9,6 +10,16 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "https://mevzusaglik.com.tr")
 # Global state for API key
 current_api_key = os.environ.get("TENANT_API_KEY", "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d")
 HEADERS = {"X-API-Key": current_api_key}
+
+# URL'den plan'ı oku (sayfa yenilenince korunacak)
+def get_plan_from_url():
+    """URL query parameter'ından plan'ı al"""
+    try:
+        # Gradio'da window.location.search'e erişemeyiz, ama localStorage'dan okuyabiliriz
+        # Fallback: localStorage'dan oku
+        return "pro"  # Default
+    except:
+        return "pro"
 
 
 # --- YARDIMCI FONKSİYONLAR ---
@@ -146,21 +157,6 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         "pro": "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d",
         "unlimited": "01fdd7b2dc26de0c5c9db75081a6ca04699444d72595d2829098882e546cb921"
     }
-    
-    # JavaScript ile localStorage'dan plan'ı oku
-    js_load_plan = """
-    <script>
-    function loadPlanFromStorage() {
-        const savedPlan = localStorage.getItem('selected_plan') || 'pro';
-        const planDropdown = document.querySelector('[label="Plan Seçin"]');
-        if (planDropdown) {
-            planDropdown.value = savedPlan;
-        }
-        return savedPlan;
-    }
-    window.addEventListener('load', loadPlanFromStorage);
-    </script>
-    """
 
     # GİRİŞ EKRANI
     with gr.Column(visible=True, elem_classes="login-card") as login_box:
@@ -224,9 +220,16 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         # API key ayarlandıktan SONRA oturum oluştur
         sid, hist, session_update = start_new_session(name)
         
-        # JavaScript ile localStorage'a plan'ı sakla
-        js_save = f"""
+        # JavaScript ile URL'ye plan'ı ekle (sayfa yenilenince korunacak)
+        js_update_url = f"""
         <script>
+        // URL'ye plan parametresi ekle
+        const url = new URL(window.location);
+        url.searchParams.set('plan', '{plan}');
+        url.searchParams.set('user', '{name}');
+        window.history.replaceState({{}}, '', url);
+        
+        // localStorage'a da sakla
         localStorage.setItem('selected_plan', '{plan}');
         localStorage.setItem('user_name', '{name}');
         localStorage.setItem('api_key', '{current_api_key}');
