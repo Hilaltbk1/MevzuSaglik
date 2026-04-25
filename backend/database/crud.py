@@ -47,7 +47,13 @@ def _get_existing_files(client: QdrantClient) -> set:
                         point.payload.get("file_name")
                     )
                     if filename:
+                        # Hem .pdf'li hem .pdf'siz versiyonları ekle
                         existing.add(filename)
+                        # .pdf uzantısını kaldır ve ekle
+                        base_name = filename.replace('.pdf', '').replace('.PDF', '')
+                        existing.add(base_name)
+                        existing.add(base_name + '.pdf')
+                        existing.add(base_name + '.PDF')
                         logger.debug(f"Mevcut dosya: {filename}")
     except Exception as e:
         logger.warning(f"Mevcut dosyalar kontrol edilirken hata: {e}")

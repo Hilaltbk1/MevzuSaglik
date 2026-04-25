@@ -409,7 +409,7 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
         <div id="chat-history-list"></div>
         <div style="margin-top:20px">
           <div class="sidebar-section-title">Belge Yükle</div>
-          <div class="upload-area" onclick="document.getElementById('file-input').click()">
+          <div class="upload-area" onclick="checkPlanAndUpload()">
             <div class="upload-icon">&#128196;</div>
             <div class="upload-text"><strong>PDF seçin</strong> veya sürükleyin</div>
             <div style="font-size:11px;color:var(--muted);margin-top:4px">Maks. 50 MB / dosya</div>
@@ -468,7 +468,7 @@ const BACKEND_URL    = "https://mevzusaglik.mevzusaglik.workers.dev";
 const TENANT_API_KEY = (window.__TENANT_API_KEY__ || '').trim();
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
-let currentUser = '', currentSessionUUID = '', currentTenantId = null;
+let currentUser = '', currentSessionUUID = '', currentTenantId = null, currentUserPlan = 'free';
 let messageCount = 0, pendingPlan = null, currentAuthMode = 'login';
 
 // Şifre validasyonu: min 8 karakter, 1 büyük, 1 rakam, 1 özel karakter
@@ -484,6 +484,7 @@ function saveSession() {
     localStorage.setItem('ms_user',    currentUser);
     localStorage.setItem('ms_session', currentSessionUUID);
     localStorage.setItem('ms_tenant',  currentTenantId);
+    localStorage.setItem('ms_plan',    currentUserPlan);
   } catch(e) {}
 }
 function loadSession() {
@@ -492,8 +493,10 @@ function loadSession() {
     const s = localStorage.getItem('ms_session');
     const t = localStorage.getItem('ms_tenant');
     const k = localStorage.getItem('ms_api_key');
+    const p = localStorage.getItem('ms_plan');
     if (u && s && t && t !== 'null') {
       currentUser = u; currentSessionUUID = s; currentTenantId = parseInt(t);
+      currentUserPlan = p || 'free';
       if (k) HEADERS['X-API-Key'] = k;
       return true;
     }
@@ -502,7 +505,7 @@ function loadSession() {
 }
 function clearSession() {
   try {
-    ['ms_user','ms_session','ms_tenant','ms_paid_plan','ms_api_key'].forEach(k => localStorage.removeItem(k));
+    ['ms_user','ms_session','ms_tenant','ms_paid_plan','ms_api_key','ms_plan'].forEach(k => localStorage.removeItem(k));
   } catch(e) {}
 }
 
@@ -538,9 +541,17 @@ window.addEventListener('DOMContentLoaded', () => {
   if (loadSession() && currentTenantId) {
     document.getElementById('sidebar-username').textContent = currentUser;
     document.getElementById('user-avatar-text').textContent = currentUser[0]?.toUpperCase() || 'K';
+    
+    // Önce localStorage'dan plan bilgisini al ve göster
+    updateSidebarPlan(currentUserPlan);
+    applyQuotaForPlan(currentUserPlan);
+    
+    // Sonra backend'den güncel plan bilgisini çek ve güncelle
+    fetchAndUpdateUserPlan();
+    
     try {
       const p = localStorage.getItem('ms_paid_plan');
-      if (p) { updateSidebarPlan(p); localStorage.removeItem('ms_paid_plan'); }
+      if (p) { localStorage.removeItem('ms_paid_plan'); }
     } catch(e) {}
     openApp();
   }
@@ -553,9 +564,26 @@ function planSuccessMsg(plan) {
 
 function updateSidebarPlan(plan) {
   const labels = { free: 'Ücretsiz Plan', pro: 'Pro Plan', enterprise: 'Kurumsal Plan' };
+  currentUserPlan = plan;
   document.getElementById('sidebar-username').textContent = currentUser;
   document.getElementById('user-avatar-text').textContent = currentUser[0]?.toUpperCase() || 'K';
   document.getElementById('sidebar-plan').textContent = labels[plan] || labels.free;
+  saveSession(); // Plan değiştiğinde kaydet
+}
+
+async function fetchAndUpdateUserPlan() {
+  if (!currentUser) return;
+  try {
+    const planRes = await fetch(BACKEND_URL + '/session/user_plan/' + currentUser, {headers: HEADERS});
+    if (planRes.ok) {
+      const planData = await planRes.json();
+      const userPlan = planData.plan || 'free';
+      updateSidebarPlan(userPlan);
+      applyQuotaForPlan(userPlan);
+    }
+  } catch(e) {
+    console.error('Plan bilgisi alınamadı:', e);
+  }
 }
 
 function applyQuotaForPlan(plan) {
@@ -651,19 +679,7 @@ async function doSubmitAuth() {
     hideModal();
 
     // Kullanıcının gerçek planını database'den al
-    try {
-      const planRes = await fetch(BACKEND_URL + '/session/user_plan/' + currentUser, {headers: HEADERS});
-      if (planRes.ok) {
-        const planData = await planRes.json();
-        const userPlan = planData.plan || 'free';
-        updateSidebarPlan(userPlan);
-        applyQuotaForPlan(userPlan);
-      } else {
-        updateSidebarPlan('free');
-      }
-    } catch(e) {
-      updateSidebarPlan('free');
-    }
+    await fetchAndUpdateUserPlan();
 
     try {
       const p = localStorage.getItem('ms_paid_plan');
@@ -867,6 +883,46 @@ async function updateQuota() {
   } catch(e) {}
 }
 
+function checkPlanAndUpload() {
+  // Ücretsiz plan kontrolü
+  if (currentUserPlan === 'free') {
+    showUpgradeModal();
+    return;
+  }
+  // Pro veya Enterprise ise dosya seçme dialogunu aç
+  document.getElementById('file-input').click();
+}
+
+function showUpgradeModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay show';
+  overlay.id = 'upgrade-modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:480px">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:48px;margin-bottom:16px">&#128274;</div>
+        <h2 style="font-family:var(--ff-display);font-size:24px;margin-bottom:12px">Belge Yükleme Özelliği</h2>
+        <p style="color:var(--muted);font-size:14px">Ücretsiz planda belge yükleyemezsiniz. Pro veya Kurumsal plana geçerek bu özelliği kullanabilirsiniz.</p>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeUpgradeModal()">Hayır, İptal</button>
+        <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="upgradeFromModal()">Evet, Pro'ya Geç</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function closeUpgradeModal() {
+  const modal = document.getElementById('upgrade-modal-overlay');
+  if (modal) modal.remove();
+}
+
+function upgradeFromModal() {
+  closeUpgradeModal();
+  goToCheckout('pro');
+}
+
 async function handleUpload(input) {
   if (!input.files.length) return;
   const status = document.getElementById('upload-status');
@@ -884,11 +940,23 @@ async function handleUpload(input) {
   status.textContent = '⏳ Dosya(lar) yükleniyor...';
   const form = new FormData();
   for (const f of input.files) form.append('files', f);
+  
+  // API key'i header'a ekle
+  const uploadHeaders = {'X-API-Key': HEADERS['X-API-Key']};
+  
   input.value = '';
   try {
-    const res  = await fetch(BACKEND_URL + '/add_documents/add', {method: 'POST', body: form});
+    const res  = await fetch(BACKEND_URL + '/add_documents/add', {
+      method: 'POST', 
+      headers: uploadHeaders,
+      body: form
+    });
     const d    = await res.json();
-    if (!res.ok) { status.style.color = '#ff6b6b'; status.textContent = d.detail || 'Yükleme başarısız'; return; }
+    if (!res.ok) { 
+      status.style.color = '#ff6b6b'; 
+      status.textContent = d.detail || 'Yükleme başarısız'; 
+      return; 
+    }
     const taskId = d.task_id;
     status.textContent = '⏳ İşleniyor, lütfen bekleyin...';
     pollUploadStatus(taskId, status);
@@ -921,7 +989,7 @@ function pollUploadStatus(taskId, statusEl) {
 }
 
 function doLogout() {
-  clearSession(); currentUser = ''; currentSessionUUID = ''; currentTenantId = null; messageCount = 0;
+  clearSession(); currentUser = ''; currentSessionUUID = ''; currentTenantId = null; currentUserPlan = 'free'; messageCount = 0;
   document.getElementById('app-page').style.display     = 'none';
   document.getElementById('landing-page').style.display = 'block';
   document.getElementById('chat-history-list').innerHTML = '';
