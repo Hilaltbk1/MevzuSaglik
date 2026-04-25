@@ -28,19 +28,31 @@ def _get_qdrant_client() -> QdrantClient:
 
 
 def _get_existing_files(client: QdrantClient) -> set:
+    """Qdrant'ta var olan dosyaları al"""
     existing = set()
     try:
         if client.collection_exists(COLLECTION_NAME):
             scroll_res, _ = client.scroll(
                 collection_name=COLLECTION_NAME,
                 limit=10000,
-                with_payload=["Mevzuat_Adi"],
+                with_payload=True,  # Tüm payload'ları al
             )
             for point in scroll_res:
-                if point.payload and "Mevzuat_Adi" in point.payload:
-                    existing.add(point.payload["Mevzuat_Adi"])
+                if point.payload:
+                    # Dosya adını farklı field'lardan ara
+                    filename = (
+                        point.payload.get("Mevzuat_Adi") or
+                        point.payload.get("Dosya_Adi") or
+                        point.payload.get("filename") or
+                        point.payload.get("file_name")
+                    )
+                    if filename:
+                        existing.add(filename)
+                        logger.debug(f"Mevcut dosya: {filename}")
     except Exception as e:
         logger.warning(f"Mevcut dosyalar kontrol edilirken hata: {e}")
+    
+    logger.info(f"Toplam mevcut dosya: {len(existing)}")
     return existing
 
 
