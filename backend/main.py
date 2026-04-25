@@ -83,23 +83,46 @@ async def chat(request: Request):
     
     return {"response": response["answer"]}
 
-app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+# Static files için birden fazla path deneyelim
+try:
+    app.mount("/static", StaticFiles(directory="frontend"), name="static")
+except:
+    try:
+        app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+    except:
+        print("Static files dizini bulunamadı")
 
 @app.get("/")
 def home():
     api_key    = os.getenv("TENANT_API_KEY", "").strip()
     backend_url = os.getenv("BACKEND_URL", "").strip()  # boşsa frontend kendi origin'ini kullanır
     try:
-        with open("../frontend/index.html", "r", encoding="utf-8") as f:
-            html = f.read()
+        # Hugging Face'de frontend dosyası nerede?
+        frontend_paths = ["frontend/index.html", "../frontend/index.html", "/app/frontend/index.html"]
+        html_content = None
+        
+        for path in frontend_paths:
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    html_content = f.read()
+                    print(f"✓ Frontend dosyası bulundu: {path}")
+                    break
+            except:
+                continue
+        
+        if html_content is None:
+            print("✗ Frontend dosyası bulunamadı!")
+            return FileResponse("index.html")  # Fallback
+        
         inject = (
             f'<script>'
             f'window.__TENANT_API_KEY__ = "{api_key}";'
             + (f'window.__BACKEND_URL__ = "{backend_url}";' if backend_url else '')
             + f'</script>'
         )
-        html = html.replace("<head>", "<head>\n" + inject, 1)
+        html_content = html_content.replace("<head>", "<head>\n" + inject, 1)
         from fastapi.responses import HTMLResponse
-        return HTMLResponse(content=html)
-    except Exception:
-        return FileResponse("frontend/index.html")
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        print(f"HTML inject hatası: {e}")
+        return FileResponse("index.html")
