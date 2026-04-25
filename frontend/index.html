@@ -974,7 +974,9 @@ function pollUploadStatus(taskId, statusEl) {
       if (d.status === 'done') {
         clearInterval(interval);
         statusEl.style.color = 'var(--teal2)';
-        statusEl.textContent = '✅ ' + d.message;
+        // Mesajı daha okunabilir hale getir
+        const message = d.message.replace(/\n/g, '<br/>');
+        statusEl.innerHTML = message;
       } else if (d.status === 'error') {
         clearInterval(interval);
         statusEl.style.color = '#ff6b6b';

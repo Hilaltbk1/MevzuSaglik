@@ -28,15 +28,18 @@ def _get_qdrant_client() -> QdrantClient:
 
 
 def _get_existing_files(client: QdrantClient) -> set:
-    """Qdrant'ta var olan dosyaları al"""
+    """Qdrant'ta var olan dosyaları al - RAG için işlenmiş dokümanları kontrol eder"""
     existing = set()
     try:
         if client.collection_exists(COLLECTION_NAME):
+            logger.info(f"Qdrant collection '{COLLECTION_NAME}' kontrol ediliyor...")
             scroll_res, _ = client.scroll(
                 collection_name=COLLECTION_NAME,
                 limit=10000,
                 with_payload=True,  # Tüm payload'ları al
             )
+            logger.info(f"Qdrant'tan {len(scroll_res)} point alındı")
+            
             for point in scroll_res:
                 if point.payload:
                     # Dosya adını farklı field'lardan ara
@@ -54,11 +57,18 @@ def _get_existing_files(client: QdrantClient) -> set:
                         existing.add(base_name)
                         existing.add(base_name + '.pdf')
                         existing.add(base_name + '.PDF')
-                        logger.debug(f"Mevcut dosya: {filename}")
+                        logger.debug(f"Mevcut dosya bulundu: {filename}")
+            
+            # Benzersiz dosya adlarını logla
+            unique_files = set()
+            for f in existing:
+                base = f.replace('.pdf', '').replace('.PDF', '')
+                unique_files.add(base)
+            logger.info(f"Qdrant'ta toplam {len(unique_files)} benzersiz dosya mevcut")
+            
     except Exception as e:
         logger.warning(f"Mevcut dosyalar kontrol edilirken hata: {e}")
     
-    logger.info(f"Toplam mevcut dosya: {len(existing)}")
     return existing
 
 
@@ -107,7 +117,7 @@ async def upload_files_background(file_data: list) -> str:
         client = _get_qdrant_client()
         logger.info("Qdrant client başarıyla oluşturuldu")
         existing_files = _get_existing_files(client)
-        logger.info(f"Mevcut dosyalar: {len(existing_files)} adet")
+        logger.info(f"Mevcut dosyalar kontrol ediliyor: {len(existing_files)} benzersiz dosya adı bulundu")
     except Exception as e:
         logger.error(f"Qdrant bağlantı hatası: {e}")
         raise HTTPException(status_code=500, detail=f"Qdrant bağlantı hatası: {str(e)}")
@@ -117,17 +127,38 @@ async def upload_files_background(file_data: list) -> str:
 
     for fd in file_data:
         filename = fd["filename"]
-        if filename in existing_files:
+        
+        # Dosya adı kontrolü - farklı varyasyonları kontrol et
+        filename_base = filename.replace('.pdf', '').replace('.PDF', '')
+        is_duplicate = False
+        
+        # Dosya adının farklı varyasyonlarını kontrol et
+        if (filename in existing_files or 
+            filename_base in existing_files or
+            f"{filename_base}.pdf" in existing_files or
+            f"{filename_base}.PDF" in existing_files):
+            is_duplicate = True
+            logger.warning(f"⚠️ Dosya zaten Qdrant'ta mevcut: {filename}")
+        
+        if is_duplicate:
             skipped.append(filename)
-            logger.warning(f"⚠️ Dosya zaten yüklü: {filename}")
             continue
+            
         doc = _pdf_to_doc(filename, fd["content"], llm_client)
         if doc:
             doc_list.append(doc)
+        else:
+            logger.warning(f"⚠️ Dosya işlenemedi: {filename}")
 
     # Eğer tüm dosyalar zaten yüklüyse, uyarı döndür
     if len(skipped) > 0 and len(doc_list) == 0:
-        msg = f"⚠️ Tüm dosyalar zaten yüklü: {', '.join(skipped)}"
+        msg = f"⚠️ Tüm dosyalar zaten Qdrant veritabanında mevcut: {', '.join(skipped)}"
+        logger.warning(msg)
+        return msg
+    
+    # Eğer bazı dosyalar atlandıysa bilgi ver
+    if len(skipped) > 0:
+        logger.info(f"{len(skipped)} dosya zaten mevcut olduğu için atlandı: {', '.join(skipped)}")
         logger.warning(msg)
         return msg
 
@@ -159,7 +190,7 @@ async def upload_files_background(file_data: list) -> str:
 
     msg = f"✅ {len(doc_list)} dosya işlendi, {total_added} parça Qdrant'a kaydedildi."
     if skipped:
-        msg += f"\n⚠️ Atlanan (zaten yüklü): {', '.join(skipped)}"
+        msg += f"\n⚠️ Atlanan dosyalar (zaten Qdrant'ta mevcut): {', '.join(skipped)}"
     
     logger.info(f"upload_files_background tamamlandı: {msg}")
     return msg
