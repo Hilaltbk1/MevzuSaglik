@@ -7,8 +7,8 @@ from typing import List
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://mevzusaglik.com.tr")
 
 # Global state for API key
-current_api_key = None
-HEADERS = {}
+current_api_key = os.environ.get("TENANT_API_KEY", "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d")
+HEADERS = {"X-API-Key": current_api_key}
 
 
 # --- YARDIMCI FONKSİYONLAR ---
@@ -136,11 +136,19 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     u_name = gr.State("Misafir")
     u_code = gr.State("Anonymous")
     s_uuid = gr.State(None)
+    
+    # Plan API keys
+    PLAN_KEYS = {
+        "free": "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af",      # atalay2
+        "pro": "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d",       # Hilal
+        "unlimited": "01fdd7b2dc26de0c5c9db75081a6ca04699444d72595d2829098882e546cb921" # Hilal (ID 33)
+    }
 
     # GİRİŞ EKRANI
     with gr.Column(visible=True, elem_classes="login-card") as login_box:
         gr.Markdown("<center><h1>⚕️ MevzuSağlık AI</h1><p>Dijital Mevzuat Asistanı</p></center>")
         name_in = gr.Textbox(label="Ad Soyad", placeholder="Adınızı yazın...", lines=1)
+        plan_in = gr.Dropdown(label="Plan Seçin", choices=["free", "pro", "unlimited"], value="pro")
         code_in = gr.Textbox(label="Araştırma Kodu (Opsiyonel)", placeholder="Size verilen kodu yazın...", lines=1)
         login_btn = gr.Button("🚀 Giriş Yap", variant="primary")
 
@@ -171,13 +179,18 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
 
     # --- ETKİLEŞİM ---
 
-    def do_login(name, code):
+    def do_login(name, plan, code):
         global current_api_key, HEADERS
         
         name = name.strip() or "Misafir"
         code = code.strip() or "Anonymous"
+        plan = plan or "pro"
         
-        # Eğer şifre girilmişse, backend'den API key'i al
+        # Plan'a göre API key'i seç
+        current_api_key = PLAN_KEYS.get(plan, PLAN_KEYS["pro"])
+        HEADERS = {"X-API-Key": current_api_key}
+        
+        # Eğer şifre girilmişse, backend'den API key'i al (override)
         if code and code != "Anonymous":
             try:
                 res = requests.post(f"{BACKEND_URL}/auth/login", 
@@ -185,24 +198,10 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
                                   timeout=10)
                 if res.status_code == 200:
                     data = res.json()
-                    current_api_key = data.get("api_key", "")
+                    current_api_key = data.get("api_key", current_api_key)
                     HEADERS = {"X-API-Key": current_api_key}
-                else:
-                    return {
-                        login_box: gr.update(visible=True),
-                        main_box: gr.update(visible=False),
-                    }
             except Exception as e:
                 print(f"Login hatası: {e}")
-                return {
-                    login_box: gr.update(visible=True),
-                    main_box: gr.update(visible=False),
-                }
-        
-        # Eğer API key yoksa, .env'den al (fallback)
-        if not current_api_key:
-            current_api_key = os.environ.get("TENANT_API_KEY", "")
-            HEADERS = {"X-API-Key": current_api_key}
         
         # API key ayarlandıktan SONRA oturum oluştur
         sid, hist, session_update = start_new_session(name)
@@ -213,7 +212,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
             u_code: code,
             s_uuid: sid,
             u_info: f"**Kullanıcı:** {name}",
-            u_code_info: f"**Kod:** {code}",
+            u_code_info: f"**Plan:** {plan}",
             session_list: session_update,
             chatbot: hist
         }
@@ -248,7 +247,7 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
         return sid, get_session_history(sid)
 
 
-    login_btn.click(do_login, [name_in, code_in], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, session_list, chatbot])
+    login_btn.click(do_login, [name_in, plan_in, code_in], [login_box, main_box, u_name, u_code, s_uuid, u_info, u_code_info, session_list, chatbot])
     
     # Oturum listesinden birine tıklandığında
     session_list.change(do_session_change, session_list, [s_uuid, chatbot])
