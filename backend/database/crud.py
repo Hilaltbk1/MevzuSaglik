@@ -17,7 +17,7 @@ from backend.schemas import SessionModel, LogModel, PlanType
 from backend.schemas.message_model import MessageModel
 from backend.schemas.tenant_model import TenantModel
 
-COLLECTION_NAME = "mevzu_saglik_docs"
+COLLECTION_NAME = "mevzuat_collection"  # Ana collection adı
 BATCH_SIZE      = 20  # Rate limit için küçültüldü (önceden 50)
 
 
@@ -43,6 +43,10 @@ def _get_existing_files(client: QdrantClient) -> set:
         )
         logger.info(f"📦 Qdrant'tan {len(scroll_res)} point alındı")
         
+        if len(scroll_res) == 0:
+            logger.warning(f"⚠️ Collection '{COLLECTION_NAME}' boş! Hiç dosya yüklenmemiş.")
+            return existing
+        
         unique_files = set()
         for point in scroll_res:
             if point.payload:
@@ -66,13 +70,17 @@ def _get_existing_files(client: QdrantClient) -> set:
                     existing.add(base_name + '.PDF')
                     existing.add((base_name + '.pdf').lower())
         
-        logger.info(f"✅ Qdrant'ta {len(unique_files)} benzersiz dosya bulundu")
-        if unique_files:
-            logger.info(f"📋 Mevcut dosyalar: {', '.join(sorted(list(unique_files)[:5]))}{'...' if len(unique_files) > 5 else ''}")
+        if len(unique_files) == 0:
+            logger.warning(f"⚠️ Qdrant'ta dosya adı bulunamadı! Metadata eksik olabilir.")
+        else:
+            logger.info(f"✅ Qdrant'ta {len(unique_files)} benzersiz dosya bulundu")
+            logger.info(f"📋 İlk 5 dosya: {', '.join(sorted(list(unique_files)[:5]))}")
         
     except Exception as e:
         logger.error(f"❌ Mevcut dosyalar kontrol edilirken hata: {e}")
+        logger.error(f"❌ Hata detayı: {type(e).__name__}")
     
+    logger.info(f"📊 Toplam {len(existing)} dosya adı varyasyonu oluşturuldu")
     return existing
 
 

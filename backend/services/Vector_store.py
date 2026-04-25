@@ -68,7 +68,7 @@ def initialize_vector_store(rebuild_db=False):
         QDRANT_HOST    = os.getenv("QDRANT_HOST", "").strip().strip('\n').strip('\r')
         QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "").strip().strip('\n').strip('\r')
         client = QdrantClient(url=QDRANT_HOST, api_key=QDRANT_API_KEY, prefer_grpc=False, timeout=300)
-        COLLECTION_NAME = "mevzu_saglik_docs"
+        COLLECTION_NAME = "mevzuat_collection"  # Ana collection adı
         exists = client.collection_exists(COLLECTION_NAME)
 
         if rebuild_db or not exists:
