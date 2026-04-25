@@ -45,8 +45,10 @@ def format_to_messages(messages_list):
 def create_new_session(user_name):
     try:
         res = requests.post(f"{BACKEND_URL}/session/create_session", json={"user_name": user_name}, headers=HEADERS, timeout=15)
+        print(f"DEBUG: create_new_session - Status: {res.status_code}, Headers: {HEADERS}")
         return res.json() if res.status_code == 200 else None
-    except:
+    except Exception as e:
+        print(f"DEBUG: create_new_session - Error: {e}")
         return None
 
 
@@ -137,11 +139,12 @@ with gr.Blocks(title="MevzuSağlık AI", theme=gr.themes.Soft(primary_hue="red")
     u_code = gr.State("Anonymous")
     s_uuid = gr.State(None)
     
-    # Plan API keys
+    # Plan API keys - .env'den oku
+    default_api_key = os.environ.get("TENANT_API_KEY", "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af")
     PLAN_KEYS = {
-        "free": "5ea2dd1bb37998bff8de234a6e9f485d2ffd9bdeea562a20e550bc06a7e099af",      # atalay2
-        "pro": "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d",       # Hilal
-        "unlimited": "01fdd7b2dc26de0c5c9db75081a6ca04699444d72595d2829098882e546cb921" # Hilal (ID 33)
+        "free": default_api_key,
+        "pro": "60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d",
+        "unlimited": "01fdd7b2dc26de0c5c9db75081a6ca04699444d72595d2829098882e546cb921"
     }
 
     # GİRİŞ EKRANI
