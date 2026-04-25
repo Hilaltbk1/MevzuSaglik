@@ -17,7 +17,7 @@ from backend.schemas import SessionModel, LogModel, PlanType
 from backend.schemas.message_model import MessageModel
 from backend.schemas.tenant_model import TenantModel
 
-COLLECTION_NAME = "mevzuat_collection"  # Ana collection adı
+COLLECTION_NAME = "mevzu_saglik_docs"  # Qdrant'taki gerçek collection adı
 BATCH_SIZE      = 20  # Rate limit için küçültüldü (önceden 50)
 
 
