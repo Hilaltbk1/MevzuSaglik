@@ -23,5 +23,5 @@ RUN pip install --no-cache-dir langchain-core>=0.1.0
 # Tüm proje dosyalarını kopyala
 COPY . .
 
-# Uygulamayı başlat (uvicorn asgi'yi çalıştırır)
-CMD ["uvicorn", "asgi:app", "--host", "0.0.0.0", "--port", "7860"]
+# Uygulamayı başlat (uvicorn backend.main'i çalıştırır)
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "7860"]
