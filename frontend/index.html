@@ -816,8 +816,17 @@ async function goToCheckout(plan) {
     const data = await res.json();
     if (!res.ok) { alert('Odeme sayfasi olusturulamadi: ' + (data.detail || res.status)); openApp(); return; }
     if (data.checkout_url) {
-      // Ödeme sayfasını aynı tab'da aç (yeni tab yerine)
-      window.location.href = data.checkout_url;
+      // Ödeme sayfasını popup'ta aç
+      const paymentWindow = window.open(data.checkout_url, 'payment', 'width=800,height=600,left=100,top=100');
+      
+      // Popup kapatılıp geri dönüldüğünde sayfayı yenile
+      const checkInterval = setInterval(() => {
+        if (paymentWindow.closed) {
+          clearInterval(checkInterval);
+          // Sayfayı yenile
+          location.reload();
+        }
+      }, 500);
     }
     else alert('Stripe odeme linki alinamadi.');
   } catch(e) { alert('Sunucuya baglaниlamadi: ' + e.message); openApp(); }
