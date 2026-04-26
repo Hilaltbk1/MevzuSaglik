@@ -528,6 +528,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const tenantId = params.get('tenant_id');
     window.history.replaceState({}, '', '/');
     
+    // Popup'ı kapat (eğer popup'tan açıldıysa)
+    if (window.opener) {
+      window.close();
+    }
+    
     // Tenant ID'yi localStorage'a kaydet
     if (tenantId) {
       try { localStorage.setItem('ms_tenant', tenantId); } catch(e) {}
