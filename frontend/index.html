@@ -525,7 +525,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (params.get('payment') === 'success') {
     const plan = params.get('plan') || 'pro';
+    const tenantId = params.get('tenant_id');
     window.history.replaceState({}, '', '/');
+    
+    // Tenant ID'yi localStorage'a kaydet
+    if (tenantId) {
+      try { localStorage.setItem('ms_tenant', tenantId); } catch(e) {}
+    }
+    
     try { localStorage.setItem('ms_paid_plan', plan); } catch(e) {}
     if (loadSession() && currentTenantId) {
       updateSidebarPlan(plan);
