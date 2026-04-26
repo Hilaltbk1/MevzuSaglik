@@ -31,9 +31,11 @@ def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db
     if not tenant:
         raise HTTPException(status_code=404, detail=f"Tenant bulunamadi: {tenant_id}")
 
+    # Success URL'sini doğru şekilde ayarla
     BASE_URL = os.getenv("BACKEND_URL", "https://mevzusaglik.com.tr").strip()
-    # Eğer Hugging Face URL'i ise, Cloudflare domain'ini kullan
-    if "hf.space" in BASE_URL:
+    
+    # Eğer localhost ise, production URL'sini kullan
+    if "localhost" in BASE_URL or "127.0.0.1" in BASE_URL or "hf.space" in BASE_URL:
         BASE_URL = "https://mevzusaglik.com.tr"
     
     plan_price_id = PLAN_PRICE_IDS[plan].strip()
