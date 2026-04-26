@@ -745,6 +745,8 @@ async function doSubmitAuth() {
   } catch(e) { alert('Bağlantı hatası.'); console.error(e); }
 }
 
+let forgotPasswordEmail = '';
+
 function showForgotPassword() {
   hideModal();
   document.getElementById('forgotModal').classList.add('show');
@@ -754,9 +756,11 @@ function showForgotPassword() {
   document.getElementById('forgot-email').value         = '';
   document.getElementById('reset-token').value          = '';
   document.getElementById('reset-new-password').value   = '';
+  forgotPasswordEmail = '';
 }
 function hideForgotModal() {
   document.getElementById('forgotModal').classList.remove('show');
+  forgotPasswordEmail = '';
   showLogin('login');
 }
 
@@ -764,35 +768,59 @@ async function doForgotPassword() {
   const email = document.getElementById('forgot-email').value.trim();
   if (!email) { alert('E-posta adresi zorunludur.'); return; }
   try {
+    console.log('Şifre sıfırlama isteği gönderiliyor:', email);
     const res  = await fetch(BACKEND_URL + '/auth/forgot-password', { method: 'POST', headers: HEADERS, body: JSON.stringify({ email }) });
     const data = await res.json();
-    alert(data.message || 'Islem tamamlandi.');
+    console.log('Backend yanıtı:', res.status, data);
+    
     if (res.ok) {
+      forgotPasswordEmail = email;
+      alert(data.message || 'Kod e-postanıza gönderildi!');
       document.getElementById('forgot-step1').style.display = 'none';
       document.getElementById('forgot-step2').style.display = 'block';
       document.getElementById('forgot-sub').textContent     = 'Kodu girin ve yeni şifre belirleyin';
+      document.getElementById('reset-token').value = '';
+      document.getElementById('reset-new-password').value = '';
+    } else {
+      alert('Hata: ' + (data.detail || data.message || 'Bilinmeyen hata'));
     }
-  } catch(e) { alert('Bağlantı hatası.'); }
+  } catch(e) { 
+    console.error('Bağlantı hatası:', e);
+    alert('Bağlantı hatası: ' + e.message); 
+  }
 }
 
 async function doResetPassword() {
-  const email    = document.getElementById('forgot-email').value.trim();
-  const token    = document.getElementById('reset-token').value.trim();
+  const email    = forgotPasswordEmail;
+  const token    = document.getElementById('reset-token').value.trim().toUpperCase();
   const newPw    = document.getElementById('reset-new-password').value;
 
-  if (!token || !newPw) { alert('Kod ve yeni parola zorunludur.'); return; }
+  if (!email) { alert('E-posta adresi bulunamadı. Lütfen tekrar deneyin.'); return; }
+  if (!token) { alert('Sıfırlama kodu zorunludur.'); return; }
+  if (!newPw) { alert('Yeni parola zorunludur.'); return; }
+  
   if (!validatePassword(newPw)) {
-    alert('Parola en az 8 karakter, 1 buyuk harf, 1 rakam ve 1 ozel karakter icermelidir.');
+    alert('Parola en az 8 karakter, 1 büyük harf, 1 rakam ve 1 özel karakter içermelidir.');
     return;
   }
   try {
+    console.log('Şifre sıfırlama isteği gönderiliyor:', { email, token });
     const res  = await fetch(BACKEND_URL + '/auth/reset-password', { method: 'POST', headers: HEADERS, body: JSON.stringify({ email, token, new_password: newPw }) });
     const data = await res.json();
-    if (!res.ok) { alert(data.detail || 'Hata oluştu.'); return; }
-    alert('Parolanız başarıyla güncellendi! Şimdi giriş yapabilirsiniz.');
-    document.getElementById('forgotModal').classList.remove('show');
-    showLogin('login');
-  } catch(e) { alert('Bağlantı hatası.'); }
+    console.log('Backend yanıtı:', res.status, data);
+    
+    if (res.ok) {
+      alert('Parolanız başarıyla güncellendi! Şimdi giriş yapabilirsiniz.');
+      document.getElementById('forgotModal').classList.remove('show');
+      forgotPasswordEmail = '';
+      showLogin('login');
+    } else {
+      alert('Hata: ' + (data.detail || data.message || 'Bilinmeyen hata'));
+    }
+  } catch(e) { 
+    console.error('Bağlantı hatası:', e);
+    alert('Bağlantı hatası: ' + e.message); 
+  }
 }
 
 function openApp() {
