@@ -64,9 +64,10 @@ def send_reset_email(to_email: str, token: str):
             server.starttls()
             server.login(smtp_user, smtp_pass)
             server.sendmail(smtp_user, [to_email], msg.as_string())
+        print(f"✅ E-posta gönderildi: {to_email}")
     except Exception as e:
-        print(f"E-posta gönderilemedi: {e}")
-        raise HTTPException(status_code=500, detail="E-posta gönderilemedi.")
+        print(f"❌ E-posta gönderilemedi: {e}")
+        raise HTTPException(status_code=500, detail=f"E-posta gönderilemedi: {str(e)}")
 
 
 # ── REGISTER ──────────────────────────────────────────────
