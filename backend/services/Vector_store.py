@@ -122,13 +122,14 @@ def initialize_vector_store(rebuild_db=False):
             logger.info(f"✅ Mevcut collection '{COLLECTION_NAME}' kullanılıyor.")
             vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embedding)
             
-            # Chunks'ları Qdrant'tan çek (BM25 için gerekli)
+            # Chunks'ları Qdrant'tan çek (BM25 için gerekli) - TIMEOUT ile
             try:
                 logger.info("📦 Mevcut dokümanlar Qdrant'tan alınıyor...")
                 scroll_result, _ = client.scroll(
                     collection_name=COLLECTION_NAME,
                     limit=10000,
                     with_payload=True,
+                    timeout=30,  # 30 saniye timeout
                 )
                 
                 # Point'leri Document'lere dönüştür

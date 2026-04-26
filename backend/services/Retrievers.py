@@ -31,6 +31,8 @@ def retrieval_chain():
     """
     from backend.services.Vector_store import initialize_vector_store
 
+    logger.info("🚀 RAG zinciri başlatılıyor...")
+    
     llm = ChatGoogleGenerativeAI(
         model=settings.LLM_MODEL_NAME or "gemini-1.5-flash",
         google_api_key=settings.GOOGLE_API_KEY,
@@ -38,6 +40,7 @@ def retrieval_chain():
     )
 
     # 1. Vektör veritabanını ve doküman chunk'larını al
+    logger.info("📦 Vector store yükleniyor...")
     v_db, split_text = initialize_vector_store(rebuild_db=False)
     if v_db is None:
         raise ValueError("Hata: Vektör veritabanı başlatılamadı! Qdrant bağlantısını kontrol et.")
@@ -45,6 +48,8 @@ def retrieval_chain():
     if split_text is None or len(split_text) == 0:
         logger.warning("⚠️ Chunks bulunamadı, BM25 devre dışı kalacak")
         split_text = []
+    
+    logger.info(f"✅ {len(split_text)} chunk yüklendi")
 
     def get_bm25_retriever(split_text):
         # Eğer chunks yoksa, BM25'i atla
