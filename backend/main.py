@@ -59,6 +59,14 @@ except Exception as e:
 
 from backend.logger import logger
 
+# Chain'i önceden yükle (ilk kullanıcı beklemsin)
+try:
+    from backend.services.Retrievers import retrieval_chain
+    retrieval_chain()
+    print("✅ RAG zinciri önceden yüklendi")
+except Exception as e:
+    print(f"⚠️ RAG zinciri yüklenemedi: {e}")
+
 # Environment variable kontrolü
 REQUIRED_VARS = ["DATABASE_URL", "GOOGLE_API_KEY", "QDRANT_HOST", "QDRANT_API_KEY", "TENANT_API_KEY"]
 missing = [v for v in REQUIRED_VARS if not os.getenv(v)]
