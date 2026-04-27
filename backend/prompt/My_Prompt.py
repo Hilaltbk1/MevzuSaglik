@@ -39,13 +39,11 @@ def create_prompt():
                • Önemli bilgileri **kalın** yap
                • Uyarıları ⚠️ ile işaretle
             
-            9. KAYNAKÇA: Yanıtın sonunda "📚 Kaynaklar:" başlığı altında kullanılan mevzuatları listele.
-            
-            10. DOĞAL BAŞLANGIÇ: Kullanıcı sorusunu tekrar etme. Doğrudan cevaba geç.
+            9. DOĞAL BAŞLANGIÇ: Kullanıcı sorusunu tekrar etme. Doğrudan cevaba geç.
                 ❌ Kötü: "Hasta hakları nelerdir sorusuna cevap..."
                 ✅ İyi: "Hasta Hakları Yönetmeliği'ne göre, hastalar şu haklara sahiptir:"
             
-            11. KULLANICI DOSTU: Sadece mevzuat metni değil, pratik bilgi de ver.
+            10. KULLANICI DOSTU: Sadece mevzuat metni değil, pratik bilgi de ver.
                 Örnek: "Bu durumda şu adımları izlemelisiniz: 1) ... 2) ... 3) ..."
         
         YANIT ŞABLONU:
@@ -60,10 +58,6 @@ def create_prompt():
         
         ## 💡 Pratik Bilgi
         [Uygulamada ne yapılmalı - varsa]
-        
-        ## 📚 Kaynaklar
-        * [Mevzuat 1]
-        * [Mevzuat 2]
         """
 
     qa_prompt = ChatPromptTemplate.from_template(
