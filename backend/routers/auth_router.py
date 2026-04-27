@@ -2,9 +2,7 @@ from __future__ import annotations
 import re
 import secrets
 import os
-import smtplib
 from datetime import datetime, timedelta
-from email.mime.text import MIMEText
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from slowapi import Limiter
@@ -40,35 +38,63 @@ def validate_password(password: str):
 
 
 def send_reset_email(to_email: str, token: str):
-    smtp_host    = os.getenv("SMTP_HOST", "smtp.gmail.com")
-    smtp_port    = int(os.getenv("SMTP_PORT", "587"))
-    smtp_user    = os.getenv("SMTP_USER", "")
-    smtp_pass    = os.getenv("SMTP_PASS", "")
-    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:8000")
+    import os
+    
+    # Resend API key'i .env'den oku
+    resend_api_key = os.getenv("RESEND_API_KEY")
+    from_email = os.getenv("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+    
+    print(f"🔍 Resend Debug - API Key: {resend_api_key[:10] if resend_api_key else 'YOK'}...")
+    print(f"🔍 Resend Debug - From: {from_email}")
 
-    body = (
-        f"Merhaba,\n\n"
-        f"Şifre sıfırlama talebiniz alındı.\n\n"
-        f"Aşağıdaki kodu 'Şifremi Unuttum' bölümüne girin:\n\n"
-        f"  {token}\n\n"
-        f"Bu kod 30 dakika geçerlidir.\n\n"
-        f"MevzuSaglik Ekibi"
-    )
-    msg = MIMEText(body, "plain", "utf-8")
-    msg["Subject"] = "MevzuSaglik - Şifre Sıfırlama"
-    msg["From"]    = smtp_user
-    msg["To"]      = to_email
-
-    try:
-        with smtplib.SMTP(smtp_host, smtp_port) as server:
-            server.starttls()
-            server.login(smtp_user, smtp_pass)
-            server.sendmail(smtp_user, [to_email], msg.as_string())
-        print(f"✅ E-posta gönderildi: {to_email}")
-    except Exception as e:
-        print(f"⚠️  E-posta gönderilemedi (test modu): {e}")
-        print(f"📌 Sıfırlama kodu: {token}")
-        # Test modunda hata verme, sadece log yaz
+    # Resend kullan
+    if resend_api_key:
+        try:
+            import requests
+            
+            body = (
+                f"Merhaba,\n\n"
+                f"Şifre sıfırlama talebiniz alındı.\n\n"
+                f"Aşağıdaki kodu 'Şifremi Unuttum' bölümüne girin:\n\n"
+                f"  {token}\n\n"
+                f"Bu kod 30 dakika geçerlidir.\n\n"
+                f"MevzuSaglik Ekibi"
+            )
+            
+            headers = {
+                "Authorization": f"Bearer {resend_api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "from": from_email,
+                "to": [to_email],
+                "subject": "MevzuSaglik - Şifre Sıfırlama",
+                "text": body
+            }
+            
+            response = requests.post(
+                "https://api.resend.com/emails",
+                headers=headers,
+                json=data
+            )
+            
+            print(f"✅ Resend yanıtı: {response.status_code}")
+            print(f"📧 Resend detay: {response.json()}")
+            
+            if response.status_code == 200:
+                print(f"✅ E-posta gönderildi (Resend): {to_email}")
+                return True
+            else:
+                print(f"⚠️  Resend hatası: {response.json()}")
+                return False
+                
+        except Exception as e:
+            print(f"⚠️  Resend hatası: {e}")
+            return False
+    
+    print("⚠️  RESEND_API_KEY bulunamadı")
+    return False
 
 
 # ── REGISTER ──────────────────────────────────────────────
@@ -143,20 +169,31 @@ async def login_user(request: Request, db: Session = Depends(get_db)):
 @router.post("/forgot-password")
 @limiter.limit("3/minute")
 async def forgot_password(request: Request, db: Session = Depends(get_db)):
-    body  = await request.json()
-    email = body.get("email", "").strip()
-    if not email:
-        raise HTTPException(status_code=400, detail="E-posta adresi zorunludur.")
+    try:
+        body  = await request.json()
+        email = body.get("email", "").strip()
+        if not email:
+            raise HTTPException(status_code=400, detail="E-posta adresi zorunludur.")
 
-    user = db.query(UserModel).filter(UserModel.email == email).first()
-    if user:
-        token                    = secrets.token_hex(6).upper()
-        user.reset_token         = token
-        user.reset_token_expires = datetime.now() + timedelta(minutes=30)
-        db.commit()
-        send_reset_email(email, token)
+        user = db.query(UserModel).filter(UserModel.email == email).first()
+        if user:
+            token                    = secrets.token_hex(6).upper()
+            user.reset_token         = token
+            user.reset_token_expires = datetime.now() + timedelta(minutes=30)
+            db.commit()
+            
+            # E-posta göndermeyi dene, başarısız olursa hata verme
+            email_sent = send_reset_email(email, token)
+            if not email_sent:
+                print(f"⚠️  E-posta gönderilemedi ama işlem devam ediyor: {email}")
 
-    return {"message": "E-posta kayıtlıysa sıfırlama kodu gönderildi."}
+        return {"message": "E-posta kayıtlıysa sıfırlama kodu gönderildi."}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"⚠️  Forgot password hatası: {e}")
+        raise HTTPException(status_code=500, detail="Bir hata oluştu. Lütfen tekrar deneyin.")
 
 
 # ── RESET PASSWORD ─────────────────────────────────────────
