@@ -7,7 +7,12 @@ from sqlalchemy.orm import sessionmaker
 from backend.config.configuration import Settings
 import sys
 import os
+import socket
+
 load_dotenv()
+
+# Socket timeout ayarla (10 saniye)
+socket.setdefaulttimeout(10)
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 #Settings den nesne oluşturduk
@@ -19,7 +24,8 @@ PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 
 engine = create_engine(
     settings.DATABASE_URL,
-    pool_pre_ping=True
+    pool_pre_ping=True,
+    connect_args={"connect_timeout": 10}  # 10 saniye timeout
 )
 #session oluşturmam lazım
 SessionLocal=sessionmaker(autocommit=False,autoflush=False,bind=engine)

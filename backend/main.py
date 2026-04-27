@@ -2,6 +2,13 @@ from __future__ import annotations
 import sys
 import os
 
+# .env dosyasını yükle (root dizindeki .env'yi bul)
+from dotenv import load_dotenv
+# Ana dizindeki .env dosyasını bul
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env_path = os.path.join(root_dir, ".env")
+load_dotenv(env_path)
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 sys.path.append(os.path.dirname(current_dir))
@@ -32,7 +39,23 @@ def patch_grpc_type_error():
 patch_grpc_type_error()
 
 print("Tablolar kontrol ediliyor/oluşturuluyor...")
-Base.metadata.create_all(bind=engine)
+import sqlalchemy
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
+import socket
+socket.setdefaulttimeout(10)  # Global socket timeout
+
+try:
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+    print("✅ Database bağlantısı başarılı")
+    Base.metadata.create_all(bind=engine)
+except OperationalError as e:
+    print(f"⚠️  Database bağlantı hatası: {e}")
+    print("⚠️  Uygulama database olmadan çalışacak")
+except Exception as e:
+    print(f"⚠️  Database hatası: {e}")
+    print("⚠️  Uygulama database olmadan çalışacak")
 
 from backend.logger import logger
 
@@ -147,3 +170,53 @@ async def test_upload():
         "message": "Upload endpoint çalışıyor",
         "timestamp": datetime.now().isoformat()
     }
+
+# Mailjet API key test endpoint'i
+@app.get("/test-mailjet")
+def test_mailjet():
+    """Mailjet API key'lerini test eder"""
+    import os
+    from mailjet_rest import Client
+    
+    api_key = os.getenv("MAILJET_API_KEY")
+    api_secret = os.getenv("MAILJET_API_SECRET")
+    
+    if not api_key or not api_secret:
+        return {
+            "status": "error",
+            "message": "MAILJET_API_KEY veya MAILJET_API_SECRET eksik",
+            "check_env": True
+        }
+    
+    # Key format kontrolü (Mailjet key'leri genellikle 32 karakter)
+    if len(api_key) < 20:
+        return {
+            "status": "error",
+            "message": "API key çok kısa, doğru formatta olmalı",
+            "key_length": len(api_key)
+        }
+    
+    try:
+        # Sadece connection testi yap (gerçek e-posta göndermeden)
+        mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+        result = mailjet.sender.list()
+        
+        if result.status_code == 200:
+            return {
+                "status": "success",
+                "message": "Mailjet API bağlantısı başarılı",
+                "key_format": "valid",
+                "response": result.json()
+            }
+        else:
+            return {
+                "status": "error",
+                "message": f"Mailjet hatası: {result.status_code}",
+                "details": result.json()
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": "Bağlantı hatası",
+            "error": str(e)
+        }
