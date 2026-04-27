@@ -25,6 +25,10 @@ PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 engine = create_engine(
     settings.DATABASE_URL,
     pool_pre_ping=True,
+    pool_size=10,  # Maksimum 10 bağlantı
+    max_overflow=5,  # Ekstra 5 bağlantı
+    pool_recycle=3600,  # 1 saatte bir bağlantıları yenile
+    pool_timeout=30,  # 30 saniye bekle
     connect_args={"connect_timeout": 10}  # 10 saniye timeout
 )
 #session oluşturmam lazım
