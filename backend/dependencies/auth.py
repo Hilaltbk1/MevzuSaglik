@@ -19,8 +19,14 @@ def get_current_tenant(
     db: Session = Depends(get_db),
 ) -> TenantModel:
     if not api_key:
-        raise HTTPException(status_code=401, detail="API anahtarı gerekli")
+        raise HTTPException(
+            status_code=401, 
+            detail="Lütfen giriş yapın. API anahtarı bulunamadı."
+        )
     tenant = db.query(TenantModel).filter_by(api_key=api_key, is_active=True).first()
     if not tenant:
-        raise HTTPException(status_code=403, detail="Geçersiz API anahtarı")
+        raise HTTPException(
+            status_code=403, 
+            detail="Geçersiz veya süresi dolmuş API anahtarı. Lütfen tekrar giriş yapın."
+        )
     return tenant
