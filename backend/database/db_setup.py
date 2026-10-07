@@ -22,23 +22,46 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # backend/database
 # Proje kök dizinine (ca.pem'in olduğu yer) çıkmak için:
 PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=10,  # Maksimum 10 bağlantı
-    max_overflow=5,  # Ekstra 5 bağlantı
-    pool_recycle=3600,  # 1 saatte bir bağlantıları yenile
-    pool_timeout=30,  # 30 saniye bekle
-    connect_args={"connect_timeout": 10}  # 10 saniye timeout
-)
-#session oluşturmam lazım
-SessionLocal=sessionmaker(autocommit=False,autoflush=False,bind=engine)
+DB_AVAILABLE = False
+engine = None
+SessionLocal = None
 
+if settings.DATABASE_URL:
+    try:
+        # psycopg2 kullan (psycopg v3 değil)
+        db_url = settings.DATABASE_URL
+        if db_url.startswith("postgresql://") and "+psycopg2" not in db_url and "+psycopg" not in db_url:
+            db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+        engine = create_engine(
+            db_url,
+            pool_pre_ping=True,
+            pool_size=5,
+            max_overflow=3,
+            pool_recycle=1800,
+            pool_timeout=10,
+            connect_args={"connect_timeout": 10}
+        )
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        DB_AVAILABLE = True
+    except Exception as e:
+        print(f"⚠️  Engine oluşturma hatası: {e}")
+        DB_AVAILABLE = False
+else:
+    print("⚠️  DATABASE_URL bulunamadı, veritabanı devre dışı")
 
 
 def get_db():
+    if not DB_AVAILABLE or SessionLocal is None:
+        from fastapi import HTTPException
+        raise HTTPException(
+            status_code=503,
+            detail="Veritabanı bağlantısı şu an kullanılamıyor. Lütfen daha sonra tekrar deneyin."
+        )
     db = SessionLocal()
     try:
         yield db
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()
