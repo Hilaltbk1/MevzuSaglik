@@ -5,7 +5,7 @@ google-generativeai
 langchain-google-genai
 langchain-qdrant
 qdrant-client
-sqlalchemy
+sqlalchemy==1.4.53
 pydantic
 PyPDF2
 bcrypt==4.0.1
