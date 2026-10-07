@@ -26,28 +26,32 @@ DB_AVAILABLE = False
 engine = None
 SessionLocal = None
 
-if settings.DATABASE_URL:
-    try:
-        # psycopg2 kullan (psycopg v3 değil)
-        db_url = settings.DATABASE_URL
-        if db_url.startswith("postgresql://") and "+psycopg2" not in db_url and "+psycopg" not in db_url:
-            db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
-        engine = create_engine(
-            db_url,
-            pool_pre_ping=True,
-            pool_size=5,
-            max_overflow=3,
-            pool_recycle=1800,
-            pool_timeout=10,
-            connect_args={"connect_timeout": 10}
-        )
-        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        DB_AVAILABLE = True
-    except Exception as e:
-        print(f"⚠️  Engine oluşturma hatası: {e}")
-        DB_AVAILABLE = False
-else:
-    print("⚠️  DATABASE_URL bulunamadı, veritabanı devre dışı")
+# Geçici olarak veritabanını devre dışı bırak
+print("⚠️  Veritabanı geçici olarak devre dışı - sadece Qdrant kullanılıyor")
+DB_AVAILABLE = False
+
+# if settings.DATABASE_URL:
+#     try:
+#         # psycopg2 kullan (psycopg v3 değil)  
+#         db_url = settings.DATABASE_URL
+#         if db_url.startswith("postgresql://") and "+psycopg2" not in db_url and "+psycopg" not in db_url:
+#             db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+#         engine = create_engine(
+#             db_url,
+#             pool_pre_ping=True,
+#             pool_size=5,
+#             max_overflow=3,
+#             pool_recycle=1800,
+#             pool_timeout=10,
+#             connect_args={"connect_timeout": 10}
+#         )
+#         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+#         DB_AVAILABLE = True
+#     except Exception as e:
+#         print(f"⚠️  Engine oluşturma hatası: {e}")
+#         DB_AVAILABLE = False
+# else:
+#     print("⚠️  DATABASE_URL bulunamadı, veritabanı devre dışı")
 
 
 def get_db():

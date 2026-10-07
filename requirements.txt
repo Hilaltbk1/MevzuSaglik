@@ -14,7 +14,8 @@ python-jose[cryptography]
 stripe
 python-multipart
 psycopg2-binary
-psycopg[binary]
+psycopg2
+psycopg
 langchain-community<0.3.0
 rank-bm25
 huggingface-hub
