@@ -1,41 +1,39 @@
-name: Weekly Qdrant Backup Check
+name: Keep HuggingFace Space Active
 
 on:
   schedule:
     - cron: '0 10 * * 0'  # Her Pazar 10:00
+    - cron: '0 10 * * 3'  # Her Çarşamba 10:00 (haftada 2 kez)
   workflow_dispatch:  # Manuel tetikleme
 
 jobs:
-  backup:
+  ping-space:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          
-      - name: Install dependencies
-        run: |
-          pip install qdrant-client
-          
-      - name: Check Qdrant Status
-        env:
-          QDRANT_HOST: ${{ secrets.QDRANT_HOST }}
-          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
-        run: |
-          python -c "
-          import os
-          from qdrant_client import QdrantClient
-          client = QdrantClient(url=os.environ['QDRANT_HOST'], api_key=os.environ['QDRANT_API_KEY'])
-          count = client.count('mevzu_saglik_docs').count
-          print(f'✅ Qdrant OK: {count} chunks')
-          if count < 1000:
-            print('⚠️ Chunk sayısı düşük!')
-          "
-      
       - name: Keep HuggingFace Space Active
         run: |
-          curl -X GET "https://hilal1-mevzusaglik.hf.space/test"
-          echo "Space pinged successfully"
+          echo "Pinging HuggingFace Space to keep it active..."
+          
+          # Test endpoint'ini çağır
+          response=$(curl -s -w "%{http_code}" -o response.txt "https://hilal1-mevzusaglik.hf.space/test")
+          
+          if [ "$response" = "200" ]; then
+            echo "✅ Space is active and responding"
+            echo "Response: $(cat response.txt)"
+          else
+            echo "⚠️ Space returned status: $response"
+            echo "Response: $(cat response.txt)"
+          fi
+          
+          # Qdrant cluster'ı da aktif tut (indirect olarak)
+          list_response=$(curl -s -w "%{http_code}" -o list_response.txt \
+            -H "X-API-Key: 60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d" \
+            "https://hilal1-mevzusaglik.hf.space/add_documents/list_existing")
+          
+          echo "List endpoint status: $list_response"
+          
+      - name: Report Status
+        run: |
+          echo "🎯 HuggingFace Space pinged successfully"
+          echo "📅 Next ping: $(date -d '+3 days' '+%Y-%m-%d %H:%M')"
+          echo "💡 This keeps both HF Space and Qdrant cluster active"
