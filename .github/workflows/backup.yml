@@ -1,0 +1,41 @@
+name: Weekly Qdrant Backup Check
+
+on:
+  schedule:
+    - cron: '0 10 * * 0'  # Her Pazar 10:00
+  workflow_dispatch:  # Manuel tetikleme
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install qdrant-client
+          
+      - name: Check Qdrant Status
+        env:
+          QDRANT_HOST: ${{ secrets.QDRANT_HOST }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+        run: |
+          python -c "
+          import os
+          from qdrant_client import QdrantClient
+          client = QdrantClient(url=os.environ['QDRANT_HOST'], api_key=os.environ['QDRANT_API_KEY'])
+          count = client.count('mevzu_saglik_docs').count
+          print(f'✅ Qdrant OK: {count} chunks')
+          if count < 1000:
+            print('⚠️ Chunk sayısı düşük!')
+          "
+      
+      - name: Keep HuggingFace Space Active
+        run: |
+          curl -X GET "https://hilal1-mevzusaglik.hf.space/test"
+          echo "Space pinged successfully"
