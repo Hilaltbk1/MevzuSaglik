@@ -5,7 +5,7 @@ google-generativeai
 langchain-google-genai
 langchain-qdrant
 qdrant-client
-sqlalchemy==1.4.53
+sqlalchemy==1.3.24
 pydantic
 PyPDF2
 bcrypt==4.0.1
@@ -16,6 +16,7 @@ python-multipart
 psycopg2-binary
 psycopg2
 psycopg
+psycopg[binary]
 langchain-community<0.3.0
 rank-bm25
 huggingface-hub
