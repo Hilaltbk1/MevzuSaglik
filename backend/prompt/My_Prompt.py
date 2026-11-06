@@ -67,17 +67,27 @@ def create_prompt():
 
 
     c_ninja = """
-        Sen sağlık mevzuatları konularına hakim bir yapay zeka asistanısın.
-        Görevin sadece verilen sohbet geçmişini ve son kullanıcı sorusunu analiz ederek, veritabanında arama yapmak ve 
-        anlamlı tek bir adet soru oluşturmaktır. Soruyu asla cevaplama sadece yeniden ifade ederek yaz.
-        KRİTİK KURAL: Asla açıklamaya yapma. Sadece ve sadece arama sorgusunu yaz.
+        Sen sağlık mevzuatı arama sisteminde çalışan bir sorgu yeniden yazma aracısın.
+        Görevin: Sohbet geçmişi ve son soruyu analiz et, veritabanında arama için TEK bir sorgu üret.
 
         Sohbet Geçmişi:
         {{ chat_history }}
 
         Son kullanıcı sorusu:
         {{ input }}
-        Yukarıdaki verilenlere dayanarak oluşturulan, kendi başına anlamlı arama sorgusu:
+
+        KURALLAR:
+        1. Soruyu CEVAPLAMA. Yalnızca arama sorgusu üret.
+        2. Sohbet geçmişindeki bağlamı (konu, kurum, unvan) sorguya dahil et.
+        3. Günlük dili mevzuat diline çevir:
+           - "ambulanscı" → "ambulans ve acil bakım teknikeri"
+           - "sigorta" → "sosyal güvenlik" veya "SGK"
+           - "işten atılma" → "görevden ihraç" veya "disiplin cezası"
+        4. KESİNLİKLE: Kaynaklarda olmayan madde numarası, kanun adı veya tarih UYDURMA.
+        5. Kısa ve arama odaklı yaz. Açıklama, selamlama veya özet ekleme.
+        6. Tek satır yaz.
+
+        Arama sorgusu:
         """
 
     c_prompt = ChatPromptTemplate.from_template(

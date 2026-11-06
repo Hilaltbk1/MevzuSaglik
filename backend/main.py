@@ -13,7 +13,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 sys.path.append(os.path.dirname(current_dir))
 
-from backend.utils import create_app
+from backend.app_utils import create_app
 from backend.database.base import Base
 from backend.database.db_setup import engine
 from backend.dependencies.auth import get_current_tenant
@@ -59,7 +59,7 @@ except Exception as e:
 
 from backend.logger import logger
 
-# Chain'i önceden yükle (ilk kullanıcı beklemsin)
+# Chain'i önceden yükle (ilk kullanıcı beklemesin)
 try:
     from backend.services.Retrievers import retrieval_chain
     retrieval_chain()
@@ -153,13 +153,14 @@ def home():
             print("✗ Frontend dosyası bulunamadı!")
             return FileResponse("index.html")  # Fallback
         
+# OLMASI GEREKEN — sadece backend URL enjekte et, API key'i kaldır
         inject = (
             f'<script>'
-            f'window.__TENANT_API_KEY__ = "{api_key}";'
             + (f'window.__BACKEND_URL__ = "{backend_url}";' if backend_url else '')
             + f'</script>'
-        )
+)
         html_content = html_content.replace("<head>", "<head>\n" + inject, 1)
+
         from fastapi.responses import HTMLResponse
         return HTMLResponse(content=html_content)
     except Exception as e:

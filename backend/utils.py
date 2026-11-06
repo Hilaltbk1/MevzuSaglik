@@ -25,19 +25,24 @@ def create_app() -> FastAPI:
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+    # Production ve development environment'lar için güvenli CORS ayarları
     ALLOWED_ORIGINS = [
         "https://mevzusaglik.com.tr",
         "https://www.mevzusaglik.com.tr",
-        "https://mevzusaglik.pages.dev",  # Cloudflare Pages önizleme adresi
-        "https://mevzusaglik.mevzusaglik.workers.dev",  # Backend'in kendi adresi
-        "https://mevzusaglik.workers.dev",  # Cloudflare Worker domain'iniz
+        "https://mevzusaglik.pages.dev",  # Cloudflare Pages
+        "https://mevzusaglik.mevzusaglik.workers.dev",  # Backend domain
+        "https://mevzusaglik.workers.dev",  # Cloudflare Worker domain
+        "https://hilal1-mevzusaglik.hf.space",  # Hugging Face Spaces
         "http://localhost:8000",
-        "http://localhost:8001",
-        "http://localhost:3000",  # Genelde React/Vite kullanırsan lazım olur
-        "http://localhost:7860",  # Gradio frontend portu
-        "https://hilal1-mevzusaglik.hf.space",  # Hugging Face Spaces URL'niz
-        "*",  # Tüm origin'lere izin ver (development için)
+        "http://localhost:8001", 
+        "http://localhost:3000",  # React/Vite dev server
+        "http://localhost:7860",  # Gradio frontend
     ]
+    
+    # Development mode için environment variable kontrolü
+    import os
+    if os.getenv("ENVIRONMENT") == "development":
+        ALLOWED_ORIGINS.append("*")  # Sadece development'ta wildcard
 
     app.add_middleware(
         CORSMiddleware,
@@ -50,7 +55,7 @@ def create_app() -> FastAPI:
     app.include_router(search.router)
     app.include_router(history.router)
     app.include_router(session_router.router)
-    app.include_router(add_documents.router)
+    #app.include_router(add_documents.router)
     app.include_router(admin.router)
     app.include_router(health.router)
     app.include_router(billing.router)

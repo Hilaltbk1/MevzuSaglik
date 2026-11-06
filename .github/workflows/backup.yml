@@ -27,7 +27,7 @@ jobs:
           
           # Qdrant cluster'ı da aktif tut (indirect olarak)
           list_response=$(curl -s -w "%{http_code}" -o list_response.txt \
-            -H "X-API-Key: 60f1d84f0c61a664b3eb9ad57afcba7f0d3dd2780a4418395171d7250432395d" \
+            -H "X-API-Key: ${{ secrets.TENANT_API_KEY }}" \
             "https://hilal1-mevzusaglik.hf.space/add_documents/list_existing")
           
           echo "List endpoint status: $list_response"

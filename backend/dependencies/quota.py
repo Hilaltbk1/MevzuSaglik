@@ -9,7 +9,9 @@ from backend.dependencies.auth import PLAN_LIMITS
 
 
 def check_daily_quota(tenant, user_name: str, db: Session):
-    limit = PLAN_LIMITS[tenant.plan]["requests_per_day"]
+    # Enum'u string'e çevir
+    plan_key = tenant.plan if isinstance(tenant.plan, str) else tenant.plan.value
+    limit = PLAN_LIMITS[plan_key]["requests_per_day"]
     if limit == -1:
         return
 

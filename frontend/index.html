@@ -4,12 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MevzuSağlık</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--navy:#0a1628;--navy2:#0f1e3a;--navy3:#162544;--teal:#0d9488;--teal2:#14b8a6;--teal3:#5eead4;--gold:#d4a853;--gold2:#f0c96b;--white:#f8f6f0;--muted:#94a3b8;--border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);--radius:12px;--ff-display:'Playfair Display',Georgia,serif;--ff-body:'DM Sans',sans-serif}
+:root{--bg:#a82e2e;--bg2:#801414;--bg3:#480707;--navy:#a82e2e;--navy2:#801414;--navy3:#071448;--accent:#9e1a1a;--accent2:#bf3a3a;--accent3:#df6a6a;--teal:#9e1a1a;--teal2:#bf3a3a;--teal3:#df6a6a;--gold:#c42020;--gold2:#e04040;--white:#f8fbff;--muted:#984a4a;--border:rgba(80, 10, 10, 0.15);--card:rgba(255, 255, 255, 0.55);--radius:12px;--ff-display:'Plus Jakarta Sans',system-ui,sans-serif;--ff-body:'Inter',system-ui,sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
-body{background:var(--navy);color:var(--white);font-family:var(--ff-body);font-size:16px;line-height:1.7;overflow-x:hidden}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,22,40,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+body{background:#8ab4e8;color:var(--white);font-family:var(--ff-body);font-size:16px;line-height:1.7;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,8,16,0.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.3s ease}
+nav.scrolled{background:rgba(5,8,16,0.9);border-bottom-color:rgba(255,255,255,0.08)}
 .nav-logo{font-family:var(--ff-display);font-size:22px;font-weight:700;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:10px}
 .nav-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
 .nav-links{display:flex;align-items:center;gap:32px}
@@ -19,17 +20,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:fl
 .btn{padding:10px 22px;border-radius:8px;font-family:var(--ff-body);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
 .btn-ghost:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
-.btn-primary{background:var(--teal);color:#fff}
-.btn-primary:hover{background:var(--teal2);transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#fff;font-weight:600;letter-spacing:0.01em}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 8px 25px rgba(99,102,241,0.3)}
 .btn-large{padding:14px 32px;font-size:16px;border-radius:10px}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);font-weight:600}
-.btn-gold:hover{transform:translateY(-2px)}
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
-.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(13,148,136,0.15) 0%,transparent 70%);pointer-events:none}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.3);color:var(--teal3);padding:6px 16px;border-radius:100px;font-size:13px;font-weight:500;margin-bottom:32px}
-.hero-badge-dot{width:6px;height:6px;background:var(--teal2);border-radius:50%}
-h1.hero-title{font-family:var(--ff-display);font-size:clamp(42px,6vw,80px);font-weight:700;line-height:1.1;margin-bottom:24px;max-width:860px}
-h1.hero-title .accent{color:var(--teal2)}h1.hero-title .gold{color:var(--gold)}
+.btn-gold{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:600}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,0.4)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 40px 80px;position:relative;overflow:hidden;background:var(--bg)}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(99,102,241,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.06) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 0%,black 40%,transparent 100%);pointer-events:none}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.4;pointer-events:none;animation:blobFloat 8s ease-in-out infinite}
+.hero-blob-1{width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.4),transparent);top:-100px;left:50%;animation:blobFloat1 8s ease-in-out infinite}
+.hero-blob-2{width:300px;height:300px;background:radial-gradient(circle,rgba(13,148,136,0.3),transparent);top:30%;left:10%;animation-delay:-3s}
+.hero-blob-3{width:250px;height:250px;background:radial-gradient(circle,rgba(129,140,248,0.25),transparent);top:20%;right:10%;animation-delay:-6s}
+@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+@keyframes blobFloat1{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-20px)}}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);color:var(--accent3);padding:6px 16px;border-radius:100px;font-size:13px;font-weight:500;margin-bottom:32px;letter-spacing:0.02em}
+.hero-badge-dot{width:6px;height:6px;background:var(--accent2);border-radius:50%;box-shadow:0 0 6px var(--accent)}
+h1.hero-title{font-size:clamp(44px,7vw,88px);font-weight:800;line-height:1.05;letter-spacing:-0.03em;margin-bottom:24px;max-width:900px;background:linear-gradient(180deg,#f1f5f9 0%,rgba(241,245,249,0.6) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h1.hero-title .accent{background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}h1.hero-title .gold{color:var(--gold)}
 .hero-sub{font-size:18px;color:var(--muted);max-width:560px;margin:0 auto 40px;font-weight:300}
 .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 .hero-stats{display:flex;gap:48px;margin-top:64px;flex-wrap:wrap;justify-content:center}
@@ -40,9 +48,10 @@ section{padding:100px 40px;position:relative}.container{max-width:1100px;margin:
 .section-title{font-family:var(--ff-display);font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.15;margin-bottom:20px}
 .section-divider{width:48px;height:2px;background:linear-gradient(90deg,var(--teal),transparent);margin-bottom:32px}
 .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:56px}
-.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;transition:all .3s}
-.feature-card:hover{border-color:rgba(13,148,136,0.3);transform:translateY(-4px)}
-.feature-icon{width:48px;height:48px;background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.feature-card{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:16px;padding:32px;transition:all 0.3s ease;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity 0.3s}
+.feature-card:hover{border-color:rgba(99,102,241,0.3);transform:translateY(-4px);background:rgba(99,102,241,0.04)}.feature-card:hover::before{opacity:1}
+.feature-icon{width:48px;height:48px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
 .feature-title{font-family:var(--ff-display);font-size:20px;font-weight:600;margin-bottom:10px}
 .feature-desc{font-size:14px;color:var(--muted);line-height:1.7}
 .steps{display:flex;flex-direction:column;gap:0;margin-top:56px}
@@ -75,7 +84,7 @@ section{padding:100px 40px;position:relative}.container{max-width:1100px;margin:
 .msg.ai .msg-bubble{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--white);border-radius:14px 14px 14px 4px}
 .msg-time{font-size:11px;color:var(--muted);padding:0 4px}
 .demo-source{background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--teal3);margin-top:4px;display:flex;align-items:center;gap:6px}
-footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
+footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 40px 40px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
 .footer-brand{font-family:var(--ff-display);font-size:22px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
 .footer-brand-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -148,9 +157,9 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 .send-btn:hover{background:var(--teal2);transform:scale(1.05)}
 .send-btn svg{width:16px;height:16px;fill:white}
 .input-hint{font-size:11px;color:var(--muted);margin-top:8px;text-align:center}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
-.modal{background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
+.modal{background:var(--bg2);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:48px 40px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,0.6)}
 .modal-logo{font-family:var(--ff-display);font-size:24px;font-weight:700;text-align:center;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px}
 .modal-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
 .modal-sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:32px}
@@ -181,9 +190,873 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 /* quota sinirsiz */
 .quota-unlimited{font-size:11px;color:var(--teal2);text-align:center;padding:4px 0}
 @media(max-width:768px){nav{padding:16px 20px}.nav-links{display:none}section{padding:60px 20px}.hero{padding:100px 20px 60px}.footer-grid{grid-template-columns:1fr 1fr}.sidebar{position:fixed;left:-280px;top:0;height:100vh;z-index:300;transition:left .3s}.sidebar.open{left:0}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:299}.sidebar-overlay.show{display:block}.mobile-menu-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:18px;color:var(--white)}.chat-main{width:100%}}
+
+@media (min-width: 900px) {
+  #landing-page h1.hero-title { white-space: nowrap; }
+}
+.marquee-section{width:100%;overflow:hidden;padding:32px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,0.01);margin-top:80px}
+.marquee-track{display:flex;gap:0;animation:marquee 30s linear infinite;white-space:nowrap}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-item{display:inline-flex;align-items:center;gap:12px;padding:0 40px;font-size:14px;font-weight:500;color:var(--muted);border-right:1px solid var(--border);flex-shrink:0}
+.marquee-item span{font-size:18px}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ══════════════════════════════════════════════
+   MEVZUSAĞLIK — Orta lacivert tema, belirgin ton farkı
+   ══════════════════════════════════════════════ */
+
+/* Arka plan: sağ/sol koyu lacivert, orta açık lacivert — ton farkı belirgin */
+:root {
+  --white:      #ffffff;
+  --muted:      rgba(255,255,255,0.62);
+  --border:     rgba(255,255,255,0.12);
+  --card:       rgba(255,255,255,0.08);
+  --accent:     #4d7cfe;
+  --accent2:    #7a9bfa;
+  --ff-display: 'Inter', system-ui, sans-serif;
+  --ff-body:    'Inter', system-ui, sans-serif;
+}
+
+html, body {
+  background: #8ab4e8;
+  color: #0a1a3a;
+}
+
+/* Gradient: orta beyaza yakın soft mavi, kenarlar çok koyu navy — maksimum ton farkı */
+#landing-page {
+  background: radial-gradient(ellipse 220% 180% at 50% 35%,
+    #ddeeff 0%,
+    #b8d4f0 8%,
+    #8ab4e8 18%,
+    #5a8cd0 30%,
+    #2e5ca8 46%,
+    #143080 62%,
+    #071448 80%,
+    #020a28 100%);
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  color: #0a1a3a;
+  position: relative;
+}
+
+/* Tüm bölümler şeffaf — gradient tüm sayfada aynı */
+#landing-page > *            { position: relative; z-index: 1; }
+#landing-page .hero          { background: transparent; }
+#ozellikler                  { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.08); }
+#nasil-calisir               { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.08); }
+#fiyatlar                    { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.08); }
+#landing-page .hero::before  { display: none; }
+#landing-page .hero-blob-1   { display: none !important; }
+#landing-page .hero-blob-2   { display: none !important; }
+#landing-page .hero-blob-3   { display: none !important; }
+
+/* ── NAV ── */
+#landing-page nav {
+  padding: 16px 56px;
+  background: rgba(180,215,245,0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(10,40,120,0.12);
+  transition: background 0.3s;
+}
+#landing-page nav.scrolled {
+  background: rgba(10,25,70,0.75);
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+#landing-page .nav-logo { color: #0a1a3a; }
+#landing-page nav.scrolled .nav-logo { color: #fff; }
+#landing-page .nav-logo-icon { background: rgba(26,58,138,0.2); border-radius: 8px; color: #1a3a8a; }
+#landing-page .nav-links a { color: rgba(10,26,58,0.65); font-size: 14px; }
+#landing-page nav.scrolled .nav-links a { color: rgba(255,255,255,0.7); }
+#landing-page .nav-links a:hover { color: #0a1a3a; }
+#landing-page .btn-ghost {
+  color: rgba(10,26,58,0.7);
+  border: 1px solid rgba(10,40,120,0.2);
+  background: rgba(255,255,255,0.3);
+  border-radius: 8px;
+}
+#landing-page .btn-ghost:hover {
+  color: #0a1a3a;
+  border-color: rgba(10,40,120,0.4);
+  background: rgba(255,255,255,0.5);
+}
+#landing-page .btn-primary {
+  background: #1a4a9e;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+}
+#landing-page .btn-primary:hover {
+  background: #2a5abf;
+}
+#landing-page .btn-gold {
+  background: linear-gradient(135deg, #1a4a9e, #0e2f72);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(20,50,130,0.4);
+}
+#landing-page .btn-gold:hover {
+  background: linear-gradient(135deg, #2a5abf, #1a3f90);
+  box-shadow: 0 6px 28px rgba(20,50,130,0.5);
+  transform: translateY(-1px);
+}
+
+/* ── HERO ── */
+#landing-page .hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 130px 56px 60px;
+  overflow: hidden;
+}
+.hero-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 72px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-text {
+  flex: 1;
+  max-width: 540px;
+  text-align: left;
+}
+.hero-illustration {
+  flex: 0 0 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-books-gif {
+  width: 420px;
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 20px 40px rgba(15,30,100,0.3));
+  animation: bookFloat 7s ease-in-out infinite;
+}
+@keyframes bookFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+#landing-page .hero-badge {
+  display: inline-block;
+  background: rgba(10,40,120,0.12);
+  border: 1px solid rgba(10,40,120,0.25);
+  color: #1a3a8a;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+#landing-page .hero-badge-dot { display: none; }
+#landing-page h1.hero-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: #0a1a3a;
+  text-shadow: 0 2px 20px rgba(180,210,255,0.4);
+  background: none;
+  -webkit-text-fill-color: #0a1a3a;
+  margin-bottom: 22px;
+  text-align: left;
+}
+#landing-page h1.hero-title .accent,
+#landing-page h1.hero-title .gold {
+  color: #1a3a8a;
+  -webkit-text-fill-color: #1a3a8a;
+  font-style: italic;
+}
+#landing-page .hero-sub {
+  font-size: 17px;
+  color: rgba(10,26,58,0.72);
+  max-width: 460px;
+  margin: 0 0 36px;
+  font-weight: 400;
+  line-height: 1.7;
+  text-align: left;
+}
+#landing-page .hero-actions { justify-content: flex-start; }
+#landing-page .hero-stats {
+  display: flex;
+  justify-content: flex-start;
+  gap: 48px;
+  margin-top: 44px;
+  padding-top: 28px;
+
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+}
+#landing-page .stat { text-align: center; }
+#landing-page .stat-num { font-size: 34px; font-weight: 800; color: #0a1a3a; letter-spacing: -0.02em; }
+#landing-page .stat-num span { color: #1a4a9e; }
+#landing-page .stat-label { font-size: 11px; color: rgba(10,26,58,0.55); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+/* ── MARQUEE ── */
+#landing-page .marquee-section {
+  border-top: 1px solid rgba(10,40,120,0.15);
+  border-bottom: 1px solid rgba(10,40,120,0.15);
+  background: rgba(255,255,255,0.18);
+  padding: 16px 0;
+  margin-top: 48px;                
+  width: calc(100% + 112px);      
+  margin-left: -56px;              
+  margin-right: -56px;             
+}
+#landing-page .marquee-item {
+  color: rgba(10,26,58,0.55);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0 36px;
+  border-right: 1px solid rgba(10,40,120,0.12);
+}
+
+/* ── SECTION LABELS & TITLES ── */
+#landing-page .section-label { color: rgba(10,26,58,0.5); font-size: 11px; letter-spacing: 0.15em; }
+#landing-page .section-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 20px rgba(10,20,80,0.3);
+  background: none;
+  -webkit-text-fill-color: #ffffff;
+}
+#landing-page .section-divider { display: none; }
+
+/* ── DEMO ── */
+#landing-page .demo-wrap {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  box-shadow: 0 8px 48px rgba(0,0,10,0.4);
+}
+#landing-page .demo-header { background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08); }
+#landing-page .demo-title { color: rgba(255,255,255,0.35); }
+#landing-page .msg.ai .msg-bubble { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); }
+#landing-page .msg.user .msg-bubble { background: #4a6be0; color: #fff; }
+#landing-page .demo-source { background: rgba(91,128,248,0.12); border: 1px solid rgba(91,128,248,0.25); color: #a5c0ff; }
+#landing-page .msg-time { color: rgba(255,255,255,0.25); }
+
+/* ── FEATURE CARDS ── */
+#landing-page .feature-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  padding: 28px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+}
+#landing-page .feature-card::before { display: none !important; }
+#landing-page .feature-card:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.32);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(10,20,80,0.2);
+}
+#landing-page .feature-icon {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  font-size: 20px;
+}
+#landing-page .feature-title { color: #fff; font-size: 16px; font-weight: 600; }
+#landing-page .feature-desc  { color: rgba(255,255,255,0.62); font-size: 14px; line-height: 1.6; }
+
+#landing-page .features-grid {
+  grid-auto-rows: 130px;            
+}
+#landing-page .features-grid .feature-card {
+  height: 130px;
+  align-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;            
+  align-items: center;
+  gap: 0 16px;
+  padding: 0 28px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transition: height .35s ease, transform .35s ease, background .25s,
+              border-color .25s, box-shadow .35s, opacity .6s ease;
+}
+
+#landing-page .features-grid .feature-icon {
+  margin-bottom: 0;
+  flex: 0 0 48px;
+}
+#landing-page .features-grid .feature-title {
+  margin-bottom: 0;
+  flex: 1;
+  font-size: 17px;
+}
+
+#landing-page .features-grid .feature-desc {
+  flex: 0 0 100%;
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  overflow: hidden;
+  transition: max-height .35s ease, opacity .3s ease, margin-top .35s ease;
+}
+
+#landing-page .features-grid .feature-card:hover {
+  height: 175px;
+  transform: scale(1.05);
+  z-index: 10;
+  background: rgba(255,255,255,0.28);
+  border-color: rgba(255,255,255,0.45);
+  box-shadow: 0 18px 44px rgba(10,20,80,0.28);
+}
+#landing-page .features-grid .feature-card:hover .feature-desc {
+  max-height: 90px;
+  opacity: 1;
+  margin-top: 14px;
+  color: rgba(255,255,255,0.9);
+}
+
+/* ── STEPS ── */
+#landing-page .step { border-bottom: 1px solid rgba(255,255,255,0.1); }
+#landing-page .step-num {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.7);
+}
+#landing-page .step-title { color: #fff; font-size: 20px; font-weight: 600; }
+#landing-page .step-desc  { color: rgba(255,255,255,0.58); }
+
+/* ── PRICING ── */
+#landing-page .price-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+}
+#landing-page .price-card:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 36px rgba(10,20,80,0.2);
+}
+#landing-page .price-card.featured {
+  background: linear-gradient(150deg, #3a58f0 0%, #2a40d0 100%);
+  border-color: transparent;
+  box-shadow: 0 16px 52px rgba(50,70,200,0.45);
+  transform: translateY(-4px);
+}
+#landing-page .price-card.featured::before {
+  content: 'En Popüler';
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: #fff; color: #3a58f0;
+  font-size: 11px; font-weight: 700;
+  padding: 5px 18px; border-radius: 100px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+#landing-page .price-card.featured .btn-primary { background: #fff; color: #3a58f0; font-weight: 700; }
+#landing-page .price-plan   { color: rgba(255,255,255,0.48); letter-spacing: 0.08em; }
+#landing-page .price-amount { color: #fff; font-weight: 800; }
+#landing-page .price-period { color: rgba(255,255,255,0.45); }
+#landing-page .price-features li { color: rgba(255,255,255,0.7); }
+#landing-page .price-features li::before { color: #b8d0ff; }
+#landing-page .price-features li.disabled { opacity: 0.28; }
+
+/* ── FEATURE CARDS v2: daha büyük, ferah, lacivert cam ── */
+#ozellikler { padding-bottom: 150px; }          /* sayfa altına yapışmasın */
+
+#landing-page .features-grid {
+  grid-auto-rows: 180px;                        /* kart yüksekliği (eskisi 130) */
+  gap: 50px;                                    /* kartlar arası boşluk (eskisi 24) */
+  margin-top: 64px;                             /* başlıkla kartlar arası */
+}
+#landing-page .features-grid .feature-card {
+  height: 200px;
+  padding: 0 32px;
+  background: rgba(12,40,110,0.28);             /* lacivert cam */
+  border-color: rgba(255,255,255,0.2);
+}
+#landing-page .features-grid .feature-card:hover {
+  height: 225px;                                /* hover'da uzama */
+  background: rgba(12,40,110,0.5);
+  border-color: rgba(255,255,255,0.4);
+  transform: scale(1.04);
+}
+
+/* ikon kutusu + SVG */
+#landing-page .features-grid .feature-icon {
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.08));
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 6px 16px rgba(5,20,70,0.25);
+}
+.feature-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* yazılar */
+#landing-page .features-grid .feature-title { font-size: 19px; }
+#landing-page .features-grid .feature-desc  { font-size: 19px; line-height: 1.65; color: rgba(255,255,255,0.9); }
+#landing-page .features-grid .feature-card:hover .feature-desc { max-height: 110px; }
+
+/* ── ÖZELLİKLER / NASIL ÇALIŞIR / FİYATLAR: eski boyutlar, koyu renkler ── */
+
+/* Bölüm başlıkları (üçü de aynı format) */
+#landing-page .section-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #0a1a3a;
+  -webkit-text-fill-color: #0a1a3a;
+  text-shadow: none;
+}
+#landing-page .section-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  color: rgba(10,26,58,0.65);
+}
+
+/* Özellik kartları: beyaz cam + lacivert yazı (kutu boyutları aynı kalır) */
+#landing-page .features-grid .feature-card {
+  background: rgba(255,255,255,0.45);
+  border-color: rgba(255,255,255,0.7);
+}
+#landing-page .features-grid .feature-card:hover {
+  background: rgba(255,255,255,0.78);
+  border-color: #fff;
+  box-shadow: 0 18px 44px rgba(10,30,100,0.25);
+}
+#landing-page .features-grid .feature-icon {
+  background: linear-gradient(135deg, #2a5cc0, #0a2a6e);
+  border-color: rgba(255,255,255,0.4);
+}
+#landing-page .features-grid .feature-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0a1a3a;
+}
+#landing-page .features-grid .feature-desc,
+#landing-page .features-grid .feature-card:hover .feature-desc {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #2a3f66;
+}
+
+/* Nasıl çalışır adımları */
+#landing-page .step {
+  padding: 32px 0;
+  gap: 32px;
+  border-bottom: 1px solid rgba(10,40,120,0.18);
+}
+#landing-page .step-num {
+  width: 56px;
+  height: 56px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #2a5cc0, #0a2a6e);
+  border-color: rgba(255,255,255,0.4);
+}
+#landing-page .step-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: #0a1a3a;
+  margin-bottom: 8px;
+}
+#landing-page .step-desc {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 480px;
+  color: #2a3f66;
+}
+
+/* Fiyatlandırma: açık cam kartlar + koyu yazı */
+#landing-page .price-card {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.75);
+}
+#landing-page .price-card:hover {
+  background: rgba(255,255,255,0.78);
+  box-shadow: 0 10px 36px rgba(10,30,100,0.22);
+}
+#landing-page .price-card.featured {
+  background: rgba(255,255,255,0.88);
+  border: 2px solid #1a4a9e;
+  box-shadow: 0 16px 48px rgba(10,40,120,0.3);
+}
+#landing-page .price-card.featured::before {
+  background: #1a4a9e;
+  color: #fff;
+}
+#landing-page .price-card.featured .btn-primary {
+  background: #1a4a9e;
+  color: #fff;
+}
+#landing-page .price-plan    { color: #1a4a9e; font-weight: 700; }
+#landing-page .price-amount  { color: #0a1a3a; font-weight: 800; }
+#landing-page .price-period  { color: #2a3f66; }
+#landing-page .price-features li { color: #1a2a4a; }
+#landing-page .price-features li::before { color: #1a4a9e; }
+#landing-page .price-features li.disabled { opacity: 0.5; }
+
+/* ── TÜM AÇIKLAMA YAZILARI: aynı font, aynı büyük boyut ── */
+#landing-page {
+  --body-size: 25px;                                  /* hepsini buradan büyütüp küçültebilirsiniz */
+  --body-font: var(--ff-body);
+}
+
+#landing-page .hero-sub,
+#landing-page .features-grid .feature-desc,
+#landing-page .features-grid .feature-card:hover .feature-desc,
+#landing-page .step-desc,
+#landing-page .price-period,
+#landing-page .price-features li {
+  font-family: 'Playfair Display', serif;
+  font-size: var(--body-size);
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* genişlik ve boşluk ayarları (yazı büyüyünce taşmasın) */
+#landing-page .hero-sub          { max-width: 520px; }
+#landing-page .step-desc         { max-width: 640px; }
+#landing-page .price-features li { gap: 12px; }
+#landing-page .price-features    { gap: 14px; }
+#landing-page .features-grid .feature-card:hover .feature-desc { max-height: 120px; }
+
+/* ── BÖLÜM ETİKETLERİ: Özellikler / Nasıl Çalışır / Fiyatlar ── */
+#landing-page .section-label {
+  display: inline-block;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.8);
+  padding: 6px 20px;
+  border-radius: 100px;
+  font-size: 60px;
+}
+/* ── FİYAT KARTLARI: daha geniş, daha dolgun, daha ferah ── */
+#landing-page .pricing-grid {
+  max-width: 1100px;                 /* eski 900px: toplam genişlik */
+  gap: 40px;                         /* eski 24px: kartlar arası boşluk */
+  margin-top: 64px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+#landing-page .price-card {
+  padding: 52px 40px;                /* eski 40px 32px: kartların iç dolgusu */
+}
+#landing-page .price-features {
+  gap: 16px;                         /* maddeler arası boşluk */
+  margin-bottom: 40px;
+}
+
+
+/* ── FOOTER ── */
+footer, #landing-page footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(255,255,255,0.1) !important;
+  padding: 56px 56px 36px !important;
+  color: #fff !important;
+}
+#landing-page .footer-brand         { color: #fff; }
+#landing-page .footer-brand-icon    { background: rgba(255,255,255,0.18); border-radius: 8px; }
+#landing-page .footer-desc          { color: rgba(255,255,255,0.45); }
+#landing-page .footer-col h4        { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 0.1em; }
+#landing-page .footer-col a         { color: rgba(255,255,255,0.5); }
+#landing-page .footer-col a:hover   { color: #fff; }
+#landing-page .footer-bottom p      { color: rgba(255,255,255,0.25); }
+#landing-page .footer-links a       { color: rgba(255,255,255,0.3); }
+#landing-page .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+/* ── İSTATİSTİKLER: ortalı ve büyük ── */
+#landing-page .hero-stats {
+  justify-content: center;          /* ortala (eski: flex-start) */
+  gap: 90px;                        /* üç istatistik arası boşluk (eski 48px) */
+  padding-top: 36px;
+}
+#landing-page .stat { text-align: center; }
+#landing-page .stat-num {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 80px;                  /* eski 34px */
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+#landing-page .stat-label {
+  font-family: var(--body-font, var(--ff-body));
+  font-size: 30px;                  /* eski 11px */
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;             /* büyük harf kalktı: "Kaynak Doğruluğu" */
+  color: #2a3f66;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  #landing-page .hero-stats { gap: 36px; flex-wrap: wrap; }
+  #landing-page .stat-num   { font-size: 44px; }
+  #landing-page .stat-label { font-size: 16px; }
+}
+
+/* ── FOOTER: diğer yazılarla aynı font, renk; daha büyük ── */
+#landing-page footer {
+  color: #0a1a3a !important;
+  border-top: 1px solid rgba(10,40,120,0.2) !important;
+}
+#landing-page .footer-grid { gap: 56px; }
+
+/* Marka */
+#landing-page .footer-brand {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0a1a3a;
+}
+#landing-page .footer-brand-icon {
+  width: 38px;
+  height: 38px;
+  font-size: 19px;
+  color: #fff;
+  background: linear-gradient(135deg, #2a5cc0, #0a2a6e);
+}
+
+/* Açıklama ve linkler: sitedeki diğer açıklama yazılarıyla aynı font */
+#landing-page .footer-desc,
+#landing-page .footer-col a,
+#landing-page .footer-bottom p,
+#landing-page .footer-links a {
+  font-family: var(--body-font, var(--ff-body));
+  font-weight: 400;
+}
+#landing-page .footer-desc {
+  font-size: 17px;
+  line-height: 1.65;
+  max-width: 340px;
+  color: #2a3f66;
+}
+
+/* Sütun başlıkları (Ürün / Şirket / Yasal): büyük harf yok */
+#landing-page .footer-col h4 {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #0a1a3a;
+  margin-bottom: 18px;
+}
+#landing-page .footer-col a {
+  font-size: 17px;
+  margin-bottom: 12px;
+  color: #2a3f66;
+}
+#landing-page .footer-col a:hover { color: #1a4a9e; }
+
+/* Alt satır */
+#landing-page .footer-bottom { border-top: 1px solid rgba(10,40,120,0.2); }
+#landing-page .footer-bottom p {
+  font-size: 25px;
+  color: #2a3f66;
+}
+#landing-page .footer-links a {
+  font-size: 25px;
+  color: #2a3f66;
+}
+#landing-page .footer-links a:hover { color: #1a4a9e; }
+
+/* ── MODAL (açık tema — okumayı kolaylaştırır) ── */
+.modal {
+  background: #1e2a4a !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6) !important;
+  border-radius: 20px !important;
+}
+.modal-logo { color: #ffffff; }
+.modal-logo-icon { background: linear-gradient(135deg, #4a6be0, #6b85f8) !important; color: #fff !important; }
+.modal-sub { color: rgba(255,255,255,0.5); }
+.form-label { color: rgba(255,255,255,0.65); }
+.form-input { background: rgba(255,255,255,0.07) !important; border: 1px solid rgba(255,255,255,0.15) !important; color: #ffffff !important; }
+.form-input:focus { border-color: rgba(91,128,248,0.6) !important; background: rgba(255,255,255,0.1) !important; }
+.form-input::placeholder { color: rgba(255,255,255,0.25) !important; }
+.modal-btn { background: #4a6be0 !important; color: #fff !important; font-weight: 700 !important; }
+.modal-btn:hover { background: #5b7cf0 !important; }
+.modal-footer a { color: #7a9bfa; }
+.success-box { background: rgba(91,128,248,0.1) !important; border: 1px solid rgba(91,128,248,0.25) !important; }
+.success-box p { color: #a5c0ff !important; }
+.success-box strong { color: #ffffff !important; }
+.form-hint { color: rgba(255,255,255,0.3) !important; }
+
+/* ── FADE-UP ── */
+#landing-page .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+#landing-page .fade-up.visible { opacity: 1; transform: none; }
+
+/* ── RESPONSİVE ── */
+@media (max-width: 900px) {
+  .hero-inner { flex-direction: column; gap: 36px; }
+  .hero-text { text-align: center; max-width: 100%; }
+  .hero-illustration { flex: 0 0 auto; }
+  .hero-books-gif { width: 300px; }
+  #landing-page h1.hero-title { text-align: center; font-size: clamp(34px, 8vw, 52px); }
+  #landing-page .hero-sub { text-align: center; margin: 0 auto 32px; }
+  #landing-page .hero-actions { justify-content: center; }
+  #landing-page .hero-badge { display: block; text-align: center; }
+  #landing-page nav { padding: 16px 20px; }
+}
+
+/* ── Playfair Display: Özellikler / Nasıl Çalışır / Fiyatlar etiketleri ── */
+#landing-page .section-label {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+
+/* ══ HEADER: diğer bölümlerle aynı font, renk, boyut ══ */
+#landing-page nav,
+#landing-page nav.scrolled {                 /* kaydırınca koyuya dönmesin, hep açık cam */
+  background: rgba(215,232,252,0.72);
+  border-bottom: 1px solid rgba(10,40,120,0.15);
+}
+#landing-page .nav-logo,
+#landing-page nav.scrolled .nav-logo {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0a1a3a;
+}
+#landing-page .nav-logo-icon {
+  width: 40px; height: 40px; font-size: 20px;
+  color: #fff;
+  background: linear-gradient(135deg, #2a5cc0, #0a2a6e);
+}
+#landing-page .nav-links { gap: 40px; }
+#landing-page .nav-links a,
+#landing-page nav.scrolled .nav-links a {
+  font-family: var(--body-font, var(--ff-body));
+  font-size: 20px;
+  font-weight: 600;
+  color: #2a3f66;
+}
+#landing-page .nav-links a:hover,
+#landing-page nav.scrolled .nav-links a:hover { color: #1a4a9e; }
+#landing-page .nav-cta .btn {
+  font-family: var(--body-font, var(--ff-body));
+  font-size: 20px;
+  font-weight: 600;
+  padding: 12px 26px;
+}
+
+/* ══ GİRİŞ PANELİ: butondan büyüyerek açılır ══ */
+#authModal {
+  background: rgba(10,26,58,0.15);
+  backdrop-filter: blur(2px);
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 84px 56px 0 0;                    /* header'ın hemen altı, sağ üst */
+}
+#authModal .modal {
+  width: 400px;
+  max-width: 100%;
+  padding: 32px 30px;
+  max-height: calc(100vh - 110px);
+  border-radius: 18px !important;
+  background: rgba(255,255,255,0.9) !important;
+  backdrop-filter: blur(18px);
+  border: 1px solid #fff !important;
+  box-shadow: 0 24px 60px rgba(10,30,100,0.3) !important;
+  transform-origin: top right;               /* sağ üstten (butondan) büyür */
+}
+#authModal.show .modal { animation: authGrow .38s cubic-bezier(.2,.8,.2,1) both; }
+#authModal.show .modal > * { animation: authFade .3s .14s both; }
+@keyframes authGrow { from { opacity:0; transform: scale(.25,.1); } to { opacity:1; transform:none; } }
+@keyframes authFade { from { opacity:0; } to { opacity:1; } }
+
+/* panel içi yazılar: açık zemin, koyu yazı */
+#authModal .modal-logo      { color: #0a1a3a; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 26px; font-weight: 800; }
+#authModal .modal-sub       { color: #2a3f66; font-size: 16px; margin-bottom: 24px; }
+#authModal .form-label      { color: #0a1a3a; font-size: 15px; font-weight: 600; }
+#authModal .form-input {
+  background: #fff !important;
+  border: 1px solid rgba(10,40,120,0.25) !important;
+  color: #0a1a3a !important;
+  font-size: 16px;
+  padding: 13px 16px;
+}
+#authModal .form-input::placeholder { color: rgba(10,26,58,0.4) !important; }
+#authModal .form-input:focus        { border-color: #1a4a9e !important; background: #fff !important; }
+#authModal .form-hint       { color: #2a3f66; font-size: 13px; }
+#authModal .modal-btn       { background: #1a4a9e !important; color: #fff !important; font-size: 16px; padding: 14px; }
+#authModal .modal-footer    { color: #2a3f66; font-size: 15px; }
+#authModal .modal-footer a  { color: #1a4a9e; font-weight: 700; }
+#authModal .modal a         { color: #2a3f66 !important; }          /* Şifremi unuttum / Vazgeç */
+#authModal .modal .modal-footer a { color: #1a4a9e !important; }
+#authModal .success-box strong { color: #0a1a3a; }
+#authModal .success-box p      { color: #1a4a9e !important; }
+
+@media (max-width: 768px) {
+  #authModal { padding: 80px 12px 0; justify-content: center; }
+  #authModal .modal { width: 100%; }
+}
+// Giriş paneli: dışarı tıklayınca veya Esc ile kapat
+document.getElementById('authModal').addEventListener('click', function (e) {
+  if (e.target === this) hideModal();
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') hideModal();
+});
+/* ── İSTATİSTİKLER: üstteki blokla aynı genişlik, kenarlar hizalı ── */
+
+#landing-page .hero-stats {
+  max-width: 1032px;
+  justify-content: flex-start;
+  gap: 90px;
+}
+#landing-page .stat { text-align: left; }
 </style>
 </head>
 <body>
+
 
 <div id="landing-page">
 <nav>
@@ -200,18 +1073,57 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
 </nav>
 
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-badge"><span class="hero-badge-dot"></span>Yapay Zeka Destekli Mevzuat Araştırması</div>
-  <h1 class="hero-title">Sağlık Mevzuatına<br/><span class="accent">Anında</span> ve <span class="gold">Doğru</span><br/>Cevaplar</h1>
-  <p class="hero-sub">Binlerce sayfayı saniyeler içinde tarayın. Doğru kaynaktan, doğru yanıtı alın.</p>
-  <div class="hero-actions">
-    <button class="btn btn-gold btn-large" onclick="showLogin('register')">Ücretsiz Deneyin</button>
-    <a href="#nasil-calisir" class="btn btn-ghost btn-large">Nasıl Çalışır?</a>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <!-- Hero: Sol metin + Sağ GIF -->
+  <div class="hero-inner">
+    <!-- Sol: Metin -->
+    <div class="hero-text">
+         <h1 class="hero-title">Sağlık Mevzuatında<br/><span class="accent">Anında</span> ve <span class="gold">Doğru</span><br/>Cevaplar</h1>
+         <p class="hero-sub">Binlerce sayfayı saniyeler içinde tarayın. Doğru kaynaktan, doğru yanıtı alın.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold btn-large" onclick="showLogin('register')">Ücretsiz Deneyin</button>
+        <a href="#nasil-calisir" class="btn btn-ghost btn-large">Nasıl Çalışır?</a>
+      </div>
+    </div>
+
+    <!-- Sağ: Kitap animasyonu -->
+    <div class="hero-illustration">
+      <img
+        src="/static/books-animation.gif"
+        alt="Hemşirelik kitapları animasyonu"
+        class="hero-books-gif"
+        loading="eager"
+      />
+    </div>
   </div>
+  <!-- Stats — hero-inner dışında, ortalı -->
   <div class="hero-stats">
     <div class="stat"><div class="stat-num"><span>%100</span></div><div class="stat-label">Kaynak Doğruluğu</div></div>
     <div class="stat"><div class="stat-num"><span>%0</span></div><div class="stat-label">Halüsinasyon Oranı</div></div>
-    <div class="stat"><div class="stat-num"><span>&lt;5s</span></div><div class="stat-label">Ortalama Yanıt Süresi</div></div>
+    <div class="stat"><div class="stat-num"><span>&lt;5s</span></div><div class="stat-label">Yanıt Süresi</div></div>
+  </div>
+
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-item"><span>⚡</span> Anlık Yanıt</div>
+      <div class="marquee-item"><span>📋</span> Kaynak Gösterimi</div>
+      <div class="marquee-item"><span>🔒</span> KVKK Uyumlu</div>
+      <div class="marquee-item"><span>🏥</span> Sağlık Odaklı</div>
+      <div class="marquee-item"><span>🔍</span> 152+ Mevzuat</div>
+      <div class="marquee-item"><span>🤖</span> Yapay Zeka Destekli</div>
+      <div class="marquee-item"><span>📱</span> Her Cihazda</div>
+      <div class="marquee-item"><span>🛡️</span> Güvenli Altyapı</div>
+      <div class="marquee-item"><span>⚡</span> Anlık Yanıt</div>
+      <div class="marquee-item"><span>📋</span> Kaynak Gösterimi</div>
+      <div class="marquee-item"><span>🔒</span> KVKK Uyumlu</div>
+      <div class="marquee-item"><span>🏥</span> Sağlık Odaklı</div>
+      <div class="marquee-item"><span>🔍</span> 152+ Mevzuat</div>
+      <div class="marquee-item"><span>🤖</span> Yapay Zeka Destekli</div>
+      <div class="marquee-item"><span>📱</span> Her Cihazda</div>
+      <div class="marquee-item"><span>🛡️</span> Güvenli Altyapı</div>
+    </div>
   </div>
 </section>
 
@@ -238,17 +1150,17 @@ footer{padding:60px 40px 40px;border-top:1px solid var(--border)}
   <div class="container">
     <div class="fade-up"><p class="section-label">Özellikler</p><div class="section-divider"></div><h2 class="section-title">Neden MevzuSağlık?</h2></div>
     <div class="features-grid">
-      <div class="feature-card fade-up"><div class="feature-icon">&#128269;</div><div class="feature-title">Kaynak Gösterimi</div><div class="feature-desc">Her yanıt, hangi yönetmeliğin hangi maddesinden alındığını gösterir.</div></div>
-      <div class="feature-card fade-up"><div class="feature-icon">&#9889;</div><div class="feature-title">Anlık Yanıt</div><div class="feature-desc">Binlerce sayfayı 3 saniyeden kısa sürede tarar.</div></div>
-      <div class="feature-card fade-up"><div class="feature-icon">&#127973;</div><div class="feature-title">Sağlık Odaklı</div><div class="feature-desc">Yalnızca sağlık mevzuatına odaklanmış model.</div></div>
-      <div class="feature-card fade-up"><div class="feature-icon">&#128172;</div><div class="feature-title">Sohbet Geçmişi</div><div class="feature-desc">Önceki sorularınıza istediğiniz zaman dönebilirsiniz.</div></div>
-      <div class="feature-card fade-up"><div class="feature-icon">&#128196;</div><div class="feature-title">Belge Yükleme</div><div class="feature-desc">Kendi iç yönetmeliklerinizi yükleyin.</div></div>
-      <div class="feature-card fade-up"><div class="feature-icon">&#128274;</div><div class="feature-title">Güvenli Altyapı</div><div class="feature-desc">Verileriniz şifrelenir. KVKK uyumlu.</div></div>
-    </div>
+      <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div class="feature-title">Kaynak Gösterimi</div><div class="feature-desc">Her yanıt, hangi yönetmeliğin hangi maddesinden alındığını gösterir.</div></div>
+        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="feature-title">Anlık Yanıt</div><div class="feature-desc">Binlerce sayfayı 3 saniyeden kısa sürede tarar.</div></div>
+        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg></div><div class="feature-title">Sağlık Odaklı</div><div class="feature-desc">Yalnızca sağlık mevzuatına odaklanmış model.</div></div>
+        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="feature-title">Sohbet Geçmişi</div><div class="feature-desc">Önceki sorularınıza istediğiniz zaman dönebilirsiniz.</div></div>
+        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg></div><div class="feature-title">Belge Yükleme</div><div class="feature-desc">Kendi iç yönetmeliklerinizi yükleyin.</div></div>
+        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div><div class="feature-title">Güvenli Altyapı</div><div class="feature-desc">Verileriniz şifrelenir. KVKK uyumlu.</div></div>
+      </div>
   </div>
 </section>
 
-<section id="nasil-calisir" style="background:rgba(255,255,255,0.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<section id="nasil-calisir">
   <div class="container">
     <div class="fade-up"><p class="section-label">Nasıl Çalışır</p><div class="section-divider"></div><h2 class="section-title">3 Adımda Yanıtınızı Alın</h2></div>
     <div class="steps">
@@ -471,6 +1383,43 @@ const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY}
 let currentUser = '', currentSessionUUID = '', currentTenantId = null, currentUserPlan = 'free';
 let messageCount = 0, pendingPlan = null, currentAuthMode = 'login';
 
+// ── JWT TOKEN YÖNETİMİ ────────────────────────────────────
+let _accessToken = '';
+
+function setToken(token) {
+  _accessToken = token || '';
+  try { 
+    if (_accessToken) localStorage.setItem('ms_access_token', _accessToken);
+    else localStorage.removeItem('ms_access_token');
+  } catch(e) {}
+}
+
+function getToken() {
+  if (_accessToken) return _accessToken;
+  try { _accessToken = localStorage.getItem('ms_access_token') || ''; } catch(e) {}
+  return _accessToken;
+}
+
+// Korumalı endpoint'ler için header oluştur (JWT + API Key)
+function authHeaders() {
+  const h = {...HEADERS};
+  const token = getToken();
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  return h;
+}
+
+// 401 gelirse otomatik logout
+function handleUnauthorized() {
+  setToken('');
+  clearSession();
+  currentUser = ''; currentSessionUUID = ''; currentTenantId = null; currentUserPlan = 'free';
+  document.getElementById('app-page').style.display     = 'none';
+  document.getElementById('landing-page').style.display = 'block';
+  document.getElementById('chat-history-list').innerHTML = '';
+  showLogin('login');
+  alert('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+}
+
 // Şifre validasyonu: min 8 karakter, 1 büyük, 1 rakam, 1 özel karakter
 const PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\[\]{};':"\\|,.<>/?]).{8,}$/;
 
@@ -498,6 +1447,7 @@ function loadSession() {
       currentUser = u; currentSessionUUID = s; currentTenantId = parseInt(t);
       currentUserPlan = p || 'free';
       if (k) HEADERS['X-API-Key'] = k;
+      getToken(); // JWT token'i yükle
       return true;
     }
   } catch(e) {}
@@ -505,7 +1455,8 @@ function loadSession() {
 }
 function clearSession() {
   try {
-    ['ms_user','ms_session','ms_tenant','ms_paid_plan','ms_api_key','ms_plan'].forEach(k => localStorage.removeItem(k));
+    ['ms_user','ms_session','ms_tenant','ms_paid_plan','ms_api_key','ms_plan','ms_access_token'].forEach(k => localStorage.removeItem(k));
+    _accessToken = '';
   } catch(e) {}
 }
 
@@ -599,7 +1550,7 @@ async function fetchAndUpdateUserPlan() {
     return;
   }
   try {
-    const planRes = await fetch(BACKEND_URL + '/session/user_plan/' + currentUser, {headers: HEADERS});
+    const planRes = await fetch(BACKEND_URL + '/session/user_plan', {headers: authHeaders()});
     if (planRes.ok) {
       const planData = await planRes.json();
       const userPlan = planData.plan || 'free';
@@ -702,6 +1653,7 @@ async function doSubmitAuth() {
       currentSessionUUID = data.session_uuid;
       currentTenantId    = data.tenant_id || null;
       if (data.api_key) { HEADERS['X-API-Key'] = data.api_key; try { localStorage.setItem('ms_api_key', data.api_key); } catch(e) {} }
+      if (data.access_token) setToken(data.access_token);
       saveSession();
       document.getElementById('auth-form').style.display        = 'none';
       document.getElementById('register-success').style.display = 'block';
@@ -713,6 +1665,7 @@ async function doSubmitAuth() {
     currentSessionUUID = data.session_uuid;
     currentTenantId    = data.tenant_id || null;
     if (data.api_key) { HEADERS['X-API-Key'] = data.api_key; try { localStorage.setItem('ms_api_key', data.api_key); } catch(e) {} }
+    if (data.access_token) setToken(data.access_token);
     saveSession();
     hideModal();
 
@@ -845,7 +1798,7 @@ async function goToCheckout(plan) {
   }
   if (!currentTenantId) { pendingPlan = plan; showLogin('login'); return; }
   try {
-    const res  = await fetch(BACKEND_URL + '/billing/checkout?tenant_id=' + currentTenantId + '&plan=' + plan, { method: 'POST', headers: HEADERS });
+    const res  = await fetch(BACKEND_URL + '/billing/checkout?tenant_id=' + currentTenantId + '&plan=' + plan, { method: 'POST', headers: authHeaders() });
     const data = await res.json();
     if (!res.ok) { alert('Odeme sayfasi olusturulamadi: ' + (data.detail || res.status)); openApp(); return; }
     if (data.checkout_url) {
@@ -877,8 +1830,9 @@ async function sendMessage() {
   if (messageCount === 1) setTimeout(loadSidebarSessions, 2000);
   const tid = appendTyping();
   try {
-    const res = await fetch(BACKEND_URL + '/search/ask', { method: 'POST', headers: HEADERS, body: JSON.stringify({query: text, user_name: currentUser, session_uuid: currentSessionUUID}) });
+    const res = await fetch(BACKEND_URL + '/search/ask', { method: 'POST', headers: authHeaders(), body: JSON.stringify({query: text, user_name: currentUser, session_uuid: currentSessionUUID}) });
     removeTyping(tid);
+    if (res.status === 401) { handleUnauthorized(); return; }
     if (res.status === 429) { appendMessage('ai', 'Günlük kullanım limitinize ulaştınız. Planı yükseltmek için Pro\'ya geçin.', []); return; }
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
@@ -926,8 +1880,9 @@ function askSuggestion(el) { document.getElementById('chat-input').value = el.te
 
 async function newChat() {
   try {
-    const res  = await fetch(BACKEND_URL + '/session/create_session', { method: 'POST', headers: HEADERS, body: JSON.stringify({user_name: currentUser}) });
+    const res  = await fetch(BACKEND_URL + '/session/create_session', { method: 'POST', headers: authHeaders(), body: JSON.stringify({user_name: currentUser}) });
     const data = await res.json();
+    if (res.status === 401) { handleUnauthorized(); return; }
     currentSessionUUID = data.session_uuid; saveSession(); messageCount = 0; resetMessages();
   } catch(e) { console.error(e); }
 }
@@ -935,7 +1890,8 @@ async function newChat() {
 async function loadSidebarSessions() {
   if (!currentUser) return;
   try {
-    const res = await fetch(BACKEND_URL + '/session/sessions/' + currentUser, {headers: HEADERS});
+    const res = await fetch(BACKEND_URL + '/session/sessions', {headers: authHeaders()});
+    if (res.status === 401) { handleUnauthorized(); return; }
     if (!res.ok) return;
     const sessions = await res.json();
     const list = document.getElementById('chat-history-list');
@@ -953,7 +1909,8 @@ async function loadSidebarSessions() {
 async function loadChat(uuid) {
   try {
     currentSessionUUID = uuid; saveSession();
-    const res  = await fetch(BACKEND_URL + '/history/' + uuid, {headers: HEADERS});
+    const res  = await fetch(BACKEND_URL + '/history/' + uuid, {headers: authHeaders()});
+    if (res.status === 401) { handleUnauthorized(); return; }
     if (!res.ok) return;
     const data = await res.json();
     const c    = document.getElementById('messages-container');
@@ -969,7 +1926,8 @@ async function loadChat(uuid) {
 async function updateQuota() {
   if (!currentUser) return;
   try {
-    const res = await fetch(BACKEND_URL + '/session/user_quota/' + currentUser, {headers: HEADERS});
+    const res = await fetch(BACKEND_URL + '/session/user_quota', {headers: authHeaders()});
+    if (res.status === 401) { handleUnauthorized(); return; }
     if (!res.ok) return;
     const d = await res.json();
 
@@ -1044,14 +2002,15 @@ async function handleUpload(input) {
   const form = new FormData();
   for (const f of input.files) form.append('files', f);
   
-  // API key'i header'a ekle
-  const uploadHeaders = {'X-API-Key': HEADERS['X-API-Key']};
+  // Dosya yükleme için header (multipart olduğu için Content-Type ekleme, browser belirler)
+  const h = authHeaders();
+  delete h['Content-Type']; // FormData için Content-Type browser'a bırakılmalı
   
   input.value = '';
   try {
     const res  = await fetch(BACKEND_URL + '/add_documents/add', {
       method: 'POST', 
-      headers: uploadHeaders,
+      headers: h,
       body: form
     });
     const d    = await res.json();
@@ -1072,7 +2031,7 @@ function pollUploadStatus(taskId, statusEl) {
   const interval = setInterval(async () => {
     attempts++;
     try {
-      const res = await fetch(BACKEND_URL + '/add_documents/status/' + taskId, {headers: HEADERS});
+      const res = await fetch(BACKEND_URL + '/add_documents/status/' + taskId, {headers: authHeaders()});
       const d   = await res.json();
       if (d.status === 'done') {
         clearInterval(interval);
@@ -1093,7 +2052,14 @@ function pollUploadStatus(taskId, statusEl) {
   }, 1000);
 }
 
-function doLogout() {
+async function doLogout() {
+  // Backend'e logout isteği gönder (token'ı revoke et)
+  try {
+    if (getToken()) {
+      await fetch(BACKEND_URL + '/auth/logout', { method: 'POST', headers: authHeaders() });
+    }
+  } catch(e) { console.error('Logout isteği gönderilemedi:', e); }
+  
   clearSession(); currentUser = ''; currentSessionUUID = ''; currentTenantId = null; currentUserPlan = 'free'; messageCount = 0;
   document.getElementById('app-page').style.display     = 'none';
   document.getElementById('landing-page').style.display = 'block';
@@ -1121,6 +2087,12 @@ window.addEventListener('resize', () => {
   } else {
     document.getElementById('mobile-menu-btn').style.display = 'none';
   }
+});
+</script>
+<script>
+// Scroll nav effect
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
 });
 </script>
 </body>

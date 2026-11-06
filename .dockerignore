@@ -5,3 +5,10 @@ __pycache__
 .env
 db_data/
 qdrant_storage/
+backups/
+*.jsonl
+*.csv
+backend/data/
+backend/evaluation/data/
+*.pkl
+.env

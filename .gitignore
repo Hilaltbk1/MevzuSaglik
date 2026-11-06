@@ -4,6 +4,7 @@ venv/
 **/venv/
 **/ .venv/
 
+backups/
 # Python Önbelleği
 __pycache__/
 **/*.pyc
@@ -12,6 +13,7 @@ __pycache__/
 
 # Veri ve İndeks Dosyaları (Hata verenler)
 **/*.json
+!kategori_eslesmesi.json
 **/*.pkl
 **/*.map
 db_data/

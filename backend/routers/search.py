@@ -1,11 +1,12 @@
 from __future__ import annotations
 import traceback
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from backend.database.db_setup import get_db
-from backend.dependencies.auth import get_current_tenant
+from backend.dependencies.auth import get_current_user
 from backend.dependencies.quota import check_daily_quota
 from backend.logger import logger
 from backend.schemas.query_model import QueryResponse, QueryRequest
@@ -16,20 +17,25 @@ router = APIRouter(prefix="/search", tags=["Soru Sorma İşlemleri"])
 
 class ChatRequest(BaseModel):
     message: str
-    user_name: str
     session_uuid: str
-    user_id: str = "Anonymous"
 
 
 @router.post("/ask", response_model=QueryResponse)
 async def create_query(
     request: QueryRequest,
     db: Session = Depends(get_db),
-    tenant=Depends(get_current_tenant),
+    current_user=Depends(get_current_user),
 ):
-    check_daily_quota(tenant, request.user_name, db)
+    from backend.schemas.tenant_model import TenantModel
+    tenant = db.query(TenantModel).filter_by(id=current_user.tenant_id).first()
+    check_daily_quota(tenant, current_user.username, db)
     try:
-        result = ask_question(db, request, tenant_id=tenant.id)
+        result = ask_question(
+            db,
+            request,
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.id,
+        )
         if not result:
             raise HTTPException(status_code=400, detail="Cevap üretilemedi.")
         return result
@@ -44,39 +50,39 @@ async def create_query(
 async def chat(
     request: ChatRequest,
     db: Session = Depends(get_db),
-    tenant=Depends(get_current_tenant),
+    current_user=Depends(get_current_user),
 ):
-    """API key ile korunan chat endpoint'i"""
     from backend.services.Retrievers import retrieval_chain
-    
-    user_input = request.message
-    user_id = request.user_id
-    
+    from backend.schemas.tenant_model import TenantModel
+    tenant = db.query(TenantModel).filter_by(id=current_user.tenant_id).first()
+    check_daily_quota(tenant, current_user.username, db)
+    user_input = request.message    
     if not user_input:
         raise HTTPException(status_code=400, detail="Mesaj gerekli")
-    
-    # Kullanımı logla
+
     import csv
-    from datetime import datetime
     import os
-    LOG_FILE = "usage_logs.csv"
+    from datetime import datetime
+
+    LOG_FILE    = "usage_logs.csv"
     file_exists = os.path.isfile(LOG_FILE)
     try:
         with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             if not file_exists:
                 writer.writerow(["timestamp", "user_id"])
-            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id])
+            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), current_user.username])
     except Exception as e:
         logger.error(f"Loglama hatası: {e}")
-    
+
     try:
-        # RAG zincirini çalıştır
         container = retrieval_chain()
-        response = container.full_chain.invoke({"input": user_input, "chat_history": []})
+        response  = container.full_chain.invoke({
+            "input":           user_input,
+            "chat_history":    [],
+            "current_user_id": current_user.id,
+        })
         return {"response": response["answer"]}
     except Exception as e:
-        error_detail = str(e)
         logger.error(f"Chat hatası: {traceback.format_exc()}")
-        # Kullanıcıya daha detaylı hata mesajı gönder
-        raise HTTPException(status_code=500, detail=f"Sunucu hatası: {error_detail}")
+        raise HTTPException(status_code=500, detail=f"Sunucu hatası: {str(e)}")

@@ -31,7 +31,7 @@ async function handleRequest(request) {
   console.log('=== INCOMING REQUEST ===')
   console.log('URL:', forwardUrl)
   console.log('Method:', request.method)
-  console.log('X-API-Key:', headers.get('X-API-Key'))
+  //console.log('X-API-Key:', headers.get('X-API-Key'))
   console.log('Content-Type:', headers.get('Content-Type'))
 
   // Prepare request body - ÖNEMLI: stream'i tüketmeden clone et

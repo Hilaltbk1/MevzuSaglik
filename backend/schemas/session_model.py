@@ -8,8 +8,11 @@ class SessionModel(Base):
     __tablename__ = 'session'
     id = Column(Integer, primary_key=True)
     tenant_id=Column(Integer,ForeignKey('tenant.id'),nullable=False)
-    session_uuid=Column(String(36), nullable=False)
+    session_uuid=Column(String(36), nullable=False , unique=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True, index=True)
     user_name = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.now)
 
     messages=relationship("MessageModel",back_populates="session",cascade="all, delete-orphan")
+    user = relationship("UserModel", back_populates="sessions")
+    tenant = relationship("TenantModel", back_populates="sessions")

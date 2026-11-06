@@ -4,9 +4,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 # BURASI ÇOK ÖNEMLİ: Tüm modellerini buraya import etmelisin!
 from alembic import context
-
+import os
 from backend.config.configuration import Settings
 from backend.database.base import Base
+from backend.schemas.document_model import DocumentModel, CategoryModel, DocumentCategoryModel
+from backend.schemas.login_session import LoginSessionModel
 from backend.schemas.tenant_model import TenantModel
 from backend.schemas.user_model import UserModel
 from backend.schemas.session_model import SessionModel
@@ -21,10 +23,17 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 settings=Settings()
-database_url = settings.DATABASE_URL
-if database_url:
-    config.set_main_option("sqlalchemy.url", database_url)
+database_url = os.getenv("DATABASE_URL")
 
+if database_url:
+    config.set_main_option(
+        "sqlalchemy.url",
+        database_url.replace("%", "%%")
+    )
+else:
+    raise RuntimeError(
+        "DATABASE_URL ortam değişkeni bulunamadı."
+    )
 
 
 if config.config_file_name is not None:

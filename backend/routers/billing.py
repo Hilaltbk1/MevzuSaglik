@@ -14,14 +14,14 @@ PLAN_PRICE_IDS = {
 }
 
 
-from backend.dependencies.auth import get_current_tenant
+from backend.dependencies.auth import get_current_user
 
 @router.post("/checkout")
-def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db), tenant=Depends(get_current_tenant)):
+def create_checkout(plan: PlanType, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     if not stripe.api_key:
         raise HTTPException(status_code=500, detail="Stripe yapilandirilmamis.")
-
-    if tenant.id != tenant_id:
+    tenant_id = current_user.tenant_id
+    if current_user.tenant_id != tenant_id:
         raise HTTPException(status_code=403, detail="Bu işlem için yetkiniz yok.")
 
     if plan not in PLAN_PRICE_IDS:
@@ -45,7 +45,7 @@ def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db
             payment_method_types=["card"],
             mode="subscription",
             line_items=[{"price": plan_price_id, "quantity": 1}],
-            metadata={"tenant_id": str(tenant_id), "plan": plan},
+            metadata={"tenant_id": str(tenant_id), "plan": plan.value},
 
             success_url=f"{BASE_URL}/?payment=success&plan={plan.value}&tenant_id={tenant_id}",
             cancel_url=f"{BASE_URL}/?payment=cancel",
@@ -54,8 +54,7 @@ def create_checkout(tenant_id: int, plan: PlanType, db: Session = Depends(get_db
         raise HTTPException(status_code=502, detail=f"Stripe hatasi: {str(e)}")
 
     # Planı hemen DB'ye yaz (webhook gecikmesine karşı)
-    tenant.plan = plan
-    db.commit()
+
 
     return {"checkout_url": session.url}
 

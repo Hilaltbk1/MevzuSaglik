@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     # Try to import create_app directly
-    from backend.utils import create_app
+    from backend.app_utils import create_app
     app = create_app()
     
     # Add basic routes if needed
