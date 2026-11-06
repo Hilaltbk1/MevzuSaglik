@@ -1,0 +1,1263 @@
+{
+  "taxonomy_version": "v1",
+  "taxonomy": {
+    "halk_sagligi": "Halk Sağlığı ve Hastalıklar",
+    "anne_cocuk_uremme": "Anne, Çocuk ve Üreme Sağlığı",
+    "beslenme_gida_su": "Beslenme, Gıda ve Su",
+    "tutun_madde": "Tütün ve Madde Bağımlılığı",
+    "acil_saglik": "Acil Sağlık Hizmetleri",
+    "hizmet_sunumu_kurumlar": "Sağlık Hizmeti Sunumu ve Kurumlar",
+    "calisanlar_hasta_haklari": "Sağlık Çalışanları ve Hasta Hakları",
+    "ilac_cihaz_eczacilik": "İlaç, Eczacılık ve Tıbbi Cihaz",
+    "cevre_denetim": "Çevre Sağlığı ve Denetim",
+    "genel": "Genel / Çapraz Konulu"
+  },
+  "documents": {
+    "0": {
+      "topics": [
+        "tutun_madde",
+        "cevre_denetim"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "1": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "2": {
+      "topics": [
+        "acil_saglik",
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "acil_saglik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "3": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "4": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "5": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "6": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "7": {
+      "topics": [
+        "tutun_madde",
+        "cevre_denetim"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "8": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "9": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "10": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "11": {
+      "topics": [
+        "hizmet_sunumu_kurumlar",
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "12": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "13": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "14": {
+      "topics": [
+        "ilac_cihaz_eczacilik",
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "ilac_cihaz_eczacilik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "15": {
+      "topics": [
+        "ilac_cihaz_eczacilik"
+      ],
+      "primary": "ilac_cihaz_eczacilik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "16": {
+      "topics": [
+        "calisanlar_hasta_haklari",
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "17": {
+      "topics": [
+        "anne_cocuk_uremme",
+        "halk_sagligi"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "18": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "19": {
+      "topics": [
+        "ilac_cihaz_eczacilik",
+        "tutun_madde"
+      ],
+      "primary": "ilac_cihaz_eczacilik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "20": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "21": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "22": {
+      "topics": [
+        "ilac_cihaz_eczacilik"
+      ],
+      "primary": "ilac_cihaz_eczacilik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "23": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "24": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "25": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "26": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "27": {
+      "topics": [
+        "beslenme_gida_su",
+        "anne_cocuk_uremme"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "28": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "29": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "30": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "31": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "32": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "33": {
+      "topics": [
+        "ilac_cihaz_eczacilik"
+      ],
+      "primary": "ilac_cihaz_eczacilik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "34": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "35": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "36": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "37": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "38": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "39": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "40": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "41": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "42": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "43": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "44": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "45": {
+      "topics": [
+        "halk_sagligi",
+        "cevre_denetim"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "46": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "47": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "48": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "49": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "50": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "51": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "52": {
+      "topics": [
+        "anne_cocuk_uremme",
+        "acil_saglik"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "53": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "54": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "55": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "56": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "57": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "58": {
+      "topics": [
+        "beslenme_gida_su",
+        "anne_cocuk_uremme"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "59": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "60": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "61": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "62": {
+      "topics": [
+        "anne_cocuk_uremme",
+        "beslenme_gida_su"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "63": {
+      "topics": [
+        "beslenme_gida_su",
+        "anne_cocuk_uremme"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "64": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "65": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "66": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "67": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "68": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "69": {
+      "topics": [
+        "tutun_madde"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "70": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "71": {
+      "topics": [
+        "halk_sagligi",
+        "anne_cocuk_uremme"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "72": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "73": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "74": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "75": {
+      "topics": [
+        "acil_saglik",
+        "halk_sagligi"
+      ],
+      "primary": "acil_saglik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "76": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "77": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "78": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "79": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "80": {
+      "topics": [
+        "halk_sagligi",
+        "cevre_denetim"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "81": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "82": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "83": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "84": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "85": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "86": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "87": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "88": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "89": {
+      "topics": [
+        "halk_sagligi",
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "90": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "91": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "92": {
+      "topics": [
+        "beslenme_gida_su",
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "93": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "94": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "95": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "96": {
+      "topics": [
+        "halk_sagligi",
+        "anne_cocuk_uremme"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "97": {
+      "topics": [
+        "halk_sagligi",
+        "cevre_denetim"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "98": {
+      "topics": [
+        "beslenme_gida_su",
+        "cevre_denetim"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "99": {
+      "topics": [
+        "anne_cocuk_uremme"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "100": {
+      "topics": [
+        "beslenme_gida_su",
+        "cevre_denetim"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "101": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "102": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "103": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "104": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "105": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "106": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "107": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "108": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "109": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "110": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "111": {
+      "topics": [
+        "acil_saglik"
+      ],
+      "primary": "acil_saglik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "112": {
+      "topics": [
+        "acil_saglik"
+      ],
+      "primary": "acil_saglik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "113": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "114": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "115": {
+      "topics": [
+        "tutun_madde",
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "tutun_madde",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "116": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "117": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "118": {
+      "topics": [
+        "beslenme_gida_su"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "119": {
+      "topics": [
+        "halk_sagligi",
+        "cevre_denetim"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "120": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "121": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "122": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "123": {
+      "topics": [
+        "halk_sagligi",
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "124": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "125": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "126": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "127": {
+      "topics": [
+        "halk_sagligi",
+        "anne_cocuk_uremme"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "128": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "129": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "130": {
+      "topics": [
+        "halk_sagligi"
+      ],
+      "primary": "halk_sagligi",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "131": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "132": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "133": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "134": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "135": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "136": {
+      "topics": [
+        "anne_cocuk_uremme",
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "anne_cocuk_uremme",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "137": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "138": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "139": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "140": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "141": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "142": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "143": {
+      "topics": [
+        "cevre_denetim",
+        "beslenme_gida_su"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "144": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "145": {
+      "topics": [
+        "ilac_cihaz_eczacilik"
+      ],
+      "primary": "ilac_cihaz_eczacilik",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "146": {
+      "topics": [
+        "hizmet_sunumu_kurumlar"
+      ],
+      "primary": "hizmet_sunumu_kurumlar",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "147": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "148": {
+      "topics": [
+        "cevre_denetim"
+      ],
+      "primary": "cevre_denetim",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "149": {
+      "topics": [
+        "calisanlar_hasta_haklari"
+      ],
+      "primary": "calisanlar_hasta_haklari",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    },
+    "150": {
+      "topics": [
+        "genel"
+      ],
+      "primary": "genel",
+      "needs_review": true,
+      "classified_by": "claude_draft"
+    },
+    "151": {
+      "topics": [
+        "beslenme_gida_su",
+        "cevre_denetim"
+      ],
+      "primary": "beslenme_gida_su",
+      "needs_review": false,
+      "classified_by": "claude_draft"
+    }
+  }
+}

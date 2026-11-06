@@ -1,0 +1,39 @@
+name: Keep HuggingFace Space Active
+
+on:
+  schedule:
+    - cron: '0 10 * * 0'  # Her Pazar 10:00
+    - cron: '0 10 * * 3'  # Her Çarşamba 10:00 (haftada 2 kez)
+  workflow_dispatch:  # Manuel tetikleme
+
+jobs:
+  ping-space:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Keep HuggingFace Space Active
+        run: |
+          echo "Pinging HuggingFace Space to keep it active..."
+          
+          # Test endpoint'ini çağır
+          response=$(curl -s -w "%{http_code}" -o response.txt "https://hilal1-mevzusaglik.hf.space/test")
+          
+          if [ "$response" = "200" ]; then
+            echo "✅ Space is active and responding"
+            echo "Response: $(cat response.txt)"
+          else
+            echo "⚠️ Space returned status: $response"
+            echo "Response: $(cat response.txt)"
+          fi
+          
+          # Qdrant cluster'ı da aktif tut (indirect olarak)
+          list_response=$(curl -s -w "%{http_code}" -o list_response.txt \
+            -H "X-API-Key: ${{ secrets.TENANT_API_KEY }}" \
+            "https://hilal1-mevzusaglik.hf.space/add_documents/list_existing")
+          
+          echo "List endpoint status: $list_response"
+          
+      - name: Report Status
+        run: |
+          echo "🎯 HuggingFace Space pinged successfully"
+          echo "📅 Next ping: $(date -d '+3 days' '+%Y-%m-%d %H:%M')"
+          echo "💡 This keeps both HF Space and Qdrant cluster active"

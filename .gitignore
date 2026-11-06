@@ -1,0 +1,74 @@
+# Sanal Ortamlar (En önemlisi)
+venv/
+.venv/
+**/venv/
+**/ .venv/
+
+backups/
+# Python Önbelleği
+__pycache__/
+**/*.pyc
+**/*.pyd
+**/*.pyo
+
+# Veri ve İndeks Dosyaları (Hata verenler)
+**/*.json
+!kategori_eslesmesi.json
+**/*.pkl
+**/*.map
+db_data/
+qdrant_storage/
+chroma_data/
+
+# Binary ve Kütüphane Dosyaları (Hugging Face'in istemediği .exe/.dll)
+**/*.exe
+**/*.dll
+**/*.so
+**/*.dylib
+
+# IDE ve Gizli Dosyalar
+.idea/
+.vscode/
+.env
+*.pem
+*.key
+*.log
+
+# Gereksiz kütüphane kalıntıları
+node_modules/
+dist/
+build/
+
+# ---- Geçici / tek kullanımlık kök scriptler ----
+duzelt*.py
+tablo.py
+teshis.py
+kontrol.py
+eslestir.py
+kimlik_duzelt.py
+qdrant_bak.py
+qdrant_yaz.py
+run_kimlik.py
+kategori_olustur.py
+belgeleri_csv_kaydet.py
+sorunlu_*.py
+json_yap*.py
+db_bak.py
+SUPURGE*.py
+KATEGORILER.md
+
+# ---- Kök dizindeki geçici test scriptleri ----
+test_categories.py
+test_enum_usage.py
+test_jwt_system.py
+test_relationships.py
+test_schema.py
+test_mailjet.py
+
+# ---- Geçici CSV / yedek JSON (kök dizin) ----
+/*.csv
+*_yedek*.json
+*_yedek_ilk.json
+*_yedek2*.json
+snapshot.json
+kategori_eslemesi.json
