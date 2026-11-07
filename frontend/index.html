@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MevzuSağlık</title>
+<title>MevzuSağlık | Sağlık mevzuatında kaynaklı yanıtlar</title>
+<meta name="description" content="Sağlık profesyonelleri için yapay zeka destekli mevzuat asistanı. Yanıtları kaynaklarıyla birlikte inceleyin."/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#a82e2e;--bg2:#801414;--bg3:#480707;--navy:#a82e2e;--navy2:#801414;--navy3:#071448;--accent:#9e1a1a;--accent2:#bf3a3a;--accent3:#df6a6a;--teal:#9e1a1a;--teal2:#bf3a3a;--teal3:#df6a6a;--gold:#c42020;--gold2:#e04040;--white:#f8fbff;--muted:#984a4a;--border:rgba(80, 10, 10, 0.15);--card:rgba(255, 255, 255, 0.55);--radius:12px;--ff-display:'Plus Jakarta Sans',system-ui,sans-serif;--ff-body:'Inter',system-ui,sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
@@ -242,9 +244,6 @@ html, body {
 /* Tüm bölümler şeffaf — gradient tüm sayfada aynı */
 #landing-page > *            { position: relative; z-index: 1; }
 #landing-page .hero          { background: transparent; }
-#ozellikler                  { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.08); }
-#nasil-calisir               { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.08); }
-#fiyatlar                    { background: transparent !important; border-top: 1px solid rgba(255,255,255,0.08); }
 #landing-page .hero::before  { display: none; }
 #landing-page .hero-blob-1   { display: none !important; }
 #landing-page .hero-blob-2   { display: none !important; }
@@ -585,7 +584,6 @@ html, body {
 #landing-page .price-features li.disabled { opacity: 0.28; }
 
 /* ── FEATURE CARDS v2: daha büyük, ferah, lacivert cam ── */
-#ozellikler { padding-bottom: 150px; }          /* sayfa altına yapışmasın */
 
 #landing-page .features-grid {
   grid-auto-rows: 180px;                        /* kart yüksekliği (eskisi 130) */
@@ -1037,13 +1035,6 @@ footer, #landing-page footer {
   #authModal { padding: 80px 12px 0; justify-content: center; }
   #authModal .modal { width: 100%; }
 }
-// Giriş paneli: dışarı tıklayınca veya Esc ile kapat
-document.getElementById('authModal').addEventListener('click', function (e) {
-  if (e.target === this) hideModal();
-});
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') hideModal();
-});
 /* ── İSTATİSTİKLER: üstteki blokla aynı genişlik, kenarlar hizalı ── */
 
 #landing-page .hero-stats {
@@ -1052,176 +1043,550 @@ document.addEventListener('keydown', function (e) {
   gap: 90px;
 }
 #landing-page .stat { text-align: left; }
+
+/* ═══════════ YENİ TANITIM SAYFASI ═══════════ */
+html,body{background:#fbfaf5}
+#landing-page{--g:#1f4f3f;--g2:#2a6350;--gd:#173d31;--ink:#1b3d31;--muted:#5d6a63;--cream:#fbfaf5;--paper:#f3f2ea;--line:#e2e4da;--tint:#e8ede5;
+  background:var(--cream);background-attachment:scroll;color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6;overflow-x:clip;position:relative}
+#landing-page *{box-sizing:border-box}
+#landing-page [id]{scroll-margin-top:84px}
+#landing-page h1,#landing-page h2,#landing-page h3,#landing-page h4,#landing-page p{margin:0}
+#landing-page .ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#landing-page .lp-wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+#landing-page .lp-sec{padding:96px 0;position:relative}
+#landing-page .lp-muted{color:var(--muted)}
+
+/* Üst menü */
+#landing-page .lp-nav{position:sticky;top:0;z-index:100;background:rgba(251,250,245,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:box-shadow .2s}
+#landing-page .lp-nav.scrolled{box-shadow:0 6px 24px rgba(31,79,63,.07)}
+#landing-page .lp-nav-in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:72px}
+#landing-page .lp-logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+#landing-page .lp-logo-ic{width:34px;height:34px;border-radius:9px;background:var(--g);color:#fff;display:grid;place-items:center}
+#landing-page .lp-logo-light{color:#fff}
+#landing-page .lp-logo-light .lp-logo-ic{background:#e8ede5;color:var(--g)}
+#landing-page .lp-links{display:flex;gap:36px}
+#landing-page .lp-links a{font-size:14px;color:var(--muted);text-decoration:none;transition:color .2s}
+#landing-page .lp-links a:hover{color:var(--ink)}
+#landing-page .lp-nav-cta{display:flex;align-items:center;gap:8px}
+
+/* Butonlar */
+#landing-page .lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:10px;font:600 15px 'Inter',system-ui,sans-serif;cursor:pointer;border:1px solid transparent;text-decoration:none;transition:background .2s,transform .2s,box-shadow .2s,border-color .2s;white-space:nowrap}
+#landing-page .lp-btn:hover{transform:translateY(-1px)}
+#landing-page .lp-btn-lg{padding:15px 26px;font-size:15px}
+#landing-page .lp-btn-primary{background:var(--g);color:#fff}
+#landing-page .lp-btn-primary:hover{background:var(--g2);box-shadow:0 10px 24px rgba(31,79,63,.25)}
+#landing-page .lp-btn-outline{background:#fff;color:var(--ink);border-color:var(--line)}
+#landing-page .lp-btn-outline:hover{border-color:var(--g);box-shadow:0 8px 20px rgba(31,79,63,.1)}
+#landing-page .lp-btn-text{background:none;color:var(--ink);padding:10px 14px}
+#landing-page .lp-btn-text:hover{transform:none;color:var(--g)}
+#landing-page .lp-btn-light{background:var(--tint);color:var(--g)}
+#landing-page .lp-btn-light:hover{background:#fff}
+
+/* Hero */
+#landing-page .lp-hero{padding:72px 0 88px}
+#landing-page .lp-hero-in{display:grid;grid-template-columns:1.05fr 1fr;gap:72px;align-items:center}
+#landing-page .lp-eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+#landing-page .lp-eyebrow::before{content:"";width:28px;height:1px;background:var(--muted)}
+#landing-page .lp-eyebrow-plain{margin-bottom:16px}
+#landing-page .lp-eyebrow-plain::before{display:none}
+#landing-page .lp-title{font-family:'Lora',Georgia,serif;font-weight:500;font-size:clamp(34px,4.2vw,56px);line-height:1.1;letter-spacing:-.02em;color:var(--gd);margin-bottom:22px;text-wrap:balance}
+#landing-page .lp-lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:480px;margin-bottom:32px}
+#landing-page .lp-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+#landing-page .lp-small{font-size:13px;color:var(--muted)}
+#landing-page .lp-stats{display:flex;flex-wrap:wrap;gap:20px 44px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+#landing-page .lp-stats b{display:block;font-family:'Lora',Georgia,serif;font-weight:500;font-size:34px;line-height:1.1;color:var(--gd)}
+#landing-page .lp-stats span{font-size:12px;color:var(--muted)}
+#landing-page .lp-seq{opacity:0;animation:lpIn .7s ease forwards;animation-delay:var(--d,0s)}
+@keyframes lpIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* Kartlar */
+#landing-page .lp-demo{position:relative}
+#landing-page .lp-demo::before{content:"";position:absolute;inset:-24px -24px -24px 32px;background:var(--tint);border-radius:28px}
+#landing-page .lp-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(31,79,63,.1)}
+#landing-page .lp-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line)}
+#landing-page .lp-card-title{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+#landing-page .lp-card-body{padding:22px}
+#landing-page .lp-pill{font-size:11px;color:var(--muted);background:var(--paper);padding:3px 10px;border-radius:99px;white-space:nowrap}
+#landing-page .lp-pill-dark{background:rgba(255,255,255,.16);color:#e8ede5}
+#landing-page .lp-q{display:flex;align-items:center;gap:12px;margin-bottom:22px;font-weight:500;font-size:15px}
+#landing-page .lp-avatar{width:30px;height:30px;border-radius:50%;background:var(--paper);display:grid;place-items:center;flex:none}
+#landing-page .lp-a{margin-bottom:20px}
+#landing-page .lp-a-name{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:8px}
+#landing-page .lp-a-name .ic{width:14px;height:14px}
+#landing-page .lp-a-text{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+#landing-page .lp-src-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+#landing-page .lp-src-label .ic{width:13px;height:13px}
+#landing-page .lp-src-label em{font-style:normal;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)}
+#landing-page .lp-src-list{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+#landing-page .lp-src{display:flex;align-items:center;gap:12px;padding:12px 16px}
+#landing-page .lp-src+.lp-src{border-top:1px solid var(--line)}
+#landing-page .lp-src div{flex:1;min-width:0}
+#landing-page .lp-src strong{display:block;font-size:13px;font-weight:600;line-height:1.3}
+#landing-page .lp-src span{font-size:11px;color:var(--muted)}
+#landing-page .lp-src-go{width:15px;height:15px}
+#landing-page .lp-input{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:10px 10px 10px 16px;border:1px solid var(--line);border-radius:10px;background:#fff;font:400 13px 'Inter',sans-serif;color:var(--muted);cursor:text;text-align:left}
+#landing-page .lp-send{width:32px;height:32px;border-radius:8px;background:var(--g);color:#fff;display:grid;place-items:center;flex:none}
+#landing-page .lp-send .ic{width:15px;height:15px}
+#landing-page .lp-caption{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:40px;font-size:12px;color:var(--muted)}
+#landing-page .lp-caption .ic{width:13px;height:13px}
+
+/* Şerit */
+#landing-page .lp-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+#landing-page .lp-strip-in{display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr;gap:32px;align-items:center;padding-top:30px;padding-bottom:30px}
+#landing-page .lp-strip-title{font-family:'Lora',Georgia,serif;font-size:24px;line-height:1.25;color:var(--gd)}
+#landing-page .lp-strip-item{display:flex;gap:12px;align-items:flex-start}
+#landing-page .lp-strip-item .ic{margin-top:3px}
+#landing-page .lp-strip-item strong{display:block;font-size:14px;font-weight:600}
+#landing-page .lp-strip-item span{font-size:12px;color:var(--muted)}
+
+/* Başlık satırı */
+#landing-page .lp-head{display:flex;align-items:flex-end;justify-content:space-between;gap:48px;margin-bottom:56px}
+#landing-page .lp-h2{font-family:'Lora',Georgia,serif;font-weight:500;font-size:clamp(32px,4vw,50px);line-height:1.12;letter-spacing:-.015em;color:var(--gd)}
+#landing-page .lp-head-p{max-width:340px;font-size:15px;color:var(--muted);line-height:1.7}
+
+/* Özellikler */
+#landing-page .lp-feats{display:grid;grid-template-columns:repeat(3,1fr);column-gap:48px}
+#landing-page .lp-feat{padding:32px 0}
+#landing-page .lp-feat:nth-child(n+4){border-top:1px solid var(--line)}
+#landing-page .lp-feat .ic{width:22px;height:22px;margin-bottom:18px}
+#landing-page .lp-feat h3{font-size:17px;font-weight:600;margin-bottom:8px;letter-spacing:-.01em}
+#landing-page .lp-feat p{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* Yeşil bant: adımlar */
+#landing-page .lp-dark{background:var(--g);color:#fff}
+#landing-page .lp-dark .lp-h2{color:#fff}
+#landing-page .lp-dark .lp-eyebrow,#landing-page .lp-dark .lp-head-p{color:rgba(255,255,255,.7)}
+#landing-page .lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+#landing-page .lp-step-top{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+#landing-page .lp-step-n{font-family:'Lora',Georgia,serif;font-size:42px;font-weight:400;line-height:1;opacity:.9}
+#landing-page .lp-step-top i{flex:1;height:1px;background:rgba(255,255,255,.28)}
+#landing-page .lp-step h3{font-size:18px;font-weight:500;margin-bottom:8px}
+#landing-page .lp-step p{font-size:14px;color:rgba(255,255,255,.72);line-height:1.7}
+
+/* Kaynak bölümü */
+#landing-page .lp-split{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+#landing-page .lp-split .lp-h2{margin-bottom:20px}
+#landing-page .lp-split .lp-lead{font-size:16px;margin-bottom:28px}
+#landing-page .lp-points{display:grid;gap:22px;margin-bottom:28px}
+#landing-page .lp-point{display:flex;gap:14px;align-items:flex-start}
+#landing-page .lp-point .ic{margin-top:3px}
+#landing-page .lp-point strong{display:block;font-size:15px;font-weight:600}
+#landing-page .lp-point span{font-size:14px;color:var(--muted);line-height:1.65}
+#landing-page .lp-link{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:0;font:600 14px 'Inter',sans-serif;color:var(--ink);cursor:pointer}
+#landing-page .lp-link:hover{color:var(--g2)}
+#landing-page .lp-demo-b::before{display:none}
+#landing-page .lp-panel{background:var(--paper);border-radius:28px;padding:26px;display:grid;gap:14px}
+#landing-page .lp-panel-head{display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+#landing-page .lp-panel-head span:last-child{text-transform:none;letter-spacing:0}
+#landing-page .lp-panel .lp-card{box-shadow:none}
+#landing-page .lp-tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--paper);padding:4px 10px;border-radius:6px;margin-bottom:14px}
+#landing-page .lp-doc-title{font-family:'Lora',Georgia,serif;font-size:26px;color:var(--gd);margin-bottom:6px}
+#landing-page .lp-doc-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+#landing-page .lp-quote{background:var(--tint);border-left:3px solid #9bb5a6;padding:14px 16px;margin-bottom:18px}
+#landing-page .lp-quote strong{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+#landing-page .lp-quote p{font-size:14px;line-height:1.6}
+#landing-page .lp-doc-go{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+#landing-page .lp-file{display:flex;align-items:center;gap:14px;padding:14px 18px;box-shadow:none}
+#landing-page .lp-file div{flex:1;min-width:0}
+#landing-page .lp-file strong{display:block;font-size:14px;font-weight:600}
+#landing-page .lp-file span{font-size:12px;color:var(--muted)}
+#landing-page .lp-file-ic{width:40px;height:40px;border-radius:10px;background:var(--tint);display:grid;place-items:center;flex:none}
+#landing-page .lp-panel-note{font-size:11px;color:var(--muted)}
+
+/* Fiyatlar */
+#landing-page .lp-alt{background:var(--paper)}
+#landing-page .lp-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+#landing-page .lp-plan{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px}
+#landing-page .lp-plan-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+#landing-page .lp-plan-head h3{font-size:19px;font-weight:600}
+#landing-page .lp-plan-desc{font-size:14px;color:var(--muted);margin-bottom:26px}
+#landing-page .lp-price{display:flex;align-items:baseline;gap:8px;margin-bottom:24px}
+#landing-page .lp-price b{font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1}
+#landing-page .lp-price span{font-size:13px;color:var(--muted)}
+#landing-page .lp-plan .lp-btn{margin-bottom:26px}
+#landing-page .lp-plan ul{list-style:none;margin:0;padding:24px 0 0;border-top:1px solid var(--line);display:grid;gap:14px}
+#landing-page .lp-plan li{display:flex;align-items:center;gap:12px;font-size:14px}
+#landing-page .lp-plan li .ic{width:16px;height:16px}
+#landing-page .lp-plan-pro{background:var(--g);border-color:var(--g);color:#fff}
+#landing-page .lp-plan-pro .lp-plan-desc,#landing-page .lp-plan-pro .lp-price span{color:rgba(255,255,255,.72)}
+#landing-page .lp-plan-pro ul{border-color:rgba(255,255,255,.2)}
+#landing-page .lp-plans-note{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:32px;font-size:13px;color:var(--muted);text-align:center}
+#landing-page .lp-plans-note a{display:inline-flex;align-items:center;gap:4px;color:var(--ink);font-weight:600;text-decoration:none}
+#landing-page .lp-plans-note .ic{width:15px;height:15px}
+
+/* Son çağrı */
+#landing-page .lp-cta{padding:88px 0}
+#landing-page .lp-cta-in{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+#landing-page .lp-cta-act{display:grid;gap:12px;justify-items:end;text-align:right}
+
+/* Alt bilgi */
+#landing-page .lp-footer{background:var(--g);color:#fff;padding:64px 0 36px}
+#landing-page .lp-foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:44px}
+#landing-page .lp-foot-desc{max-width:300px;margin-top:22px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.72)}
+#landing-page .lp-foot-col{display:flex;flex-direction:column;gap:12px}
+#landing-page .lp-foot-col h4{font-size:14px;font-weight:600;margin-bottom:4px}
+#landing-page .lp-foot-col a{font-size:13px;color:rgba(255,255,255,.62);text-decoration:none;transition:color .2s}
+#landing-page .lp-foot-col a:hover{color:#fff}
+#landing-page .lp-disclaimer{display:flex;align-items:center;gap:10px;padding:20px 0;border-top:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);font-size:13px;color:rgba(255,255,255,.8)}
+#landing-page .lp-disclaimer .ic{width:15px;height:15px}
+#landing-page .lp-foot-bottom{display:flex;justify-content:space-between;gap:16px;padding-top:24px;font-size:12px;color:rgba(255,255,255,.6)}
+
+/* Küçük ekranlar */
+@media (max-width:960px){
+  #landing-page .lp-title{font-size:clamp(30px,8vw,56px)}
+  #landing-page .lp-links{display:none}
+  #landing-page .lp-hero-in,#landing-page .lp-split{grid-template-columns:1fr;gap:56px}
+  #landing-page .lp-strip-in{grid-template-columns:1fr 1fr}
+  #landing-page .lp-strip-title{grid-column:1/-1}
+  #landing-page .lp-feats{grid-template-columns:1fr 1fr}
+  #landing-page .lp-feat:nth-child(n+3){border-top:1px solid var(--line)}
+  #landing-page .lp-steps,#landing-page .lp-plans{grid-template-columns:1fr}
+  #landing-page .lp-steps{gap:36px}
+  #landing-page .lp-head,#landing-page .lp-cta-in{flex-direction:column;align-items:flex-start;gap:16px}
+  #landing-page .lp-cta-act{justify-items:start;text-align:left}
+  #landing-page .lp-foot-grid{grid-template-columns:1fr 1fr}
+  #landing-page .lp-foot-grid>div:first-child{grid-column:1/-1}
+}
+@media (max-width:600px){
+  #landing-page .lp-wrap{padding:0 20px}
+  #landing-page .lp-sec{padding:64px 0}
+  #landing-page .lp-hero{padding:44px 0 64px}
+  #landing-page .lp-nav-in{height:64px;gap:8px}
+  #landing-page .lp-logo{font-size:18px;gap:8px}
+  #landing-page .lp-logo-ic{width:30px;height:30px}
+  #landing-page .lp-nav-cta{gap:4px}
+  #landing-page .lp-nav-cta .lp-btn{padding:8px 11px;font-size:13px}
+  #landing-page .lp-lead{font-size:16px}
+  #landing-page .lp-stats{gap:16px 28px}
+  #landing-page .lp-stats b{font-size:28px}
+  #landing-page .lp-actions .lp-btn{flex:1}
+  #landing-page .lp-demo::before{inset:-14px -8px -14px 14px;border-radius:22px}
+  #landing-page .lp-card-body{padding:16px}
+  #landing-page .lp-card-head{padding:14px 16px}
+  #landing-page .lp-strip-in,#landing-page .lp-feats{grid-template-columns:1fr}
+  #landing-page .lp-feat:nth-child(n+2){border-top:1px solid var(--line)}
+  #landing-page .lp-strip-in{gap:22px}
+  #landing-page .lp-plan{padding:26px 22px}
+  #landing-page .lp-panel{padding:16px;border-radius:22px}
+  #landing-page .lp-foot-grid{gap:32px 24px}
+  #landing-page .lp-foot-bottom{flex-direction:column;gap:8px}
+  #landing-page .lp-disclaimer{align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){
+  #landing-page .lp-seq{animation:none;opacity:1}
+  #landing-page .lp-btn,#landing-page .lp-btn:hover{transition:none;transform:none}
+}
+
+/* ═══ Giriş paneli: yeşil temaya uyum ═══ */
+#authModal{background:rgba(23,61,49,.18)}
+#authModal .modal{background:#fff !important;border:1px solid #e2e4da !important;box-shadow:0 24px 60px rgba(23,61,49,.22) !important;border-radius:16px !important;backdrop-filter:none}
+#authModal .modal-logo{color:#173d31;font-family:'Inter',system-ui,sans-serif;font-weight:700}
+#authModal .modal-logo-icon{background:#1f4f3f !important;color:#fff !important}
+#authModal .modal-sub,#authModal .form-hint,#authModal .modal-footer{color:#5d6a63}
+#authModal .form-label{color:#1b3d31}
+#authModal .form-input{border:1px solid #d5d9cd !important;color:#1b3d31 !important}
+#authModal .form-input:focus{border-color:#1f4f3f !important}
+#authModal .modal-btn{background:#1f4f3f !important}
+#authModal .modal-btn:hover{background:#2a6350 !important}
+#authModal .modal a{color:#5d6a63 !important}
+#authModal .modal-footer a,#authModal .modal .modal-footer a{color:#1f4f3f !important}
+#authModal .success-box{background:#e8ede5 !important;border:1px solid #c9d6cc !important}
+#authModal .success-box strong{color:#173d31}
+#authModal .success-box p{color:#1f4f3f !important}
+
+/* ═══ Uygulama ekranı: telefon uyumu ═══ */
+html,body{overflow-x:hidden}
+.app-layout{height:100vh;height:100dvh}
+@media (max-width:768px){
+  .chat-input-area{padding:12px 14px}
+  .modal,#authModal .modal{padding:28px 20px}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   MARKA UYARLAMASI (final katman)
+   Proje: MevzuSağlık — yeşil/krem kurumsal kimlik (#1f4f3f / #fbfaf5)
+   Aşağıdaki kurallar önceki tüm temaları ezer; uygulama ekranı,
+   pencereler ve butonlar tek bir marka paletinde birleşir.
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#f4f7f2;--bg2:#ffffff;--bg3:#e8ede5;
+  --navy:#f4f7f2;--navy2:#ffffff;--navy3:#e8ede5;
+  --accent:#1f4f3f;--accent2:#2a6350;--accent3:#1f4f3f;
+  --teal:#1f4f3f;--teal2:#2a6350;--teal3:#1f4f3f;
+  --gold:#d9b26a;--gold2:#c9a25a;
+  --white:#1b3d31;--muted:#5d6a63;
+  --border:rgba(23,61,49,0.12);--card:#ffffff;
+}
+html,body{background:#f4f7f2;color:#1b3d31}
+
+/* Uygulama ekranı (sohbet alanı) */
+#app-page{background:#f4f7f2;color:#1b3d31}
+#app-page .sidebar{background:#fff;border-right:1px solid #e2e4da}
+#app-page .sidebar-logo,#app-page .chat-topbar-title{color:#173d31}
+#app-page .chat-topbar{background:#fff;border-bottom:1px solid #e2e4da}
+#app-page .chat-input-area{background:#f4f7f2;border-top:1px solid #e2e4da}
+#app-page .user-card{background:#f4f7f2;border-color:#e2e4da}
+#app-page .user-avatar{background:linear-gradient(135deg,#1f4f3f,#2a6350);color:#fff}
+#app-page .chat-item:hover,#app-page .chat-item.active{background:#e8ede5;color:#173d31}
+#app-page .new-chat-btn{background:#e8ede5;border:1px solid #c9d6cc;color:#1f4f3f}
+#app-page .new-chat-btn:hover{background:#dbe4dc}
+#app-page .message.ai .message-bubble{background:#fff;border:1px solid #e2e4da;box-shadow:0 2px 10px rgba(23,61,49,.06);color:#1b3d31}
+#app-page .message.user .message-bubble{background:#1f4f3f;color:#fff}
+#app-page .message.ai .message-avatar{background:linear-gradient(135deg,#1f4f3f,#2a6350);color:#fff}
+#app-page .message.user .message-avatar{background:linear-gradient(135deg,#d9b26a,#c9a25a);color:#173d31}
+#app-page .typing{background:#fff;border:1px solid #e2e4da}
+#app-page .input-wrap{background:#fff;border:1px solid #d5d9cd}
+#app-page .input-wrap:focus-within{border-color:#1f4f3f}
+#app-page .send-btn{background:#1f4f3f}
+#app-page .send-btn:hover{background:#2a6350}
+#app-page .send-btn svg{fill:#fff}
+#app-page .empty-state .empty-title{color:#1b3d31}
+#app-page .empty-state .empty-icon{opacity:.5}
+#app-page .suggestion{background:#fff;border-color:#e2e4da;color:#5d6a63}
+#app-page .suggestion:hover{border-color:#1f4f3f;color:#173d31}
+#app-page .source-chip{background:#e8ede5;border:1px solid #c9d6cc;color:#1f4f3f}
+#app-page .upload-area{border:1px dashed rgba(31,79,63,.35);background:rgba(31,79,63,.04)}
+#app-page .upload-area:hover{border-color:#1f4f3f}
+#app-page .upload-text strong{color:#1f4f3f}
+#app-page .mobile-menu-btn{background:#fff;border:1px solid #e2e4da;color:#1b3d31}
+#app-page .logout-btn:hover{border-color:rgba(179,38,30,.35);color:#b3261e}
+#app-page .quota-fill{background:linear-gradient(90deg,#1f4f3f,#2a6350)}
+
+/* Pencereler: giriş, şifremi unuttum, plan yükseltme */
+.modal-overlay{background:rgba(23,61,49,.35)}
+#forgotModal .modal,.modal-overlay .modal{background:#fff;border:1px solid #e2e4da;color:#1b3d31;box-shadow:0 24px 60px rgba(23,61,49,.22);border-radius:16px}
+#forgotModal .modal-logo{color:#173d31}
+#forgotModal .modal-logo-icon{background:#1f4f3f;color:#fff}
+#forgotModal .modal-sub,#forgotModal .form-hint{color:#5d6a63}
+#forgotModal .form-input{background:#fff;border:1px solid #d5d9cd;color:#1b3d31}
+#forgotModal .form-input:focus{border-color:#1f4f3f}
+#forgotModal .modal-btn{background:#1f4f3f}
+#forgotModal .modal-btn:hover{background:#2a6350}
+#forgotModal .success-box{background:#e8ede5;border:1px solid #c9d6cc}
+#forgotModal .success-box strong{color:#173d31}
+#forgotModal .success-box p{color:#1f4f3f !important}
+.success-box{background:#e8ede5;border:1px solid #c9d6cc}
+.success-box strong{color:#173d31}
+.success-box p{color:#1f4f3f}
+
+/* Butonlar */
+.btn-primary{background:#1f4f3f;box-shadow:none}
+.btn-primary:hover{background:#2a6350;box-shadow:0 8px 25px rgba(31,79,63,.25)}
+.btn-gold{background:linear-gradient(135deg,#1f4f3f,#2a6350)}
+.modal .btn-ghost{color:#5d6a63;border-color:#d5d9cd}
 </style>
 </head>
 <body>
 
 
 <div id="landing-page">
-<nav>
-  <a href="#" class="nav-logo"><div class="nav-logo-icon">&#9877;</div>MevzuSağlık</a>
-  <div class="nav-links">
-    <a href="#ozellikler">Özellikler</a>
-    <a href="#nasil-calisir">Nasıl Çalışır</a>
-    <a href="#fiyatlar">Fiyatlar</a>
-  </div>
-  <div class="nav-cta">
-    <button class="btn btn-ghost" onclick="showLogin('login')">Giriş Yap</button>
-    <button class="btn btn-primary" onclick="showLogin('register')">Ücretsiz Başla</button>
-  </div>
-</nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 4v16M5 7.5l14 9M19 7.5l-14 9"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M11 4l1.8 4.7L17.5 10.5 12.8 12.3 11 17l-1.8-4.7L4.5 10.5l4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M3 5.5C5 4.5 8 4.5 12 6.5c4-2 7-2 9-1v13c-2-1-5-1-9 1-4-2-7-2-9-1z"/><path d="M12 6.5v13"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="2.5"/></symbol>
+<symbol id="i-checkuser" viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c0-3.4 2.9-5.5 6.5-5.5"/><path d="M14.5 17.5l2 2 4-4"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></symbol>
+<symbol id="i-steth" viewBox="0 0 24 24"><path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H9l-4 3V6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M12 17v-6M9.5 13.5L12 11l2.5 2.5"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+<symbol id="i-cursor" viewBox="0 0 24 24"><path d="M5 4l6 15 2-6 6-2z"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M4 7h12M4 12h6M4 17h5"/><circle cx="16" cy="15" r="3"/><path d="M18.2 17.2L20 19"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></symbol>
+<symbol id="i-panel" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M14 4v16"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</defs></svg>
 
-<section class="hero">
-  <div class="hero-blob hero-blob-1"></div>
-  <div class="hero-blob hero-blob-2"></div>
+<header class="lp-nav">
+  <div class="lp-wrap lp-nav-in">
+    <a href="#" class="lp-logo"><span class="lp-logo-ic"><svg class="ic"><use href="#i-star"/></svg></span><span>mevzu sağlık</span></a>
+    <div class="lp-links">
+      <a href="#ozellikler">Özellikler</a>
+      <a href="#nasil-calisir">Nasıl Çalışır</a>
+      <a href="#fiyatlar">Fiyatlar</a>
+    </div>
+    <div class="lp-nav-cta">
+      <button type="button" class="lp-btn lp-btn-text" onclick="showLogin('login')">Giriş Yap</button>
+      <button type="button" class="lp-btn lp-btn-primary" onclick="showLogin('register')">Ücretsiz Başla</button>
+    </div>
+  </div>
+</header>
 
-  <!-- Hero: Sol metin + Sağ GIF -->
-  <div class="hero-inner">
-    <!-- Sol: Metin -->
-    <div class="hero-text">
-         <h1 class="hero-title">Sağlık Mevzuatında<br/><span class="accent">Anında</span> ve <span class="gold">Doğru</span><br/>Cevaplar</h1>
-         <p class="hero-sub">Binlerce sayfayı saniyeler içinde tarayın. Doğru kaynaktan, doğru yanıtı alın.</p>
-      <div class="hero-actions">
-        <button class="btn btn-gold btn-large" onclick="showLogin('register')">Ücretsiz Deneyin</button>
-        <a href="#nasil-calisir" class="btn btn-ghost btn-large">Nasıl Çalışır?</a>
+<section class="lp-sec lp-hero">
+  <div class="lp-wrap lp-hero-in">
+    <div class="lp-hero-text">
+      <p class="lp-eyebrow lp-seq" style="--d:.05s">Sağlık profesyonelleri için yapay zeka</p>
+      <h1 class="lp-title lp-seq" style="--d:.15s">Sağlık mevzuatı.<br>Açık cevaplar.<br>Görünür kaynaklar.</h1>
+      <p class="lp-lead lp-seq" style="--d:.3s">Sorunuzu sorun, yanıtı kaynağıyla birlikte görün.</p>
+      <div class="lp-actions lp-seq" style="--d:.42s">
+        <button type="button" class="lp-btn lp-btn-primary lp-btn-lg" onclick="showLogin('register')">Ücretsiz Başla <svg class="ic"><use href="#i-out"/></svg></button>
+        <a href="#nasil-calisir" class="lp-btn lp-btn-outline lp-btn-lg">Nasıl çalışır?</a>
+      </div>
+      <p class="lp-small lp-seq" style="--d:.5s">Ücretsiz planla keşfedin · Günde 20 soru</p>
+      <div class="lp-stats lp-seq" style="--d:.6s">
+        <div><b>%100</b><span>Kaynak Doğruluğu</span></div>
+        <div><b>%0</b><span>Halüsinasyon Oranı</span></div>
+        <div><b>&lt;5s</b><span>Yanıt Süresi</span></div>
       </div>
     </div>
 
-    <!-- Sağ: Kitap animasyonu -->
-    <div class="hero-illustration">
-      <img
-        src="https://hilal1-mevzusaglik.hf.space/static/books-animation.gif"
-        alt="Hemşirelik kitapları animasyonu"
-        class="hero-books-gif"
-        loading="eager"
-      />
-    </div>
-  </div>
-  <!-- Stats — hero-inner dışında, ortalı -->
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-num"><span>%100</span></div><div class="stat-label">Kaynak Doğruluğu</div></div>
-    <div class="stat"><div class="stat-num"><span>%0</span></div><div class="stat-label">Halüsinasyon Oranı</div></div>
-    <div class="stat"><div class="stat-num"><span>&lt;5s</span></div><div class="stat-label">Yanıt Süresi</div></div>
-  </div>
-
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <div class="marquee-item"><span>⚡</span> Anlık Yanıt</div>
-      <div class="marquee-item"><span>📋</span> Kaynak Gösterimi</div>
-      <div class="marquee-item"><span>🔒</span> KVKK Uyumlu</div>
-      <div class="marquee-item"><span>🏥</span> Sağlık Odaklı</div>
-      <div class="marquee-item"><span>🔍</span> 152+ Mevzuat</div>
-      <div class="marquee-item"><span>🤖</span> Yapay Zeka Destekli</div>
-      <div class="marquee-item"><span>📱</span> Her Cihazda</div>
-      <div class="marquee-item"><span>🛡️</span> Güvenli Altyapı</div>
-      <div class="marquee-item"><span>⚡</span> Anlık Yanıt</div>
-      <div class="marquee-item"><span>📋</span> Kaynak Gösterimi</div>
-      <div class="marquee-item"><span>🔒</span> KVKK Uyumlu</div>
-      <div class="marquee-item"><span>🏥</span> Sağlık Odaklı</div>
-      <div class="marquee-item"><span>🔍</span> 152+ Mevzuat</div>
-      <div class="marquee-item"><span>🤖</span> Yapay Zeka Destekli</div>
-      <div class="marquee-item"><span>📱</span> Her Cihazda</div>
-      <div class="marquee-item"><span>🛡️</span> Güvenli Altyapı</div>
-    </div>
-  </div>
-</section>
-
-<section style="padding:0 40px 100px">
-  <div class="container">
-    <div class="demo-wrap fade-up">
-      <div class="demo-header">
-        <div class="demo-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
-        <span class="demo-title">MevzuSağlık AI - Örnek Konuşma</span>
-      </div>
-      <div class="demo-body">
-        <div class="msg user"><div class="msg-bubble">Hemşire nöbet süresi kaç saati geçemez?</div><div class="msg-time">14:32</div></div>
-        <div class="msg ai">
-          <div class="msg-bubble"><strong>Hemşirelik Yönetmeliği Madde 24'e göre;</strong><br/><br/>- En fazla <strong>16 saat</strong> arka arkaya nöbet tutulabilir.<br/>- Aylık toplam <strong>130 saati</strong> aşamaz.</div>
-          <div class="demo-source">&#128218; Hemşirelik Yönetmeliği - Madde 24</div>
-          <div class="msg-time">14:32</div>
+    <div class="lp-demo">
+      <div class="lp-card">
+        <div class="lp-card-head"><span class="lp-card-title"><svg class="ic"><use href="#i-spark"/></svg>Mevzuat asistanı</span><span class="lp-pill">Örnek görünüm</span></div>
+        <div class="lp-card-body">
+          <div class="lp-q lp-seq" style="--d:.7s"><span class="lp-avatar"><svg class="ic"><use href="#i-user"/></svg></span><p>Sağlık kuruluşlarında ruhsat süreci için hangi mevzuatı incelemeliyim?</p></div>
+          <div class="lp-a lp-seq" style="--d:1.2s">
+            <p class="lp-a-name"><svg class="ic"><use href="#i-star"/></svg>Mevzu Sağlık</p>
+            <p class="lp-a-text">İlgili düzenlemeleri kaynaklarıyla birlikte inceleyebilirsiniz. Kuruluş türünü belirterek aramanızı daraltın; kapsamı ve güncelliği kaynak metin üzerinden kontrol edin.</p>
+            <p class="lp-src-label"><svg class="ic"><use href="#i-link"/></svg>Yanıtın kaynakları <em>· temsili içerik</em></p>
+            <div class="lp-src-list">
+              <div class="lp-src"><svg class="ic lp-src-ic"><use href="#i-doc"/></svg><div><strong>İlgili yönetmelik</strong><span>Kaynak metni incele</span></div><svg class="ic lp-src-go"><use href="#i-out"/></svg></div>
+              <div class="lp-src"><svg class="ic lp-src-ic"><use href="#i-doc"/></svg><div><strong>İlgili madde ve kapsam</strong><span>Kaynak metni incele</span></div><svg class="ic lp-src-go"><use href="#i-out"/></svg></div>
+            </div>
+          </div>
+          <button type="button" class="lp-input lp-seq" style="--d:1.8s" onclick="showLogin('register')"><span>Mevzuatla ilgili sorunuzu yazın...</span><span class="lp-send"><svg class="ic"><use href="#i-up"/></svg></span></button>
         </div>
       </div>
+      <p class="lp-caption"><svg class="ic"><use href="#i-cursor"/></svg>Yanıttan kaynağa, tek bir akışta.</p>
     </div>
   </div>
 </section>
 
-<section id="ozellikler">
-  <div class="container">
-    <div class="fade-up"><p class="section-label">Özellikler</p><div class="section-divider"></div><h2 class="section-title">Neden MevzuSağlık?</h2></div>
-    <div class="features-grid">
-      <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div class="feature-title">Kaynak Gösterimi</div><div class="feature-desc">Her yanıt, hangi yönetmeliğin hangi maddesinden alındığını gösterir.</div></div>
-        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="feature-title">Anlık Yanıt</div><div class="feature-desc">Binlerce sayfayı 3 saniyeden kısa sürede tarar.</div></div>
-        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg></div><div class="feature-title">Sağlık Odaklı</div><div class="feature-desc">Yalnızca sağlık mevzuatına odaklanmış model.</div></div>
-        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="feature-title">Sohbet Geçmişi</div><div class="feature-desc">Önceki sorularınıza istediğiniz zaman dönebilirsiniz.</div></div>
-        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg></div><div class="feature-title">Belge Yükleme</div><div class="feature-desc">Kendi iç yönetmeliklerinizi yükleyin.</div></div>
-        <div class="feature-card fade-up"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div><div class="feature-title">Güvenli Altyapı</div><div class="feature-desc">Verileriniz şifrelenir. KVKK uyumlu.</div></div>
-      </div>
+<div class="lp-strip">
+  <div class="lp-wrap lp-strip-in">
+    <p class="lp-strip-title">Cevabı bilin. Kaynağını da.</p>
+    <div class="lp-strip-item"><svg class="ic"><use href="#i-book"/></svg><div><strong>Kaynağı görün</strong><span>Yönetmelik ve madde bağlantıları</span></div></div>
+    <div class="lp-strip-item"><svg class="ic"><use href="#i-scan"/></svg><div><strong>Bağlamı inceleyin</strong><span>Yanıttan ilgili kaynak metne geçiş</span></div></div>
+    <div class="lp-strip-item"><svg class="ic"><use href="#i-checkuser"/></svg><div><strong>Kararı siz verin</strong><span>Uzman değerlendirmenize destek</span></div></div>
   </div>
-</section>
+</div>
 
-<section id="nasil-calisir">
-  <div class="container">
-    <div class="fade-up"><p class="section-label">Nasıl Çalışır</p><div class="section-divider"></div><h2 class="section-title">3 Adımda Yanıtınızı Alın</h2></div>
-    <div class="steps">
-      <div class="step fade-up"><div class="step-num">1</div><div class="step-content"><div class="step-title">Sorunuzu Yazın</div><div class="step-desc">Doğal dilde, günlük konuştuğunuz gibi sorun.</div></div></div>
-      <div class="step fade-up"><div class="step-num">2</div><div class="step-content"><div class="step-title">Yapay Zeka Mevzuatı Tarar</div><div class="step-desc">Tüm yönetmelik ve tebliğleri anında tarar.</div></div></div>
-      <div class="step fade-up"><div class="step-num">3</div><div class="step-content"><div class="step-title">Kaynaklı Yanıt Gelir</div><div class="step-desc">Yanıt, kaynak bilgisiyle birlikte sunulur.</div></div></div>
+<section class="lp-sec" id="ozellikler">
+  <div class="lp-wrap">
+    <div class="lp-head fade-up">
+      <div><p class="lp-eyebrow lp-eyebrow-plain">Daha az arama, daha çok netlik</p><h2 class="lp-h2">Günlük iş akışınıza<br>nefes aldıran bir asistan.</h2></div>
+      <p class="lp-head-p">Mevzuat araştırmasının her adımını sadeleştirin. Sorudan kaynağa, tek bir çalışma alanında ilerleyin.</p>
     </div>
-  </div>
-</section>
-
-<section id="fiyatlar">
-  <div class="container" style="text-align:center">
-    <div class="fade-up"><p class="section-label">Fiyatlar</p><div class="section-divider" style="margin:0 auto 32px"></div><h2 class="section-title">Size Uygun Planı Seçin</h2></div>
-    <div class="pricing-grid fade-up">
-      <div class="price-card">
-        <div class="price-plan">Ücretsiz</div>
-        <div class="price-amount"><sup>&#8378;</sup>0</div>
-        <div class="price-period">sonsuza kadar ücretsiz</div>
-        <ul class="price-features">
-          <li>Günde 20 soru</li><li>3 sohbet oturumu</li><li>Temel mevzuat erişimi</li>
-          <li class="disabled">Belge yükleme</li><li class="disabled">Öncelikli destek</li>
-        </ul>
-        <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="showLogin('register')">Ücretsiz Başla</button>
-      </div>
-      <div class="price-card featured">
-        <div class="price-plan">Pro</div>
-        <div class="price-amount"><sup>&#8378;</sup>299</div>
-        <div class="price-period">aylık</div>
-        <ul class="price-features">
-          <li>Günde 500 soru</li><li>50 sohbet oturumu</li><li>Tam mevzuat erişimi</li>
-          <li>10 belge yükleme</li><li>E-posta desteği</li>
-        </ul>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="buyPlan('pro')">Pro'ya Geç</button>
-      </div>
-      <div class="price-card">
-        <div class="price-plan">Kurumsal</div>
-        <div class="price-amount"><sup>&#8378;</sup>500</div>
-        <div class="price-period">aylık</div>
-        <ul class="price-features">
-          <li>Sınırsız soru</li><li>Sınırsız oturum</li><li>Özel mevzuat entegrasyonu</li>
-          <li>Sınırsız belge yükleme</li><li>7/24 telefon desteği</li>
-        </ul>
-        <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="buyPlan('enterprise')">Satın Al</button>
-      </div>
+    <div class="lp-feats fade-up">
+      <div class="lp-feat"><svg class="ic"><use href="#i-book"/></svg><h3>Her yanıtın bir dayanağı var.</h3><p>Yanıtla birlikte ilgili yönetmeliği ve maddeyi görün. Bilgiyi doğrudan kaynağından inceleyin.</p></div>
+      <div class="lp-feat"><svg class="ic"><use href="#i-bolt"/></svg><h3>Aramaya değil, işinize zaman.</h3><p>Uzun metinleri tek tek taramak yerine sorunuzu yazın. İhtiyacınız olan bilgiye hızla ulaşın.</p></div>
+      <div class="lp-feat"><svg class="ic"><use href="#i-steth"/></svg><h3>Odağımız sağlık mevzuatı.</h3><p>Genel yanıtlar yerine sağlık profesyonellerinin mevzuat soruları için tasarlanmış bir deneyim.</p></div>
+      <div class="lp-feat"><svg class="ic"><use href="#i-chat"/></svg><h3>Kaldığınız yerden devam edin.</h3><p>Sohbet geçmişinizle önceki sorularınıza dönün; araştırmanızı her seferinde yeniden başlatmayın.</p></div>
+      <div class="lp-feat"><svg class="ic"><use href="#i-upload"/></svg><h3>Kendi belgelerinizi de dahil edin.</h3><p>İç yönetmeliklerinizi yükleyin. Kurumunuza ait belgeleri mevzuat araştırmanızla birlikte kullanın.</p></div>
+      <div class="lp-feat"><svg class="ic"><use href="#i-shield"/></svg><h3>Güvenli bir çalışma alanı.</h3><p>Sorularınız ve belgeleriniz için güvenli altyapı. Mesleki araştırmanıza odaklanabileceğiniz bir alan.</p></div>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div><div class="footer-brand"><div class="footer-brand-icon">&#9877;</div>MevzuSağlık</div><p class="footer-desc">Sağlık profesyonelleri için yapay zeka destekli mevzuat asistanı.</p></div>
-      <div class="footer-col"><h4>Ürün</h4><a href="#ozellikler">Özellikler</a><a href="#fiyatlar">Fiyatlar</a></div>
-      <div class="footer-col"><h4>Şirket</h4><a href="#">Hakkımızda</a><a href="#">İletişim</a></div>
-      <div class="footer-col"><h4>Yasal</h4><a href="#">Gizlilik</a><a href="#">KVKK</a></div>
+<section class="lp-sec lp-dark" id="nasil-calisir">
+  <div class="lp-wrap">
+    <div class="lp-head fade-up">
+      <div><p class="lp-eyebrow lp-eyebrow-plain">Nasıl çalışır?</p><h2 class="lp-h2">Bir soru. Üç sade adım.</h2></div>
+      <p class="lp-head-p">Karmaşık aramalar olmadan, sorunuzdan kaynaklı yanıta.</p>
     </div>
-    <div class="footer-bottom">
-      <p>2025 MevzuSağlık. Tüm hakları saklıdır.</p>
-      <div class="footer-links"><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
+    <div class="lp-steps fade-up">
+      <div class="lp-step"><div class="lp-step-top"><span class="lp-step-n">01</span><i></i><svg class="ic"><use href="#i-chat"/></svg></div><h3>Sorunuzu yazın</h3><p>Merak ettiğiniz konuyu kendi cümlelerinizle anlatın. Gerekirse ayrıntılar ekleyin.</p></div>
+      <div class="lp-step"><div class="lp-step-top"><span class="lp-step-n">02</span><i></i><svg class="ic"><use href="#i-scan"/></svg></div><h3>Yapay zeka mevzuatı tarar</h3><p>Asistan, sorunuzla ilişkili sağlık mevzuatını tarar ve yanıtı oluşturur.</p></div>
+      <div class="lp-step"><div class="lp-step-top"><span class="lp-step-n">03</span><i></i><svg class="ic"><use href="#i-doc"/></svg></div><h3>Kaynaklı yanıtı inceleyin</h3><p>Yanıtı okuyun, ilgili yönetmelik ve maddelere geçerek değerlendirin.</p></div>
     </div>
   </div>
-</footer>
+</section>
+
+<section class="lp-sec">
+  <div class="lp-wrap lp-split">
+    <div class="fade-up">
+      <p class="lp-eyebrow lp-eyebrow-plain">Bilginin arkasındaki metne ulaşın</p>
+      <h2 class="lp-h2">Sadece bir yanıt değil, bakabileceğiniz bir dayanak.</h2>
+      <p class="lp-lead">Özetle yetinmeyin. Yanıtın dayandığı kaynağı açın, ilgili maddeyi inceleyin ve konuyu kendi bağlamında değerlendirin.</p>
+      <div class="lp-points">
+        <div class="lp-point"><svg class="ic"><use href="#i-list"/></svg><div><strong>Yanıttan ilgili maddeye</strong><span>Yönetmelik ve madde bağlantılarıyla araştırmanızın izini kaybetmeyin.</span></div></div>
+        <div class="lp-point"><svg class="ic"><use href="#i-upload"/></svg><div><strong>Kurumunuzun bilgisi de yanınızda</strong><span>İç yönetmeliklerinizi belge olarak yükleyin; kurumunuza özel araştırmaları aynı yerde yürütün.</span></div></div>
+      </div>
+      <button type="button" class="lp-link" onclick="showLogin('register')">Çalışma alanınızı keşfedin <svg class="ic"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="lp-demo lp-demo-b fade-up">
+      <div class="lp-panel">
+        <div class="lp-panel-head"><span>Kaynak odaklı çalışma alanı</span><span>Örnek görünüm</span></div>
+        <div class="lp-card">
+          <div class="lp-card-head"><span class="lp-card-title"><svg class="ic"><use href="#i-doc"/></svg>Kaynak incelemesi</span><svg class="ic lp-muted"><use href="#i-panel"/></svg></div>
+          <div class="lp-card-body">
+            <span class="lp-tag">Mevzuat kaynağı</span>
+            <p class="lp-doc-title">İlgili yönetmelik</p>
+            <p class="lp-doc-sub">Kaynak metin / İlgili madde ve kapsam</p>
+            <div class="lp-quote"><strong>Yanıtla ilişkili bölüm</strong><p>Yanıtın dayandığı bölüme buradan ulaşın. İlgili maddeyi belgenin bütünüyle birlikte değerlendirerek araştırmanızı derinleştirin.</p></div>
+            <p class="lp-doc-go"><strong>Kaynak metne git</strong><svg class="ic"><use href="#i-out"/></svg></p>
+          </div>
+        </div>
+        <div class="lp-card lp-file"><span class="lp-file-ic"><svg class="ic"><use href="#i-doc"/></svg></span><div><strong>Kurum içi yönerge.pdf</strong><span>Örnek belge · Çalışma alanına eklendi</span></div><svg class="ic"><use href="#i-check"/></svg></div>
+        <p class="lp-panel-note">Arayüz temsili olarak gösterilmiştir; hukuki hüküm içermez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lp-sec lp-alt" id="fiyatlar">
+  <div class="lp-wrap">
+    <div class="lp-head fade-up">
+      <div><p class="lp-eyebrow lp-eyebrow-plain">Fiyatlar</p><h2 class="lp-h2">İhtiyacınız kadar, yanınızda.</h2></div>
+      <p class="lp-head-p">Ücretsiz keşfedin. İş akışınız büyüdükçe size uygun planla devam edin.</p>
+    </div>
+    <div class="lp-plans fade-up">
+      <div class="lp-plan">
+        <div class="lp-plan-head"><h3>Ücretsiz</h3></div>
+        <p class="lp-plan-desc">Mevzu Sağlık ile tanışmak için.</p>
+        <p class="lp-price"><b>₺0</b><span>/ ay</span></p>
+        <button type="button" class="lp-btn lp-btn-outline" onclick="showLogin('register')">Ücretsiz Başla <svg class="ic"><use href="#i-out"/></svg></button>
+        <ul><li><svg class="ic"><use href="#i-check"/></svg>Günde 20 soru</li><li><svg class="ic"><use href="#i-check"/></svg>3 sohbet oturumu</li><li><svg class="ic"><use href="#i-check"/></svg>Temel mevzuat erişimi</li></ul>
+      </div>
+      <div class="lp-plan lp-plan-pro">
+        <div class="lp-plan-head"><h3>Pro</h3><span class="lp-pill lp-pill-dark">Günlük kullanım için</span></div>
+        <p class="lp-plan-desc">Günlük araştırmalarınız için daha fazlası.</p>
+        <p class="lp-price"><b>₺299</b><span>/ ay</span></p>
+        <button type="button" class="lp-btn lp-btn-light" onclick="buyPlan('pro')">Pro ile Devam Et <svg class="ic"><use href="#i-out"/></svg></button>
+        <ul><li><svg class="ic"><use href="#i-check"/></svg>Günde 500 soru</li><li><svg class="ic"><use href="#i-check"/></svg>50 sohbet oturumu</li><li><svg class="ic"><use href="#i-check"/></svg>Tam mevzuat erişimi</li><li><svg class="ic"><use href="#i-check"/></svg>10 belge yükleme</li><li><svg class="ic"><use href="#i-check"/></svg>E-posta desteği</li></ul>
+      </div>
+      <div class="lp-plan">
+        <div class="lp-plan-head"><h3>Kurumsal</h3></div>
+        <p class="lp-plan-desc">Kurumunuzun ihtiyaçlarına özel kapsam.</p>
+        <p class="lp-price"><b>₺500</b><span>/ ay</span></p>
+        <button type="button" class="lp-btn lp-btn-outline" onclick="buyPlan('enterprise')">Kurumsal Planı Seç <svg class="ic"><use href="#i-out"/></svg></button>
+        <ul><li><svg class="ic"><use href="#i-check"/></svg>Sınırsız soru ve oturum</li><li><svg class="ic"><use href="#i-check"/></svg>Özel mevzuat entegrasyonu</li><li><svg class="ic"><use href="#i-check"/></svg>Sınırsız belge yükleme</li><li><svg class="ic"><use href="#i-check"/></svg>7/24 telefon desteği</li></ul>
+      </div>
+    </div>
+    <p class="lp-plans-note"><svg class="ic"><use href="#i-chat"/></svg>Kurumunuz için hangi planın uygun olduğundan emin değil misiniz? <a href="#iletisim">Bizimle iletişime geçin <svg class="ic"><use href="#i-out"/></svg></a></p>
+  </div>
+</section>
+
+<section class="lp-sec lp-cta">
+  <div class="lp-wrap lp-cta-in fade-up">
+    <div><p class="lp-eyebrow lp-eyebrow-plain">Bir sonraki sorunuzla başlayın</p><h2 class="lp-h2">Mevzuatta yolunuzu bulun.<br>İşinize güvenle odaklanın.</h2></div>
+    <div class="lp-cta-act"><button type="button" class="lp-btn lp-btn-primary lp-btn-lg" onclick="showLogin('register')">Ücretsiz Başla <svg class="ic"><use href="#i-out"/></svg></button><p class="lp-small">Günde 20 soruyla keşfedin</p></div>
+  </div>
+</section>
+
+<div class="lp-footer" id="iletisim" role="contentinfo">
+  <div class="lp-wrap">
+    <div class="lp-foot-grid">
+      <div>
+        <a href="#" class="lp-logo lp-logo-light"><span class="lp-logo-ic"><svg class="ic"><use href="#i-star"/></svg></span><span>mevzu sağlık</span></a>
+        <p class="lp-foot-desc">Sağlık profesyonelleri için yapay zeka destekli mevzuat asistanı. Bilgiye ulaşmanın daha anlaşılır yolu.</p>
+      </div>
+      <div class="lp-foot-col"><h4>Ürün</h4><a href="#ozellikler">Özellikler</a><a href="#nasil-calisir">Nasıl Çalışır</a><a href="#fiyatlar">Fiyatlar</a></div>
+      <div class="lp-foot-col"><h4>Şirket</h4><a href="#">Mevzu Sağlık</a><a href="#iletisim">İletişim</a></div>
+      <div class="lp-foot-col"><h4>Yasal</h4><a href="#">Gizlilik</a><a href="#">KVKK</a></div>
+    </div>
+    <p class="lp-disclaimer"><svg class="ic"><use href="#i-info"/></svg>MevzuSağlık yapay zeka hatalar yapabilir. Kritik kararlar için uzman görüşü alın.</p>
+    <div class="lp-foot-bottom"><span>© 2026 Mevzu Sağlık. Tüm hakları saklıdır.</span><span>Türkçe · Türkiye</span></div>
+  </div>
+</div>
 </div>
 
 <div class="modal-overlay" id="authModal">
@@ -1375,7 +1740,7 @@ document.addEventListener('keydown', function (e) {
 </div>
 
 <script>
-const BACKEND_URL    = "https://hilal1-mevzusaglik.hf.space";
+const BACKEND_URL = window.__BACKEND_URL__ || (["mevzusaglik.com.tr","www.mevzusaglik.com.tr"].includes(location.hostname) ? "" : "https://mevzusaglik.com.tr");
 const TENANT_API_KEY = (window.__TENANT_API_KEY__ || '').trim();
 const HEADERS = {'Content-Type':'application/json', 'X-API-Key': TENANT_API_KEY};
 
@@ -2089,10 +2454,26 @@ window.addEventListener('resize', () => {
 });
 </script>
 <script>
-// Scroll nav effect
-window.addEventListener('scroll', () => {
-  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
-});
+// Üst menü gölgesi
+(function(){
+  var n = document.querySelector('.lp-nav');
+  if (n) window.addEventListener('scroll', function(){ n.classList.toggle('scrolled', window.scrollY > 8); });
+})();
+// Giriş paneli: dışarı tıklayınca veya Esc ile kapat
+(function(){
+  var m = document.getElementById('authModal');
+  if (m) m.addEventListener('click', function(e){ if (e.target === m && typeof hideModal === 'function') hideModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && typeof hideModal === 'function') hideModal(); });
+})();
+// Kaydırınca beliren öğeler (ana script hata verse bile içerik görünür kalsın)
+(function(){
+  var els = document.querySelectorAll('.fade-up');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(el){ el.classList.add('visible'); }); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(x){ if (x.isIntersecting) { x.target.classList.add('visible'); io.unobserve(x.target); } });
+  }, {threshold: 0.1});
+  els.forEach(function(el){ io.observe(el); });
+})();
 </script>
 </body>
 </html>
