@@ -11,7 +11,7 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from backend.config.configuration import Settings
 from backend.llm_client import llm_client
-from backend.routers import search, history, session_router, admin, add_documents, billing, health, auth_router
+from backend.routers import search, history, session_router, admin, add_documents, billing, health, auth_router, system
 import google.generativeai as genai
 
 from backend.logger import logger
@@ -60,4 +60,5 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(billing.router)
     app.include_router(auth_router.router)
+    app.include_router(system.router)
     return app
