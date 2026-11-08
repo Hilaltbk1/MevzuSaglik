@@ -1,5 +1,5 @@
 from __future__ import annotations
-from sqlalchemy import Column, Integer, DateTime, ForeignKey,Text
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, Text, String
 import datetime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -14,6 +14,9 @@ class LogModel(Base):
     response=Column(Text, nullable=False)
     error_message=Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    scope = Column(String(20), nullable=False, default="in_scope")
+    latency_ms = Column(Integer, nullable=True)
+    source_count = Column(Integer, nullable=True)
 
     message_id=Column(Integer, ForeignKey('message.id'), nullable=False)
     # Doğrusu bu şekilde olmalı:

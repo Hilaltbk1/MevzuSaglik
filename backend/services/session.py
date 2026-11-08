@@ -1,15 +1,23 @@
 from __future__ import annotations
+import time
 from langchain_core.messages import HumanMessage, AIMessage
 from backend.schemas.query_model import QueryRequest, QueryResponse
 from backend.services.Retrievers import retrieval_chain
 from backend.services.chunking11 import source_label
+from backend.services.scope import classify_question, Scope
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from backend.database import crud
 
+OUT_OF_SCOPE_ANSWER = (
+    "Bu soru sağlık mevzuatı kapsamı dışında. Ben kanun, yönetmelik, tebliğ ve "
+    "uygulama rehberleri hakkında kaynaklı yanıt verebilirim. Sorunuzu mevzuatla "
+    "ilgili biçimde yeniden ifade eder misiniz? "
+    "Örn: 'Hemşirelik yönetmeliğine göre nöbet süresi kaç saattir?'"
+)
+
 def get_chain(tenant_id: int = 0):
     return retrieval_chain()
-
 
 def ask_question(
     db: Session,
@@ -29,7 +37,27 @@ def ask_question(
 
     s_id = db_session.id
 
-    # Geçmişi çek
+    # ═══ YENİ: Kapsam kapısı — retrieval'dan ÖNCE ═══
+    decision = classify_question(request.query)
+    if decision.scope is Scope.OUT_OF_SCOPE:
+        human_message = crud.create_message(db, s_id, request.query, "human")
+        crud.create_message(db, s_id, OUT_OF_SCOPE_ANSWER, "ai")
+        try:
+            crud.create_log(db, 200, request.query, OUT_OF_SCOPE_ANSWER, None,
+                            human_message.id, scope="out_of_scope",
+                            source_count=0, latency_ms=0)
+        except Exception as log_error:
+            print(f"Loglama sırasında hata oluştu: {log_error}")
+        return QueryResponse(
+            query=request.query,
+            answer=OUT_OF_SCOPE_ANSWER,
+            sources=[],
+            status="out_of_scope",
+            session_uuid=request.session_uuid,
+        )
+    # ═══ Kapsam kapısı sonu ═══
+
+    # Geçmişi çek (mevcut kodun — aynen)
     db_messages  = crud.read_messages_by_session(db, s_id)
     chat_history = []
     for msg in db_messages:
@@ -44,14 +72,17 @@ def ask_question(
     # AI Yanıtı — user_id ile erişim filtresi geçir
     current_chain = get_chain(tenant_id)
     try:
+        t0 = time.perf_counter()
         response = current_chain.full_chain.invoke({
             "input":           request.query,
             "chat_history":    chat_history,
             "current_user_id": user_id,
         })
+        latency_ms = int((time.perf_counter() - t0) * 1000)
     except Exception as e:
         print(f"--- RAG ZİNCİRİ HATASI: {e} ---")
         raise e
+
 
     answer = response.get("answer", "Üzgünüm cevap oluşturulamadı")
 
@@ -65,9 +96,11 @@ def ask_question(
     # AI mesajını kaydet
     crud.create_message(db, s_id, answer, "ai")
 
-    # Loglama
+    # Loglama — scope, latency, kaynak sayısı eklendi
     try:
-        crud.create_log(db, 200, request.query, answer, None, human_message.id)
+        crud.create_log(db, 200, request.query, answer, None, human_message.id,
+                        scope="in_scope", source_count=len(sources),
+                        latency_ms=latency_ms)
     except Exception as log_error:
         print(f"Loglama sırasında hata oluştu: {log_error}")
 
@@ -78,7 +111,6 @@ def ask_question(
         status="success",
         session_uuid=request.session_uuid,
     )
-
 
 def get_session_history(db: Session, uuid: str):
     try:

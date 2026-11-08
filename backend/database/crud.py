@@ -378,6 +378,9 @@ def create_log(
     response_data: str,
     error_message: str,
     message_id: int,
+    scope: str = "in_scope",
+    latency_ms: int | None = None,
+    source_count: int | None = None,
 ) -> LogModel:
     log = LogModel(
         status_code=status_code,
@@ -385,6 +388,9 @@ def create_log(
         response=response_data,
         error_message=error_message,
         message_id=message_id,
+        scope=scope,
+        latency_ms=latency_ms,
+        source_count=source_count,
     )
     db.add(log)
     db.commit()
