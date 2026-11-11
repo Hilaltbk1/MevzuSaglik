@@ -58,14 +58,14 @@ def ask_question(
     # ═══ Kapsam kapısı sonu ═══
 
     # Geçmişi çek (mevcut kodun — aynen)
-    db_messages  = crud.read_messages_by_session(db, s_id)
+    # Geçmişi çek — sadece son 6 mesaj (3 soru-cevap) yeterli
+    db_messages = crud.read_messages_by_session(db, s_id)
     chat_history = []
-    for msg in db_messages:
+    for msg in db_messages[-6:]:
         if msg.sender_type == "human":
             chat_history.append(HumanMessage(content=msg.content))
         else:
             chat_history.append(AIMessage(content=msg.content))
-
     # Kullanıcı mesajını kaydet
     human_message = crud.create_message(db, s_id, request.query, "human")
 
