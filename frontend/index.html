@@ -2015,15 +2015,6 @@ async function doSubmitAuth() {
     return;
   }
 
-  if (data["2fa_required"]) {
-        pending2FA = { user_name: name, password: password };
-        hideModal();
-        document.getElementById('twofaModal').classList.add('show');
-        document.getElementById('twofa-code').value = '';
-        document.getElementById('twofa-code').focus();
-        return;
-      }
-
   const endpoint = currentAuthMode === 'register' ? '/auth/register' : '/auth/login';
   const body     = currentAuthMode === 'register'
     ? { user_name: name, password, email: email || undefined }
@@ -2033,6 +2024,15 @@ async function doSubmitAuth() {
     const res  = await fetch(BACKEND_URL + endpoint, { method: 'POST', headers: HEADERS, body: JSON.stringify(body) });
     const data = await res.json();
     if (!res.ok) { alert(data.detail || 'Bir hata oluştu.'); return; }
+
+    if (data["2fa_required"]) {
+      pending2FA = { user_name: name, password: password };
+      hideModal();
+      document.getElementById('twofaModal').classList.add('show');
+      document.getElementById('twofa-code').value = '';
+      document.getElementById('twofa-code').focus();
+      return;
+    }
 
     if (currentAuthMode === 'register') {
       currentUser        = data.user_name || name;
