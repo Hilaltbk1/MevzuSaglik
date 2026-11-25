@@ -3,8 +3,7 @@ from fastapi import APIRouter
 from backend.database.db_setup import SessionLocal
 
 router = APIRouter(tags=["Sistem"])
-
-@router.get("/health")
+@router.api_route("/health", methods=["GET", "HEAD"])
 def health_check():
     try:
         db = SessionLocal()
