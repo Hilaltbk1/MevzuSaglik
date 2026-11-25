@@ -1,18 +1,25 @@
 from __future__ import annotations
-from backend.services.topic_router import classify_topics, should_apply_topic_filter
-from qdrant_client.models import Filter, FieldCondition, MatchValue, MatchAny
+
+import re
+import threading
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
+from typing import List, Any, Dict, Optional
+
+from dotenv import load_dotenv
+from langchain_community.retrievers import BM25Retriever
+from langchain_core.documents import Document
+from langchain_core.prompts import PromptTemplate
+from langchain_core.retrievers import BaseRetriever
+from langchain_google_genai import ChatGoogleGenerativeAI
+from qdrant_client.models import Filter, FieldCondition, MatchValue, MatchAny
+
+from backend.config.configuration import Settings
+from backend.logger import logger
+from backend.prompt.My_Prompt import create_prompt
 from backend.services.chunking11 import assemble_parent, source_label
 from backend.services.text_utils import tokenize
-import threading
-from typing import List, Any, Dict, Optional
-from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.retrievers import BM25Retriever
-from langchain_core.prompts import PromptTemplate
-from backend.config.configuration import Settings
-from backend.prompt.My_Prompt import create_prompt
-from backend.logger import logger
+from backend.services.topic_router import classify_topics, should_apply_topic_filter
 
 load_dotenv()
 settings = Settings()
@@ -20,6 +27,13 @@ settings = Settings()
 # Thread-safe lazy loading
 _chain_instance: Optional[Any] = None
 _chain_lock = threading.Lock()
+
+# Satır başındaki "1.", "2)", "-", "•" gibi numaralandırmaları temizlemek için
+_NUM_PREFIX = re.compile(r"^\s*(?:\d+\s*[.)]|[-•*])\s*")
+
+
+def _clean_line(line: str) -> str:
+    return _NUM_PREFIX.sub("", line).strip()
 
 
 def retrieval_chain():
@@ -54,15 +68,25 @@ def _create_chain_instance():
     logger.info("🚀 RAG zinciri başlatılıyor...")
 
     llm = ChatGoogleGenerativeAI(
-        model=settings.LLM_MODEL_NAME or "gemini-1.5-flash",
+        model=settings.LLM_MODEL_NAME or "gemini-2.5-flash",
         google_api_key=settings.GOOGLE_API_KEY,
         temperature=0,
+        max_output_tokens=768,  # uzun yanıtları kes — süre tavanı
+        max_retries=1,  # kota hatasında dakikalarca asılı kalmasın
+        timeout=45,  # 45 sn'de cevap yoksa isteği bırak
+    )
+    prep_llm = ChatGoogleGenerativeAI(
+        model=settings.LLM_MODEL_NAME or "gemini-2.5-flash",
+        google_api_key=settings.GOOGLE_API_KEY,
+        temperature=0,
+        thinking_budget=0,
+        max_retries=1,
+        timeout=15,
     )
 
-    logger.info("📦 Vector store yükleniyor...")
     v_db, split_text = initialize_vector_store(rebuild_db=False)
     if v_db is None:
-        raise ValueError("Hata: Vektör veritabanı başlatılamadı! Qdrant bağlantısını kontrol et.")
+        raise ValueError("Hata: Vektör veritabanı başlatılamaz! Qdrant bağlantısını kontrol et.")
 
     if split_text is None or len(split_text) == 0:
         logger.warning("⚠️ Chunks bulunamadı, BM25 devre dışı kalacak")
@@ -70,29 +94,23 @@ def _create_chain_instance():
 
     logger.info(f"✅ {len(split_text)} chunk yüklendi")
 
-    def get_bm25_retriever(split_text):
-        if not split_text or len(split_text) == 0:
+    def get_bm25_retriever(chunks):
+        if not chunks:
             logger.warning("⚠️ BM25 için chunks yok, sadece vector search kullanılacak")
             return None
 
         # pkl kullanmadan her zaman bellekte oluştur (yeni belgeler eklendikçe güncel kalsın)
         public_chunks = [
-            d for d in split_text
+            d for d in chunks
             if d.metadata.get("access_scope", "public") == "public"
         ]
-        bm25 = BM25Retriever.from_documents(
-            public_chunks if public_chunks else split_text,
-            preprocess_func=tokenize
+        return BM25Retriever.from_documents(
+            public_chunks if public_chunks else chunks,
+            preprocess_func=tokenize,
         )
 
-        return bm25
-
-    # Retriever'ları oluştur
-    vector_retriever = v_db.as_retriever(
-        search_type="similarity",
-        search_kwargs={"k": settings.VECTOR_FETCH_K},
-    )
     bm25_retriever = get_bm25_retriever(split_text)
+
     parent_index = defaultdict(list)
     for d in split_text:
         pid = d.metadata.get("parent_id")
@@ -111,9 +129,6 @@ def _create_chain_instance():
         )
     else:
         logger.warning("⚠️ Sadece Vector Search kullanılacak (BM25 yok)")
-
-    from langchain_core.retrievers import BaseRetriever
-    from langchain_core.documents import Document
 
     def _owner_matches(meta_owner, user_id) -> bool:
         """Qdrant/BM25 owner_id string|int tutarsızlığını normalize et."""
@@ -150,12 +165,12 @@ def _create_chain_instance():
         b_retriever: Any = None
 
         def retrieve(
-            self,
-            query: str,
-            *,
-            user_id: Optional[int] = None,
-            route_topics: Optional[List[str]] = None,
-            apply_topic_filter: bool = False,
+                self,
+                query: str,
+                *,
+                user_id: Optional[int] = None,
+                route_topics: Optional[List[str]] = None,
+                apply_topic_filter: bool = False,
         ) -> List[Document]:
             use_topic = bool(apply_topic_filter and route_topics)
             route_topics_list = list(route_topics or [])
@@ -184,8 +199,7 @@ def _create_chain_instance():
                     ]
                 )
 
-            # --- 2) TOPIC FILTER (soft) — primary VEYA topics listesi (BM25 ile aynı kural) ---
-            # Not: Qdrant'ta must varken should zorunlu filtre DEĞİLDİR → nested Filter.
+            # --- 2) TOPIC FILTER (soft) ---
             qdrant_filter = privacy_filter
             if use_topic:
                 topic_or = Filter(
@@ -225,9 +239,9 @@ def _create_chain_instance():
 
             mode = settings.RETRIEVAL_MODE  # vector | bm25 | hybrid
 
-            # --- 3) Vector arama (Doğrudan VectorStore'dan filtre ile çağrılır) ---
+            # --- 3) Vector arama ---
             v_docs: List[Document] = []
-            if mode in ("vector", "hybrid"):
+            if mode in ("vector", "hybrid") or not self.b_retriever:
                 try:
                     v_docs = self.v_store.similarity_search(
                         query,
@@ -253,18 +267,22 @@ def _create_chain_instance():
             # --- 4) BM25 ---
             b_docs: List[Document] = []
             if mode in ("bm25", "hybrid") and self.b_retriever is not None:
-                b_docs_all = self.b_retriever.invoke(query)
+                try:
+                    b_docs_all = self.b_retriever.invoke(query)
+                except Exception as e:
+                    logger.warning(f"BM25 hatası: {e}")
+                    b_docs_all = []
                 b_docs = [
                     d for d in b_docs_all
                     if (
-                        d.metadata.get("access_scope", "public") == "public"
-                        or _owner_matches(d.metadata.get("owner_id"), user_id)
-                    )
-                    and (
-                        not use_topic
-                        or d.metadata.get("primary_topic") in route_topics_list
-                        or any(t in (d.metadata.get("topics") or []) for t in route_topics_list)
-                    )
+                               d.metadata.get("access_scope", "public") == "public"
+                               or _owner_matches(d.metadata.get("owner_id"), user_id)
+                       )
+                       and (
+                               not use_topic
+                               or d.metadata.get("primary_topic") in route_topics_list
+                               or any(t in (d.metadata.get("topics") or []) for t in route_topics_list)
+                       )
                 ]
 
             # --- 5) Mode / RRF ---
@@ -292,7 +310,7 @@ def _create_chain_instance():
             return fused
 
         def _get_relevant_documents(
-            self, query: str, *, run_manager=None
+                self, query: str, *, run_manager=None
         ) -> List[Document]:
             return self.retrieve(query)
 
@@ -318,17 +336,18 @@ def _create_chain_instance():
     )
 
     class FullChain:
-        def __init__(self, llm_client, retriever, reranker, qa_prompt, ctx_prompt, doc_prompt, parent_index):
-            self.llm          = llm_client
+        def __init__(self, llm_client, prep_llm_client, retriever, reranker, qa_prompt, ctx_prompt, doc_prompt,
+                     parent_index):
+            self.llm = llm_client
+            self.prep_llm = prep_llm_client  # ön-işleme için hızlı LLM
             self.parent_index = parent_index
-            self.retriever    = retriever
-            self.reranker     = reranker
-            self.qa_prompt    = qa_prompt
-            self.ctx_prompt   = ctx_prompt
-            self.doc_prompt   = doc_prompt
+            self.retriever = retriever
+            self.reranker = reranker
+            self.qa_prompt = qa_prompt
+            self.ctx_prompt = ctx_prompt
+            self.doc_prompt = doc_prompt
 
         def _expand_to_parents(self, docs, cap=4000, max_parents=4):
-            from langchain_core.documents import Document as LCDoc
             out, seen = [], set()
             for d in docs:
                 pid = d.metadata.get("parent_id")
@@ -343,7 +362,7 @@ def _create_chain_instance():
                             for x in docs
                             if x.metadata.get("parent_id") == pid
                         }
-                        out.append(LCDoc(
+                        out.append(Document(
                             page_content=assemble_parent(kids, matched, cap),
                             metadata=dict(d.metadata),
                         ))
@@ -353,40 +372,33 @@ def _create_chain_instance():
                     break
             return out
 
-        def _build_search_query(self, question: str, chat_history: List[Any]) -> str:
-            if not chat_history:
-                return question
-            try:
-                history_text = "\n".join([getattr(m, "content", str(m)) for m in chat_history])
-                prompt = self.ctx_prompt.format(input=question, chat_history=history_text)
-                resp   = self.llm.invoke(prompt)
-                return getattr(resp, "content", str(resp))
-            except Exception:
-                return question
-
-        def _generate_queries(self, question: str, chat_history: List[Any], n: int = 2) -> List[str]:
-            """Ana sorgu + n alternatif sorgu üretir. Toplam n+1 sorgu döner."""
+        # TEK çağrı: hem düzeltilmiş soru hem alternatifler aynı cevapta döner.
+        def _prepare_queries(self, question: str, chat_history: List[Any], n: int = 2) -> List[str]:
+            """Tek LLM çağrısında: geçmişe göre soruyu düzelt + n alternatif üret."""
             history_text = "\n".join([getattr(m, "content", str(m)) for m in chat_history])
             prompt = (
-                f"Aşağıdaki soruyu mevzuat veritabanında aramak için {n} farklı biçimde yeniden ifade et.\n"
-                f"Her versiyon farklı kelime seçimi veya farklı açı kullanmalı.\n"
-                f"KESİNLİKLE olmayan madde numarası, kanun adı veya tarih UYDURMA.\n"
-                f"Yalnızca {n} satır yaz, her satıra bir sorgu. Başka açıklama ekleme.\n\n"
+                f"Aşağıdaki görevi yap, yalnızca {n + 1} satır yaz, başka açıklama ekleme:\n"
+                f"1. satır: Soruyu sohbet geçmişine göre bağımsız ve anlaşılır hale getir "
+                f"(zamirleri çöz: 'onun', 'o madde', 'yukarıdaki' gibi).\n"
+                f"2-{n + 1}. satır: 1. satırdaki sorunun mevzuat veritabanında aramak için "
+                f"farklı kelime seçimli {n} alternatifi.\n"
+                f"KESİNLİKLE olmayan madde numarası, kanun adı veya tarih UYDURMA.\n\n"
                 f"Sohbet geçmişi: {history_text}\n"
                 f"Soru: {question}"
             )
             try:
-                resp = self.llm.invoke(prompt)
+                resp = self.prep_llm.invoke(prompt)
                 raw = getattr(resp, "content", str(resp)).strip()
-                alternatives = [
-                    q.strip("0123456789.-) ").strip()
+                lines = [
+                    _clean_line(q)
                     for q in raw.split("\n") if q.strip()
-                ][:n]
-            except Exception:
-                alternatives = []
+                ][: n + 1]
+            except Exception as e:
+                logger.warning(f"⚠️ Sorgu hazırlama hatası, orijinal soru kullanılacak: {e}")
+                lines = []
             # Orijinal soruyu başa koy, tekrarları kaldır
             seen, unique = set(), []
-            for q in [question] + alternatives:
+            for q in [question] + lines:
                 if q and q not in seen:
                     seen.add(q)
                     unique.append(q)
@@ -396,57 +408,62 @@ def _create_chain_instance():
             """Sorunun birden fazla bağımsız alt soruya ihtiyacı var mı?"""
             q = question.lower()
             signals = [
-                (" ve " in q and "?" in q),      # "... ve ...?" şeklinde
-                ("hem " in q and " hem " in q),   # "hem X hem Y"
-                ("ayrıca" in q),                  # "ayrıca şunu da"
-                (q.count("?") > 1),               # birden fazla soru işareti
-                (" ile birlikte " in q),           # "X ile birlikte Y"
+                (" ve " in q and "?" in q),  # "... ve ...?" şeklinde
+                ("hem " in q and " hem " in q),  # "hem X hem Y"
+                ("ayrıca" in q),  # "ayrıca şunu da"
+                (q.count("?") > 1),  # birden fazla soru işareti
+                (" ile birlikte " in q),  # "X ile birlikte Y"
             ]
             return sum(signals) >= 2  # 2+ sinyal varsa karmaşık say
 
-        def _decompose_question(self, question: str) -> List[str]:
-            """Karmaşık soruyu bağımsız alt sorulara böler."""
+        def _decompose_question(self, question: str, chat_history: List[Any]) -> List[str]:
+            """Karmaşık soruyu bağımsız alt sorulara böler. (prep_llm kullanır)"""
+            history_text = "\n".join([getattr(m, "content", str(m)) for m in chat_history])
             prompt = (
                 f"Aşağıdaki soruyu birbirinden bağımsız 2-3 alt soruya böl.\n"
                 f"Her alt soru tek başına mevzuatta aranabilir olmalı.\n"
                 f"KESİNLİKLE olmayan madde numarası veya kanun adı UYDURMA.\n"
                 f"Yalnızca alt soruları yaz, her satıra bir tane. Açıklama ekleme.\n\n"
+                f"Sohbet geçmişi: {history_text}\n"
                 f"Soru: {question}"
             )
             try:
-                resp = self.llm.invoke(prompt)
-                raw  = getattr(resp, "content", str(resp)).strip()
+                resp = self.prep_llm.invoke(prompt)
+                raw = getattr(resp, "content", str(resp)).strip()
                 subs = [
-                    q.strip("0123456789.-) ").strip()
+                    _clean_line(q)
                     for q in raw.split("\n") if q.strip()
                 ][:3]
+                subs = [s for s in subs if s]
                 return subs if subs else [question]
-            except Exception:
+            except Exception as e:
+                logger.warning(f"⚠️ Decomposition hatası, orijinal soru kullanılacak: {e}")
                 return [question]
 
         def invoke(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
             question: str = inputs.get("input", "")
             chat_history: List[Any] = inputs.get("chat_history", [])
-            current_user_id: int | None = inputs.get("current_user_id", None)
+            current_user_id: Optional[int] = inputs.get("current_user_id", None)
 
-            search_query = self._build_search_query(question, chat_history)
+            # ── Query Decomposition / Multi-Query ──────────────────────────
+            if self._needs_decomposition(question):
+                sub_questions = self._decompose_question(question, chat_history)
+                logger.info(f"🔀 Decomposition: {len(sub_questions)} alt soru → {sub_questions}")
+                queries = list(dict.fromkeys(sub_questions))
+            else:
+                queries = self._prepare_queries(question, chat_history, n=2)
+            if not queries:
+                queries = [question]
+            logger.info(f"🔍 {len(queries)} sorgu: {queries}")
 
-            # Topic routing
+            # Topic routing — hazırlanmış ilk sorgu üzerinden
+            search_query = queries[0]
             route = classify_topics(search_query)
             use_topic = should_apply_topic_filter(route, min_confidence=0.70)
             logger.info(
                 f"🧭 route={route.topics} conf={route.confidence:.2f} "
                 f"apply={use_topic} ({route.reason})"
             )
-
-            # ── Query Decomposition / Multi-Query ────────────────────────
-            if self._needs_decomposition(question):
-                sub_questions = self._decompose_question(question)
-                logger.info(f"🔀 Decomposition: {len(sub_questions)} alt soru → {sub_questions}")
-                queries = list(dict.fromkeys([search_query] + sub_questions))
-            else:
-                queries = self._generate_queries(search_query, [], n=2)
-            logger.info(f"🔍 {len(queries)} sorgu: {queries}")
 
             k_rrf = 60
             all_scores: Dict[str, float] = {}
@@ -459,13 +476,19 @@ def _create_chain_instance():
                     or f"{md.get('parent_id', '')}:{md.get('child_index', '')}:{doc.page_content[:120]}"
                 )
 
-            for q in queries:
-                q_docs = self.retriever.retrieve(
+            # Sorguları PARALEL getir
+            def _fetch(q: str) -> List[Document]:
+                return self.retriever.retrieve(
                     q,
                     user_id=current_user_id,
                     route_topics=route.topics,
                     apply_topic_filter=use_topic,
                 )
+
+            with ThreadPoolExecutor(max_workers=max(1, min(len(queries), 3))) as ex:
+                q_results = list(ex.map(_fetch, queries))
+
+            for q_docs in q_results:
                 for rank, doc in enumerate(q_docs):
                     key = _key(doc)
                     all_scores[key] = all_scores.get(key, 0) + 1 / (k_rrf + rank + 1)
@@ -479,16 +502,17 @@ def _create_chain_instance():
             corrective_trigger = False
             if self.reranker and docs:
                 try:
-                    pairs         = [[question, d.page_content] for d in docs]
+                    pairs = [[question, d.page_content] for d in docs]
                     rerank_scores = self.reranker.predict(pairs)
-                    scored_docs   = sorted(zip(rerank_scores, docs), key=lambda x: x[0], reverse=True)
-                    best_score    = scored_docs[0][0] if scored_docs else -99
+                    scored_docs = sorted(zip(rerank_scores, docs), key=lambda x: x[0], reverse=True)
+                    best_score = float(scored_docs[0][0]) if scored_docs else -99.0
 
                     logger.info(f"📊 Rerank en iyi skor: {best_score:.2f}")
 
                     if best_score < -4.0:
                         # En iyi belge bile çok alakasız → corrective tetikle
-                        logger.warning(f"⚠️ Corrective RAG: en iyi skor {best_score:.2f} < -4.0 → alakasız belgeler")
+                        logger.warning(
+                            f"⚠️ Corrective RAG: en iyi skor {best_score:.2f} < -4.0 → alakasız belgeler")
                         corrective_trigger = True
                         docs = []
                     else:
@@ -532,17 +556,21 @@ def _create_chain_instance():
 
             formatted_docs = []
             for d in docs:
-                s_label = d.metadata.get("source_label") or source_label(d.metadata) or d.metadata.get("Mevzuat_Adi", "Bilinmeyen")
+                s_label = (
+                    d.metadata.get("source_label")
+                    or source_label(d.metadata)
+                    or d.metadata.get("Mevzuat_Adi", "Bilinmeyen")
+                )
                 text = self.doc_prompt.format(
                     page_content=d.page_content,
                     source_label=s_label,
                 )
                 formatted_docs.append(text)
 
-            context_text     = "\n\n".join(formatted_docs)
+            context_text = "\n\n".join(formatted_docs)
             qa_prompt_filled = self.qa_prompt.format(input=question, context=context_text)
-            answer_msg       = self.llm.invoke(qa_prompt_filled)
-            answer_text      = getattr(answer_msg, "content", str(answer_msg))
+            answer_msg = self.llm.invoke(qa_prompt_filled)
+            answer_text = getattr(answer_msg, "content", str(answer_msg))
 
             return {"answer": answer_text, "context": docs}
 
@@ -552,6 +580,7 @@ def _create_chain_instance():
 
     full_chain = FullChain(
         llm_client=llm,
+        prep_llm_client=prep_llm,
         retriever=hybrid_retriever,
         reranker=rerank_model,
         qa_prompt=qa_pr,
@@ -560,5 +589,4 @@ def _create_chain_instance():
         parent_index=parent_index,
     )
 
-    _chain_instance = ChainContainer(full_chain)
-    return _chain_instance
+    return ChainContainer(full_chain)
