@@ -165,9 +165,32 @@ async def login_user(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Kullanıcı adı ve parola zorunludur.")
 
     user = db.query(UserModel).filter(UserModel.username == user_name).first()
-    if not user or not verify_password(password, user.password_hash):
+    if not user:
         raise HTTPException(status_code=401, detail="Geçersiz kullanıcı adı veya parola.")
 
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Hesabınız devre dışı bırakılmış. Destek ile iletişime geçin.")
+
+    # 5 yanlış denemede 15 dakika kilit
+    if user.locked_until and datetime.now() < user.locked_until:
+        kalan = int((user.locked_until - datetime.now()).total_seconds() // 60) + 1
+        raise HTTPException(status_code=429, detail=f"Çok fazla başarısız deneme. {kalan} dakika sonra tekrar deneyin.")
+
+    if not verify_password(password, user.password_hash):
+        user.failed_attempts = (user.failed_attempts or 0) + 1
+        if user.failed_attempts >= 5:
+            user.locked_until = datetime.now() + timedelta(minutes=15)
+        db.commit()
+        raise HTTPException(status_code=401, detail="Geçersiz kullanıcı adı veya parola.")
+
+    # Başarılı şifre → kilidi temizle
+    user.failed_attempts = 0
+    user.locked_until = None
+    db.commit()
+
+    # 2FA açıksa token verme; ikinci adımı iste
+    if user.is_2fa_enabled and user.totp_secret:
+        return {"message": "Doğrulama kodu gerekli", "2fa_required": True, "user_name": user.username}
     from backend.schemas.tenant_model import TenantModel
     tenant       = db.query(TenantModel).filter_by(id=user.tenant_id).first()
     new_session  = crud.create_session(db, user_name, user.tenant_id, user.id)

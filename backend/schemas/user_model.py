@@ -1,6 +1,6 @@
 from __future__ import annotations
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, text ,Enum
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, text ,Enum,Text
 from sqlalchemy.orm import  relationship
 
 from backend.database.base import Base
@@ -24,6 +24,11 @@ class UserModel(Base):
     reset_token_expires  = Column(DateTime, nullable=True)
     created_at           = Column(DateTime, default=datetime.datetime.now)
 
+    totp_secret      = Column(Text, nullable=True)
+    is_2fa_enabled   = Column(Boolean, default=False)
+    failed_attempts  = Column(Integer, default=0)
+    locked_until     = Column(DateTime(timezone=True), nullable=True)
+    recovery_codes   = Column(Text, nullable=True)  # virgülle ayrılmış sha256 hash'leri
     #relatıonships
     tenant = relationship("TenantModel", back_populates="users")
     login_sessions = relationship(

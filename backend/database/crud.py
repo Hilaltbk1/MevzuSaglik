@@ -370,6 +370,12 @@ def create_session(db: Session, user_name: str, tenant_id: int, user_id: int = N
     db.refresh(s)
     return s
 
+def _redact(text: str | None, limit: int = 500) -> str:
+    """Loglama için metni kısalt — tam metin messages tablosunda kalır."""
+    if not text:
+        return ""
+    text = str(text)
+    return text[:limit] + ("..." if len(text) > limit else "")
 
 def create_log(
     db: Session,
@@ -384,8 +390,8 @@ def create_log(
 ) -> LogModel:
     log = LogModel(
         status_code=status_code,
-        request=request_data,
-        response=response_data,
+        request=_redact(request_data),  # DEĞİŞTİ
+        response=_redact(response_data),
         error_message=error_message,
         message_id=message_id,
         scope=scope,

@@ -38,3 +38,6 @@ python-multipart>=0.0.6
 # External Services
 stripe>=7.0.0
 resend>=0.6.0
+
+pyotp>=2.9.0
+qrcode[pil]>=7.4
