@@ -1665,6 +1665,19 @@ html,body{background:#f4f7f2;color:#1b3d31}
   </div>
 </div>
 
+<!-- 2FA Modal -->
+<div class="modal-overlay" id="twofaModal">
+  <div class="modal">
+    <div class="modal-logo" style="justify-content:center">🔒 Iki Adimli Dogrulama</div>
+    <div class="modal-sub">Authenticator uygulamanizdaki 6 haneli kodu girin</div>
+    <div class="form-group">
+      <input type="text" id="twofa-code" class="form-input" placeholder="000000"
+             maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+             onkeydown="if(event.key==='Enter') doSubmit2FA()"/>
+    </div>
+    <button class="modal-btn" onclick="doSubmit2FA()">Dogrula</button>
+  </div>
+</div>
 <div id="app-page">
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <div class="app-layout">
@@ -2002,6 +2015,15 @@ async function doSubmitAuth() {
     return;
   }
 
+  if (data["2fa_required"]) {
+        pending2FA = { user_name: name, password: password };
+        hideModal();
+        document.getElementById('twofaModal').classList.add('show');
+        document.getElementById('twofa-code').value = '';
+        document.getElementById('twofa-code').focus();
+        return;
+      }
+
   const endpoint = currentAuthMode === 'register' ? '/auth/register' : '/auth/login';
   const body     = currentAuthMode === 'register'
     ? { user_name: name, password, email: email || undefined }
@@ -2061,7 +2083,40 @@ async function doSubmitAuth() {
 
   } catch(e) { alert('Bağlantı hatası.'); console.error(e); }
 }
+let pending2FA = null; // { user_name, password }
 
+async function doSubmit2FA() {
+  if (!pending2FA) return;
+  const code = document.getElementById('twofa-code').value.trim();
+  if (!code) { alert('Doğrulama kodu zorunludur.'); return; }
+  try {
+    const res  = await fetch(BACKEND_URL + '/auth/2fa/login', {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        user_name: pending2FA.user_name,
+        password:  pending2FA.password,
+        code:      code
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert(data.detail || 'Doğrulama başarısız.'); return; }
+
+    document.getElementById('twofaModal').classList.remove('show');
+    pending2FA = null;
+
+    currentUser        = data.user_name;
+    currentSessionUUID = data.session_uuid;
+    currentTenantId    = data.tenant_id || null;
+    if (data.api_key) { HEADERS['X-API-Key'] = data.api_key; try { localStorage.setItem('ms_api_key', data.api_key); } catch(e) {} }
+    if (data.access_token) setToken(data.access_token);
+    saveSession();
+    hideModal();
+
+    openApp();
+    fetchAndUpdateUserPlan().catch(e => console.error('Plan bilgisi alınamadı:', e));
+  } catch(e) { alert('Bağlantı hatası.'); console.error(e); }
+}
 let forgotPasswordEmail = '';
 
 function showForgotPassword() {

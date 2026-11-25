@@ -2,7 +2,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import io
-from datetime import datetime
+import secrets
 import pyotp
 import qrcode
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -10,11 +10,11 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 from sqlalchemy.orm import Session
 
+from backend.database import timeutil
 from backend.database.db_setup import get_db
 from backend.dependencies.auth import get_current_user
-from backend.schemas.login_session import LoginSessionModel
+from backend.routers.auth_router import verify_password, _start_login
 from backend.schemas.user_model import UserModel
-from backend.utils.jwt_utils import create_access_token
 
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/auth/2fa", tags=["2FA"])
@@ -71,13 +71,19 @@ async  def verify_2fa(request: Request, current_user=Depends(get_current_user), 
 @router.post("/login")
 @limiter.limit("10/minute")
 async def login_2fa(request: Request, db: Session = Depends(get_db)):
-    """Şifre doğru olan ama 2FA açık kullanıcıya token verir (kod veya kurtarma kodu)."""
+    """Şifre + 2FA kodu (veya kurtarma kodu) ile token verir."""
     body = await request.json()
     user_name = (body.get("user_name") or "").strip()
-    code = (body.get("code") or "").strip()
+    password  = body.get("password", "")
+    code      = (body.get("code") or "").strip()
 
     user = db.query(UserModel).filter(UserModel.username == user_name).first()
-    if not user or not user.is_2fa_enabled or not user.totp_secret:
+
+    # KRİTİK: Bu adıma şifre doğrulanmadan geçilemez
+    if not user or not password or not verify_password(password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Geçersiz kullanıcı adı veya parola.")
+
+    if not user.is_2fa_enabled or not user.totp_secret:
         raise HTTPException(status_code=401, detail="2FA doğrulaması açılamadı.")
 
     ok = pyotp.TOTP(user.totp_secret).verify(code, valid_window=1)
@@ -98,28 +104,21 @@ async def login_2fa(request: Request, db: Session = Depends(get_db)):
 
     db.commit()  # kullanılan kurtarma kodunu düşür
 
-    login_session = LoginSessionModel(
-        user_id=user.id,
-        expires_at=datetime.now() + __import__("datetime").timedelta(hours=8),
-        revoked=False,
-    )
-    db.add(login_session)
-    db.commit()
-    db.refresh(login_session)
-    access_token = create_access_token({"sid": str(login_session.id)})
+    # Tek session akışı: auth_router'daki yardımcıyı kullan
+    access_token = _start_login(db, user.id)
 
     from backend.schemas.tenant_model import TenantModel
-    tenant = db.query(TenantModel).filter_by(id=user.tenant_id).first()
     from backend.database import crud
+    tenant      = db.query(TenantModel).filter_by(id=user.tenant_id).first()
     new_session = crud.create_session(db, user.username, user.tenant_id, user.id)
 
     return {
-        "message": "Giriş başarılı",
-        "user_name": user.username,
-        "session_uuid": new_session.session_uuid,
-        "tenant_id": user.tenant_id,
-        "api_key": tenant.api_key if tenant else "",
-        "access_token": access_token,
-        "token_type": "bearer",
+        "message":            "Giriş başarılı",
+        "user_name":          user.username,
+        "session_uuid":       new_session.session_uuid,
+        "tenant_id":          user.tenant_id,
+        "api_key":            tenant.api_key if tenant else "",
+        "access_token":       access_token,
+        "token_type":         "bearer",
         "recovery_code_used": used_recovery,
     }
